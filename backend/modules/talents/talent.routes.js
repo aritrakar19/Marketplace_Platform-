@@ -1,0 +1,10 @@
+const router = require('express').Router();
+const talentCtrl = require('./talent.controller');
+const { verifyToken } = require('../../middleware/auth.middleware');
+const { restrictTo } = require('../../middleware/role.middleware');
+const validate = require('../../middleware/validate.middleware');
+const { talentValidator } = require('./talent.validator');
+router.post('/', verifyToken, restrictTo('Talent'), validate(talentValidator), talentCtrl.createOrUpdate);
+router.get('/search', talentCtrl.search);
+router.get('/:id', talentCtrl.getById);
+module.exports = router;

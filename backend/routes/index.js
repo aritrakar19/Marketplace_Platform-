@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+router.use('/auth', require('../modules/auth/auth.routes'));
+router.use('/users', require('../modules/users/user.routes'));
+router.use('/talents', require('../modules/talents/talent.routes'));
+router.use('/brands', require('../modules/brands/brand.routes'));
+router.use('/campaigns', require('../modules/campaigns/campaign.routes'));
+router.use('/applications', require('../modules/applications/application.routes'));
+router.use('/invites', require('../modules/invites/invite.routes'));
+router.use('/chat', require('../modules/chat/chat.routes'));
+router.use('/payments', require('../modules/payments/payment.routes'));
+router.use('/reviews', require('../modules/reviews/review.routes'));
+router.use('/admin', require('../modules/admin/admin.routes'));
+module.exports = router;

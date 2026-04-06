@@ -1,7 +1,8 @@
 import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
-import { Menu, X, Bell, User } from 'lucide-react';
+import { Menu, X, Bell, User, LogOut } from 'lucide-react';
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 interface NavbarProps {
   variant?: 'default' | 'dashboard';
@@ -9,6 +10,7 @@ interface NavbarProps {
 
 export default function Navbar({ variant = 'default' }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { currentUser, logout } = useAuth();
 
   if (variant === 'dashboard') {
     return (
@@ -25,6 +27,10 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              </Button>
+              <Button variant="ghost" onClick={() => logout()} title="Log out" className="hidden md:flex gap-2">
+                <LogOut className="w-4 h-4" />
+                <span className="text-sm">Logout</span>
               </Button>
               <Button variant="ghost" size="icon">
                 <User className="w-5 h-5" />
@@ -58,12 +64,23 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
             <Link to="/#how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors">
               How it Works
             </Link>
-            <Link to="/auth">
-              <Button variant="ghost">Log In</Button>
-            </Link>
-            <Link to="/auth">
-              <Button className="bg-blue-600 hover:bg-blue-700">Get Started</Button>
-            </Link>
+            {currentUser ? (
+              <div className="flex items-center gap-4">
+                <Link to="/dashboard">
+                  <Button variant="ghost">Dashboard</Button>
+                </Link>
+                <Button variant="outline" onClick={() => logout()}>Log Out</Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-4">
+                <Link to="/auth">
+                  <Button variant="ghost">Log In</Button>
+                </Link>
+                <Link to="/auth">
+                  <Button className="bg-blue-600 hover:bg-blue-700">Get Started</Button>
+                </Link>
+              </div>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -102,14 +119,36 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                 How it Works
               </Link>
               <div className="flex flex-col gap-2 px-4 pt-2">
-                <Link to="/auth">
-                  <Button variant="ghost" className="w-full">
-                    Log In
-                  </Button>
-                </Link>
-                <Link to="/auth">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700">Get Started</Button>
-                </Link>
+                {currentUser ? (
+                  <>
+                    <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="ghost" className="w-full">
+                        Dashboard
+                      </Button>
+                    </Link>
+                    <Button 
+                      variant="outline" 
+                      className="w-full" 
+                      onClick={() => {
+                        logout();
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      Log Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="ghost" className="w-full">
+                        Log In
+                      </Button>
+                    </Link>
+                    <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700">Get Started</Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </nav>
           </div>

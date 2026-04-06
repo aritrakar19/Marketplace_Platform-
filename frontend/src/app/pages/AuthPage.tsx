@@ -5,19 +5,133 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card } from '../components/ui/card';
 import { Separator } from '../components/ui/separator';
-import { Building2, User, ArrowLeft } from 'lucide-react';
+import { Building2, User, ArrowLeft, AlertCircle } from 'lucide-react';
+
+import { auth, db } from '../../services/firebase';
+import { 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  signInWithPopup, 
+  GoogleAuthProvider 
+} from 'firebase/auth';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function AuthPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [role, setRole] = useState<'brand' | 'talent' | null>(null);
+  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
-  const handleAuth = (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (mode === 'signup' && role) {
-      navigate('/profile-setup');
-    } else {
-      navigate('/dashboard');
+    setError(null);
+    setLoading(true);
+
+    try {
+      if (mode === 'signup' && role) {
+        // Signup
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        try {
+          // Save user to Firestore
+          await setDoc(doc(db, 'users', user.uid), {
+            uid: user.uid,
+            email: user.email,
+            role: role,
+            createdAt: serverTimestamp()
+          });
+          navigate('/profile-setup');
+        } catch (dbError: any) {
+          console.error("Firestore Save Error:", dbError);
+          setError("Account created, but we couldn't save your profile to the database. (Firestore permissions error).");
+          // Optionally sign them out since their account is in a broken state
+          await auth.signOut();
+        }
+      } else {
+        // Login
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Fetch user from Firestore to verify/store role if needed in future
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (userData.role === 'admin') {
+              console.log("Logged in as Admin");
+            }
+          } else {
+            console.warn("User document missing in Firestore.");
+            setError("Account found, but profile data missing. Please contact support.");
+          }
+          navigate('/dashboard');
+        } catch (dbError: any) {
+          console.error("Firestore Read Error:", dbError);
+          setError("Logged in, but couldn't verify profile permissions.");
+        }
+      }
+    } catch (err: any) {
+      console.error('Authentication Error:', err);
+      // Clean up Firebase errors
+      if (err.code === 'auth/email-already-in-use') {
+        setError('Email is already in use. Please log in.');
+      } else if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+        setError('Invalid email or password.');
+      } else {
+        setError(err.message || 'An error occurred during authentication');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      const user = userCredential.user;
+
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (!userDoc.exists()) {
+        if (mode === 'signup' && role) {
+          // New Google Signup
+          await setDoc(userDocRef, {
+            uid: user.uid,
+            email: user.email,
+            role: role,
+            createdAt: serverTimestamp()
+          });
+          navigate('/profile-setup');
+        } else {
+          // They are trying to signup/signin with Google but haven't selected a role 
+          // and no doc exists in Firestore.
+          await auth.signOut();
+          if (mode === 'login') {
+            setError('Account not found. Please sign up first.');
+            setMode('signup');
+          } else {
+            setError('Please select a role to sign up.');
+          }
+        }
+      } else {
+        // Google Login (doc exists)
+        navigate('/dashboard');
+      }
+    } catch (err: any) {
+      console.error('Google Auth Error:', err);
+      setError(err.message || 'An error occurred during Google authentication');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,24 +182,24 @@ export default function AuthPage() {
               <Label>I am a...</Label>
               <div className="grid grid-cols-2 gap-4">
                 <Card
-                  className={`p-6 cursor-pointer hover:border-blue-600 transition-all ${
-                    role === 'brand' ? 'border-blue-600 border-2 bg-blue-50' : ''
+                  className={`p-6 cursor-pointer hover:border-blue-600 transition-all shadow-sm ${
+                    role === 'brand' ? 'border-blue-600 border-2 bg-blue-50' : 'border-gray-200'
                   }`}
                   onClick={() => setRole('brand')}
                 >
-                  <Building2 className="w-8 h-8 mb-3 text-blue-600" />
+                  <Building2 className={`w-8 h-8 mb-3 ${role === 'brand' ? 'text-blue-600' : 'text-gray-500'}`} />
                   <h3 className="font-semibold mb-1">Brand</h3>
-                  <p className="text-sm text-gray-600">Looking for talent</p>
+                  <p className="text-sm text-gray-500">Looking for talent</p>
                 </Card>
                 <Card
-                  className={`p-6 cursor-pointer hover:border-blue-600 transition-all ${
-                    role === 'talent' ? 'border-blue-600 border-2 bg-blue-50' : ''
+                  className={`p-6 cursor-pointer hover:border-blue-600 transition-all shadow-sm ${
+                    role === 'talent' ? 'border-blue-600 border-2 bg-blue-50' : 'border-gray-200'
                   }`}
                   onClick={() => setRole('talent')}
                 >
-                  <User className="w-8 h-8 mb-3 text-blue-600" />
+                  <User className={`w-8 h-8 mb-3 ${role === 'talent' ? 'text-blue-600' : 'text-gray-500'}`} />
                   <h3 className="font-semibold mb-1">Talent</h3>
-                  <p className="text-sm text-gray-600">Offering services</p>
+                  <p className="text-sm text-gray-500">Offering services</p>
                 </Card>
               </div>
             </div>
@@ -94,6 +208,13 @@ export default function AuthPage() {
           {/* Form (Login or after role selection) */}
           {(mode === 'login' || role) && (
             <form onSubmit={handleAuth} className="space-y-4">
+              {error && (
+                <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                  <span>{error}</span>
+                </div>
+              )}
+
               <div>
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -102,6 +223,9 @@ export default function AuthPage() {
                   placeholder="you@example.com"
                   required
                   className="mt-1"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
                 />
               </div>
 
@@ -113,33 +237,43 @@ export default function AuthPage() {
                   placeholder="••••••••"
                   required
                   className="mt-1"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
                 />
               </div>
 
               {mode === 'login' && (
                 <div className="flex items-center justify-between text-sm">
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" />
+                    <input type="checkbox" className="rounded border-gray-300" />
                     <span className="text-gray-600">Remember me</span>
                   </label>
-                  <a href="#" className="text-blue-600 hover:text-blue-700">
+                  <a href="#" className="text-blue-600 hover:text-blue-700 font-medium">
                     Forgot password?
                   </a>
                 </div>
               )}
 
-              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" size="lg">
-                {mode === 'login' ? 'Log In' : 'Continue'}
+              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" size="lg" disabled={loading}>
+                {loading ? 'Processing...' : (mode === 'login' ? 'Log In' : 'Continue')}
               </Button>
 
               <div className="relative my-6">
                 <Separator />
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-50 px-4 text-sm text-gray-500">
+                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-50 px-4 text-sm text-gray-500 font-medium">
                   Or continue with
                 </span>
               </div>
 
-              <Button type="button" variant="outline" className="w-full" size="lg">
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="w-full font-medium" 
+                size="lg" 
+                onClick={handleGoogleAuth}
+                disabled={loading}
+              >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path
                     fill="currentColor"
@@ -168,8 +302,9 @@ export default function AuthPage() {
                   onClick={() => {
                     setMode(mode === 'login' ? 'signup' : 'login');
                     setRole(null);
+                    setError(null);
                   }}
-                  className="text-blue-600 hover:text-blue-700 font-semibold"
+                  className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
                 >
                   {mode === 'login' ? 'Sign up' : 'Log in'}
                 </button>
@@ -181,3 +316,4 @@ export default function AuthPage() {
     </div>
   );
 }
+

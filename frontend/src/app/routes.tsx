@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import LandingPage from "./pages/LandingPage";
 import AuthPage from "./pages/AuthPage";
 import ExploreTalent from "./pages/ExploreTalent";
@@ -11,6 +11,16 @@ import PaymentPage from "./pages/PaymentPage";
 import AdminPanel from "./pages/AdminPanel";
 import ProfileSetup from "./pages/ProfileSetup";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useAuth } from "../context/AuthContext";
+
+// Wrapper for /auth to redirect logged in users to dashboard
+const AuthRoute = () => {
+  const { currentUser, loading } = useAuth();
+  if (loading) return null;
+  if (currentUser) return <Navigate to="/dashboard" replace />;
+  return <AuthPage />;
+};
 
 export const router = createBrowserRouter([
   {
@@ -19,11 +29,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/auth",
-    Component: AuthPage,
-  },
-  {
-    path: "/profile-setup",
-    Component: ProfileSetup,
+    Component: AuthRoute,
   },
   {
     path: "/explore",
@@ -34,28 +40,37 @@ export const router = createBrowserRouter([
     Component: TalentProfile,
   },
   {
-    path: "/dashboard",
-    Component: BrandDashboard,
-  },
-  {
-    path: "/campaigns",
-    Component: CampaignsPage,
-  },
-  {
-    path: "/campaigns/:id",
-    Component: CampaignDetails,
-  },
-  {
-    path: "/chat",
-    Component: ChatPage,
-  },
-  {
-    path: "/payment",
-    Component: PaymentPage,
-  },
-  {
-    path: "/admin",
-    Component: AdminPanel,
+    element: <ProtectedRoute />, // All children are protected
+    children: [
+      {
+        path: "/profile-setup",
+        Component: ProfileSetup,
+      },
+      {
+        path: "/dashboard",
+        Component: BrandDashboard,
+      },
+      {
+        path: "/campaigns",
+        Component: CampaignsPage,
+      },
+      {
+        path: "/campaigns/:id",
+        Component: CampaignDetails,
+      },
+      {
+        path: "/chat",
+        Component: ChatPage,
+      },
+      {
+        path: "/payment",
+        Component: PaymentPage,
+      },
+      {
+        path: "/admin",
+        Component: AdminPanel,
+      },
+    ],
   },
   {
     path: "*",

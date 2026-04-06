@@ -1,0 +1,17 @@
+.env
+node_modules
+.DS_Store
+.env.example
+.env.local
+.env.production
+.env.development
+.env.test
+.env.test.local
+.env.test.production
+.env.test.development
+.env.test.development.local
+.env.test.development.production
+.env.test.development.test
+.env.test.development.test.local
+.env.test.development.test.production
+.env.test.development.test.development

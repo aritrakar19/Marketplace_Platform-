@@ -111,8 +111,53 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
+// @desc    Get all talents from MongoDB
+// @route   GET /api/talents
+// @access  Private
+const getAllTalents = async (req, res) => {
+  try {
+    const talents = await User.find({ role: 'talent' });
+    res.status(200).json({ success: true, data: talents });
+  } catch (error) {
+    console.error('Fetch talents error:', error.message);
+    res.status(500).json({ success: false, message: 'Server error fetching talents' });
+  }
+};
+
+// @desc    Get a single talent by ID
+// @route   GET /api/talents/:id
+// @access  Private
+const getTalentById = async (req, res) => {
+  try {
+    const talent = await User.findOne({ _id: req.params.id, role: 'talent' });
+    if (!talent) {
+      return res.status(404).json({ success: false, message: 'Talent not found' });
+    }
+    res.status(200).json({ success: true, data: talent });
+  } catch (error) {
+    console.error('Fetch talent by ID error:', error.message);
+    res.status(500).json({ success: false, message: 'Server error fetching talent details' });
+  }
+};
+
+// @desc    Get all brands from MongoDB
+// @route   GET /api/brands
+// @access  Private
+const getAllBrands = async (req, res) => {
+  try {
+    const brands = await User.find({ role: 'brand' });
+    res.status(200).json({ success: true, data: brands });
+  } catch (error) {
+    console.error('Fetch brands error:', error.message);
+    res.status(500).json({ success: false, message: 'Server error fetching brands' });
+  }
+};
+
 module.exports = {
   registerUser,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  getAllTalents,
+  getTalentById,
+  getAllBrands
 };

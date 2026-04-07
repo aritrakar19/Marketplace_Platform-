@@ -1,6 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router';
 import TalentCard from '../components/TalentCard';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -11,7 +13,7 @@ import { Card } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import { Search, Filter, X } from 'lucide-react';
-import { mockTalents, categories } from '../data/mockData';
+import { categories } from '../data/mockData';
 
 export default function ExploreTalent() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,12 +24,44 @@ export default function ExploreTalent() {
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [dbTalents, setDbTalents] = useState<any[]>([]);
+
+  const { currentUser, userData, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!authLoading) {
+      if (!currentUser || userData?.role !== 'brand') {
+        navigate('/dashboard');
+        return;
+      }
+      
+      const fetchTalents = async () => {
+        try {
+          const token = await currentUser.getIdToken();
+          const res = await fetch('http://localhost:5000/api/talents', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setDbTalents(data.data || []);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      
+      fetchTalents();
+    }
+  }, [currentUser, userData, authLoading, navigate]);
 
   // Extract unique locations
   const locations = useMemo(() => {
-    const locs = mockTalents.map((t) => t.location.split(',')[1]?.trim() || t.location);
+    const locs = dbTalents.map((t) => t.location?.split(',')[1]?.trim() || t.location).filter(Boolean);
     return [...new Set(locs)];
-  }, []);
+  }, [dbTalents]);
 
   // Get subcategories based on selected categories
   const availableSubCategories = useMemo(() => {
@@ -41,13 +75,13 @@ export default function ExploreTalent() {
 
   // Filter talents
   const filteredTalents = useMemo(() => {
-    return mockTalents.filter((talent) => {
+    return dbTalents.filter((talent) => {
       // Search query
       if (
         searchQuery &&
-        !talent.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !talent.subCategory.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !talent.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+        !talent.name?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !talent.subCategory?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !(talent.tags || []).some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
       ) {
         return false;
       }
@@ -66,17 +100,36 @@ export default function ExploreTalent() {
       }
 
       // Followers range
-      if (talent.followers < followersRange[0] || talent.followers > followersRange[1]) {
+      const followersRaw = talent.followers || 0;
+      let followersNum = 0;
+      if (typeof followersRaw === 'string') {
+        const clean = followersRaw.toUpperCase();
+        if (clean.includes('M')) followersNum = parseFloat(clean) * 1000000;
+        else if (clean.includes('K')) followersNum = parseFloat(clean) * 1000;
+        else followersNum = parseFloat(clean) || 0;
+      } else {
+        followersNum = followersRaw;
+      }
+
+      if (followersNum < followersRange[0] || (followersRange[1] < 2000000 && followersNum > followersRange[1])) {
         return false;
       }
 
       // Engagement rate
-      if (talent.engagementRate < minEngagement) {
+      const engagementRaw = talent.engagementRate || 0;
+      let engagementNum = 0;
+      if (typeof engagementRaw === 'string') {
+        engagementNum = parseFloat(engagementRaw) || 0;
+      } else {
+        engagementNum = engagementRaw;
+      }
+
+      if (engagementNum < minEngagement) {
         return false;
       }
 
       // Location filter
-      if (selectedLocations.length > 0) {
+      if (selectedLocations.length > 0 && talent.location) {
         const talentLocation = talent.location.split(',')[1]?.trim() || talent.location;
         if (!selectedLocations.includes(talentLocation)) {
           return false;
@@ -98,6 +151,7 @@ export default function ExploreTalent() {
     minEngagement,
     selectedLocations,
     verifiedOnly,
+    dbTalents,
   ]);
 
   const clearFilters = () => {
@@ -379,7 +433,7 @@ export default function ExploreTalent() {
             {filteredTalents.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredTalents.map((talent) => (
-                  <TalentCard key={talent.id} talent={talent} />
+                  <TalentCard key={talent._id || talent.id} talent={talent} />
                 ))}
               </div>
             ) : (

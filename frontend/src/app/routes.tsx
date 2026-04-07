@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router";
 import LandingPage from "./pages/LandingPage";
 import AuthPage from "./pages/AuthPage";
 import ExploreTalent from "./pages/ExploreTalent";
+import ExploreBrands from "./pages/ExploreBrands";
 import TalentProfile from "./pages/TalentProfile";
 import BrandDashboard from "./pages/BrandDashboard";
 import CampaignsPage from "./pages/CampaignsPage";
@@ -45,6 +46,10 @@ export const router = createBrowserRouter([
       {
         path: "/profile-setup",
         Component: ProfileSetup,
+      },
+      {
+        path: "/explore-brands",
+        Component: ExploreBrands,
       },
       {
         path: "/dashboard",

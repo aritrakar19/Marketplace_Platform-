@@ -1,4 +1,4 @@
-import { Talent } from '../data/mockData';
+
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -8,13 +8,15 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 
 interface TalentCardProps {
-  talent: Talent;
+  talent: any;
 }
 
 export default function TalentCard({ talent }: TalentCardProps) {
   const [saved, setSaved] = useState(false);
 
-  const formatFollowers = (count: number) => {
+  const formatFollowers = (count: any) => {
+    if (!count) return 'N/A';
+    if (typeof count === 'string') return count;
     if (count >= 1000000) {
       return `${(count / 1000000).toFixed(1)}M`;
     }
@@ -33,11 +35,17 @@ export default function TalentCard({ talent }: TalentCardProps) {
     >
       <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200 rounded-2xl">
         <div className="relative">
-          <img
-            src={talent.profileImage}
-            alt={talent.name}
-            className="w-full h-48 object-cover"
-          />
+          <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center overflow-hidden">
+            {talent.profileImage ? (
+              <img
+                src={talent.profileImage}
+                alt={talent.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-4xl font-bold text-blue-500 uppercase">{talent.name?.charAt(0) || 'T'}</span>
+            )}
+          </div>
           <button
             onClick={() => setSaved(!saved)}
             className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform"
@@ -69,24 +77,24 @@ export default function TalentCard({ talent }: TalentCardProps) {
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <TrendingUp className="w-4 h-4" />
-              <span>{talent.engagementRate}%</span>
+              <span>{talent.engagementRate || 'N/A'}{talent.engagementRate && !talent.engagementRate.includes('%') ? '%' : ''}</span>
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <MapPin className="w-4 h-4" />
-              <span className="truncate">{talent.location.split(',')[0]}</span>
+              <span className="truncate">{talent.location ? talent.location.split(',')[0] : 'Remote'}</span>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-2 mb-4">
-            {talent.tags.slice(0, 3).map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
+            {(talent.tags || talent.portfolio || []).slice(0, 3).map((tag: string, idx: number) => (
+              <Badge key={idx} variant="secondary" className="text-xs truncate max-w-[100px]">
                 {tag}
               </Badge>
             ))}
           </div>
 
           <div className="flex gap-2">
-            <Link to={`/talent/${talent.id}`} className="flex-1">
+            <Link to={`/talent/${talent._id || talent.id}`} className="flex-1">
               <Button variant="outline" className="w-full">
                 View Profile
               </Button>

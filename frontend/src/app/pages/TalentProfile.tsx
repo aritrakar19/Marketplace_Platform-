@@ -1,4 +1,6 @@
 import { useParams, Link } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Button } from '../components/ui/button';
@@ -19,14 +21,59 @@ import {
   Calendar,
   Image as ImageIcon,
 } from 'lucide-react';
-import { mockTalents } from '../data/mockData';
 import { motion } from 'motion/react';
-import { useState } from 'react';
 
 export default function TalentProfile() {
   const { id } = useParams();
-  const talent = mockTalents.find((t) => t.id === id);
+  const [talent, setTalent] = useState<any>(null);
+  const [similarTalents, setSimilarTalents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const token = await currentUser?.getIdToken();
+        const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
+
+        // Fetch talent by id
+        const res = await fetch(`http://localhost:5000/api/talents/${id}`, { headers });
+        if (res.ok) {
+          const data = await res.json();
+          setTalent(data.data);
+
+          // Fetch similar talents
+          const allRes = await fetch('http://localhost:5000/api/talents', { headers });
+          if (allRes.ok) {
+            const allData = await allRes.json();
+            setSimilarTalents(
+              allData.data.filter((t: any) => t.category === data.data.category && t._id !== id).slice(0, 3)
+            );
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch talent:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (id) {
+      fetchData();
+    }
+  }, [id, currentUser]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    );
+  }
 
   if (!talent) {
     return (
@@ -42,7 +89,9 @@ export default function TalentProfile() {
     );
   }
 
-  const formatFollowers = (count: number) => {
+  const formatFollowers = (count: any) => {
+    if (!count) return 'N/A';
+    if (typeof count === 'string') return count;
     if (count >= 1000000) {
       return `${(count / 1000000).toFixed(1)}M`;
     }
@@ -72,11 +121,17 @@ export default function TalentProfile() {
         <Card className="p-8 mb-8 rounded-2xl">
           <div className="flex flex-col md:flex-row gap-6 items-start">
             <div className="relative">
-              <img
-                src={talent.profileImage}
-                alt={talent.name}
-                className="w-32 h-32 rounded-2xl object-cover border-4 border-white shadow-lg"
-              />
+              <div className="w-32 h-32 rounded-2xl border-4 border-white shadow-lg overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                {talent.profileImage ? (
+                  <img
+                    src={talent.profileImage}
+                    alt={talent.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-4xl font-bold text-blue-500 uppercase">{talent.name?.charAt(0) || 'T'}</span>
+                )}
+              </div>
               {talent.verified && (
                 <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center border-4 border-white">
                   <CheckCircle className="w-5 h-5 text-white" />
@@ -91,7 +146,7 @@ export default function TalentProfile() {
                   <p className="text-lg text-gray-600 mb-2">{talent.subCategory}</p>
                   <div className="flex items-center gap-2 text-gray-600">
                     <MapPin className="w-4 h-4" />
-                    <span>{talent.location}</span>
+                    <span>{talent.location ? talent.location.split(',')[0] : 'Remote'}</span>
                   </div>
                 </div>
 
@@ -135,7 +190,7 @@ export default function TalentProfile() {
                     <TrendingUp className="w-4 h-4" />
                     <span className="text-sm">Engagement</span>
                   </div>
-                  <div className="text-2xl font-bold">{talent.engagementRate}%</div>
+                  <div className="text-2xl font-bold">{talent.engagementRate || 'N/A'}{talent.engagementRate && !talent.engagementRate.includes('%') ? '%' : ''}</div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-xl">
                   <div className="flex items-center gap-2 text-gray-600 mb-1">
@@ -143,7 +198,7 @@ export default function TalentProfile() {
                     <span className="text-sm">Posts</span>
                   </div>
                   <div className="text-2xl font-bold">
-                    {talent.stats.posts.toLocaleString()}
+                    {talent.stats?.posts?.toLocaleString() || 'N/A'}
                   </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-xl">
@@ -152,7 +207,7 @@ export default function TalentProfile() {
                     <span className="text-sm">Avg. Likes</span>
                   </div>
                   <div className="text-2xl font-bold">
-                    {formatFollowers(talent.stats.avgLikes)}
+                    {talent.stats?.avgLikes ? formatFollowers(talent.stats.avgLikes) : 'N/A'}
                   </div>
                 </div>
               </div>
@@ -166,10 +221,10 @@ export default function TalentProfile() {
             {/* About */}
             <Card className="p-6 rounded-2xl">
               <h2 className="text-xl font-semibold mb-4">About</h2>
-              <p className="text-gray-700 leading-relaxed">{talent.bio}</p>
+              <p className="text-gray-700 leading-relaxed">{talent.bio || 'No bio provided.'}</p>
 
               <div className="mt-6 flex flex-wrap gap-2">
-                {talent.tags.map((tag) => (
+                {(talent.tags || []).map((tag: string) => (
                   <Badge key={tag} variant="secondary">
                     {tag}
                   </Badge>
@@ -178,11 +233,11 @@ export default function TalentProfile() {
             </Card>
 
             {/* Portfolio */}
-            {talent.portfolio.length > 0 && (
+            {talent.portfolio && talent.portfolio.length > 0 && (
               <Card className="p-6 rounded-2xl">
                 <h2 className="text-xl font-semibold mb-4">Portfolio</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {talent.portfolio.map((image, index) => (
+                  {talent.portfolio.map((image: string, index: number) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, scale: 0.9 }}
@@ -201,11 +256,11 @@ export default function TalentProfile() {
             )}
 
             {/* Past Collaborations */}
-            {talent.collaborations.length > 0 && (
+            {talent.collaborations && talent.collaborations.length > 0 && (
               <Card className="p-6 rounded-2xl">
                 <h2 className="text-xl font-semibold mb-4">Past Collaborations</h2>
                 <div className="space-y-4">
-                  {talent.collaborations.map((collab, index) => (
+                  {talent.collaborations.map((collab: any, index: number) => (
                     <div key={index}>
                       <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -235,12 +290,13 @@ export default function TalentProfile() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Social Media */}
-            <Card className="p-6 rounded-2xl">
-              <h3 className="font-semibold mb-4">Social Media</h3>
-              <div className="space-y-3">
-                {talent.socialMedia.instagram && (
-                  <a
-                    href={`https://instagram.com/${talent.socialMedia.instagram}`}
+            {talent.socialMedia && (
+              <Card className="p-6 rounded-2xl">
+                <h3 className="font-semibold mb-4">Social Media</h3>
+                <div className="space-y-3">
+                  {talent.socialMedia.instagram && (
+                    <a
+                      href={`https://instagram.com/${talent.socialMedia.instagram}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
@@ -272,7 +328,8 @@ export default function TalentProfile() {
                   </a>
                 )}
               </div>
-            </Card>
+              </Card>
+            )}
 
             {/* Category */}
             <Card className="p-6 rounded-2xl">
@@ -281,18 +338,14 @@ export default function TalentProfile() {
             </Card>
 
             {/* Recommended Talents */}
-            <Card className="p-6 rounded-2xl">
-              <h3 className="font-semibold mb-4">Similar Talents</h3>
-              <div className="space-y-4">
-                {mockTalents
-                  .filter(
-                    (t) => t.category === talent.category && t.id !== talent.id
-                  )
-                  .slice(0, 3)
-                  .map((t) => (
+            {similarTalents.length > 0 && (
+              <Card className="p-6 rounded-2xl">
+                <h3 className="font-semibold mb-4">Similar Talents</h3>
+                <div className="space-y-4">
+                  {similarTalents.map((t) => (
                     <Link
-                      key={t.id}
-                      to={`/talent/${t.id}`}
+                      key={t._id}
+                      to={`/talent/${t._id}`}
                       className="flex items-center gap-3 hover:bg-gray-50 p-2 rounded-xl transition-colors"
                     >
                       <img
@@ -310,6 +363,7 @@ export default function TalentProfile() {
                   ))}
               </div>
             </Card>
+            )}
           </div>
         </div>
       </div>

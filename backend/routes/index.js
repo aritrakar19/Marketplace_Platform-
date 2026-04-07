@@ -1,8 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const { getAllTalents, getTalentById, getAllBrands } = require('../controllers/userController');
+const { verifyFirebaseToken } = require('../middleware/authMiddleware');
+
 router.use('/auth', require('../modules/auth/auth.routes'));
 router.use('/users', require('./userRoutes'));
-router.use('/talents', require('../modules/talents/talent.routes'));
+router.get('/talents', verifyFirebaseToken, getAllTalents);
+router.get('/talents/:id', verifyFirebaseToken, getTalentById);
+router.get('/brands', verifyFirebaseToken, getAllBrands);
+// router.use('/talents', require('../modules/talents/talent.routes'));
 router.use('/brands', require('../modules/brands/brand.routes'));
 router.use('/campaigns', require('../modules/campaigns/campaign.routes'));
 router.use('/applications', require('../modules/applications/application.routes'));

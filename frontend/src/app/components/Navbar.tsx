@@ -62,9 +62,15 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/explore" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Find Talent
-            </Link>
+            {userData?.role === 'talent' ? (
+              <Link to="/explore-brands" className="text-gray-600 hover:text-gray-900 transition-colors">
+                Find Brands
+              </Link>
+            ) : (
+              <Link to="/explore" className="text-gray-600 hover:text-gray-900 transition-colors">
+                Find Talent
+              </Link>
+            )}
             <Link to="/campaigns" className="text-gray-600 hover:text-gray-900 transition-colors">
               Campaigns
             </Link>
@@ -104,13 +110,23 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
             <nav className="flex flex-col gap-4">
-              <Link
-                to="/explore"
-                className="text-gray-600 hover:text-gray-900 transition-colors px-4 py-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Find Talent
-              </Link>
+              {userData?.role === 'talent' ? (
+                <Link
+                  to="/explore-brands"
+                  className="text-gray-600 hover:text-gray-900 transition-colors px-4 py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Find Brands
+                </Link>
+              ) : (
+                <Link
+                  to="/explore"
+                  className="text-gray-600 hover:text-gray-900 transition-colors px-4 py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Find Talent
+                </Link>
+              )}
               <Link
                 to="/campaigns"
                 className="text-gray-600 hover:text-gray-900 transition-colors px-4 py-2"

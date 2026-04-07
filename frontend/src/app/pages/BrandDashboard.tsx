@@ -52,13 +52,23 @@ export default function BrandDashboard() {
               <LayoutDashboard className="w-5 h-5" />
               <span>Dashboard</span>
             </Link>
-            <Link
-              to="/explore"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
-            >
-              <Users className="w-5 h-5" />
-              <span>Find Talent</span>
-            </Link>
+            {userData?.role === 'talent' ? (
+              <Link
+                to="/explore-brands"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                <Users className="w-5 h-5" />
+                <span>Find Brands</span>
+              </Link>
+            ) : (
+              <Link
+                to="/explore"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                <Users className="w-5 h-5" />
+                <span>Find Talent</span>
+              </Link>
+            )}
             <Link
               to="/campaigns"
               className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
@@ -256,7 +266,7 @@ export default function BrandDashboard() {
               <Card className="p-6 rounded-2xl">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="font-semibold text-lg">Saved Talents</h3>
-                  <Link to="/explore">
+                  <Link to={userData?.role === 'talent' ? "/explore-brands" : "/explore"}>
                     <Button variant="ghost" size="sm">View All</Button>
                   </Link>
                 </div>
@@ -275,9 +285,9 @@ export default function BrandDashboard() {
                       <div className="text-xs text-gray-600">{talent.followers}</div>
                     </div>
                   ))}
-                  <Link to="/explore">
+                  <Link to={userData?.role === 'talent' ? "/explore-brands" : "/explore"}>
                     <Button variant="outline" className="w-full mt-2">
-                      Find More Talent
+                      {userData?.role === 'talent' ? 'Find More Brands' : 'Find More Talent'}
                     </Button>
                   </Link>
                 </div>

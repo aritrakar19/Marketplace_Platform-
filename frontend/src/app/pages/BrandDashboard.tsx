@@ -33,7 +33,10 @@ const savedTalents = [
   { name: 'Emma Rodriguez', category: 'Player', followers: '650K', image: 'https://images.unsplash.com/photo-1758179761789-87792b6132a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400' },
 ];
 
+import { useAuth } from '../../context/AuthContext';
+
 export default function BrandDashboard() {
+  const { userData } = useAuth();
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar variant="dashboard" />
@@ -87,7 +90,7 @@ export default function BrandDashboard() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Welcome back, Brand Manager!</h1>
+                <h1 className="text-3xl font-bold mb-2">Welcome back, {userData?.fullName || userData?.name || 'Brand Manager'}!</h1>
                 <p className="text-gray-600">Here's what's happening with your campaigns</p>
               </div>
               <Link to="/campaigns">

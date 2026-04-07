@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 router.use('/auth', require('../modules/auth/auth.routes'));
-router.use('/users', require('../modules/users/user.routes'));
+router.use('/users', require('./userRoutes'));
 router.use('/talents', require('../modules/talents/talent.routes'));
 router.use('/brands', require('../modules/brands/brand.routes'));
 router.use('/campaigns', require('../modules/campaigns/campaign.routes'));

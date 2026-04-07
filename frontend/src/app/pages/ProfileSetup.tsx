@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { auth } from '../../services/firebase';
 import { useNavigate } from 'react-router';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -23,17 +24,52 @@ export default function ProfileSetup() {
     youtube: '',
     twitter: '',
     tiktok: '',
+    profileImage: '',
   });
   const navigate = useNavigate();
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsUploadingPhoto(true);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, profileImage: reader.result as string });
+        setIsUploadingPhoto(false);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const totalSteps = 4;
   const progress = (step / totalSteps) * 100;
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step < totalSteps) {
       setStep(step + 1);
     } else {
-      navigate('/dashboard');
+      try {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await fetch('http://localhost:5000/api/users/profile', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(`Failed to save profile on backend. Status: ${response.status}, Error: ${errText}`);
+        }
+
+        navigate('/dashboard');
+      } catch (err) {
+        console.error('Error saving profile:', err);
+        alert(String(err));
+      }
     }
   };
 
@@ -88,6 +124,29 @@ export default function ProfileSetup() {
               </div>
 
               <div className="space-y-4">
+                <div className="flex flex-col gap-2">
+                  <Label>Profile Photo</Label>
+                  <div className="flex items-center gap-4">
+                    <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden border border-gray-300">
+                      {formData.profileImage ? (
+                        <img src={formData.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-gray-400 text-xs">No Photo</span>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                        className="cursor-pointer"
+                        disabled={isUploadingPhoto}
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Recommended size: 256x256px</p>
+                    </div>
+                  </div>
+                </div>
+
                 <div>
                   <Label htmlFor="fullName">Full Name *</Label>
                   <Input

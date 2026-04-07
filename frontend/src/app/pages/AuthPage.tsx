@@ -39,17 +39,22 @@ export default function AuthPage() {
         const user = userCredential.user;
 
         try {
-          // Save user to Firestore
-          await setDoc(doc(db, 'users', user.uid), {
-            uid: user.uid,
-            email: user.email,
-            role: role,
-            createdAt: serverTimestamp()
+          // Save user to MongoDB backend
+          const res = await fetch('http://localhost:5000/api/users/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              firebaseUid: user.uid,
+              name: user.displayName || user.email?.split('@')[0] || 'User',
+              email: user.email,
+              role: role
+            })
           });
+          if (!res.ok) throw new Error('Status ' + res.status);
           navigate('/profile-setup');
         } catch (dbError: any) {
-          console.error("Firestore Save Error:", dbError);
-          setError("Account created, but we couldn't save your profile to the database. (Firestore permissions error).");
+          console.error("Backend Save Error:", dbError);
+          setError("Account created, but we couldn't save your profile to the database.");
           // Optionally sign them out since their account is in a broken state
           await auth.signOut();
         }
@@ -58,21 +63,25 @@ export default function AuthPage() {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Fetch user from Firestore to verify/store role if needed in future
+        // Fetch user from MongoDB to verify/store role if needed in future
         try {
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            if (userData.role === 'admin') {
+          const token = await user.getIdToken();
+          const response = await fetch('http://localhost:5000/api/users/me', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          
+          if (response.ok) {
+            const result = await response.json();
+            if (result.data?.role === 'admin') {
               console.log("Logged in as Admin");
             }
           } else {
-            console.warn("User document missing in Firestore.");
+            console.warn("User document missing in MongoDB.");
             setError("Account found, but profile data missing. Please contact support.");
           }
           navigate('/dashboard');
         } catch (dbError: any) {
-          console.error("Firestore Read Error:", dbError);
+          console.error("Backend Read Error:", dbError);
           setError("Logged in, but couldn't verify profile permissions.");
         }
       }
@@ -99,17 +108,23 @@ export default function AuthPage() {
       const userCredential = await signInWithPopup(auth, provider);
       const user = userCredential.user;
 
-      const userDocRef = doc(db, 'users', user.uid);
-      const userDoc = await getDoc(userDocRef);
+      const token = await user.getIdToken();
+      const meResponse = await fetch('http://localhost:5000/api/users/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
-      if (!userDoc.exists()) {
+      if (!meResponse.ok) {
         if (mode === 'signup' && role) {
           // New Google Signup
-          await setDoc(userDocRef, {
-            uid: user.uid,
-            email: user.email,
-            role: role,
-            createdAt: serverTimestamp()
+          const res = await fetch('http://localhost:5000/api/users/register', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({
+               firebaseUid: user.uid,
+               name: user.displayName || user.email?.split('@')[0] || 'User',
+               email: user.email,
+               role: role
+             })
           });
           navigate('/profile-setup');
         } else {

@@ -3,6 +3,7 @@ import { Button } from '../components/ui/button';
 import { Menu, X, Bell, User, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import ProfileModal from './ProfileModal';
 
 interface NavbarProps {
   variant?: 'default' | 'dashboard';
@@ -10,7 +11,7 @@ interface NavbarProps {
 
 export default function Navbar({ variant = 'default' }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, userData } = useAuth();
 
   if (variant === 'dashboard') {
     return (
@@ -32,9 +33,15 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                 <LogOut className="w-4 h-4" />
                 <span className="text-sm">Logout</span>
               </Button>
-              <Button variant="ghost" size="icon">
-                <User className="w-5 h-5" />
-              </Button>
+              <ProfileModal>
+                <Button variant="ghost" size="icon" className="overflow-hidden rounded-full border border-gray-200">
+                  {userData?.profileImage ? (
+                    <img src={userData.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <User className="w-5 h-5" />
+                  )}
+                </Button>
+              </ProfileModal>
             </div>
           </div>
         </div>

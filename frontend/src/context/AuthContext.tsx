@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth, db } from '../services/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { auth } from '../services/firebase';
 
 interface AuthContextType {
   currentUser: User | null;
   userRole: string | null;
+  userData: any | null; // MongoDB user data
+  setUserData: (data: any) => void;
   loading: boolean;
   logout: () => Promise<void>;
 }
@@ -13,6 +14,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   currentUser: null,
   userRole: null,
+  userData: null,
+  setUserData: () => {},
   loading: true,
   logout: async () => {},
 });
@@ -22,6 +25,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [userData, setUserData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,15 +34,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setCurrentUser(user);
       
       if (user) {
-        // Fetch role from Firestore
+        // Fetch role from backend
         try {
-          const userDocRef = doc(db, 'users', user.uid);
-          const userDoc = await getDoc(userDocRef);
+          const token = await user.getIdToken();
+          const response = await fetch('http://localhost:5000/api/users/me', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
           
-          if (userDoc.exists()) {
-            setUserRole(userDoc.data().role || null);
+          if (response.ok) {
+            const data = await response.json();
+            const fetchedUserData = data.data || data;
+            setUserRole(fetchedUserData?.role || null);
+            setUserData(fetchedUserData);
           } else {
             setUserRole(null);
+            setUserData(null);
           }
         } catch (error) {
           console.error("Failed to fetch user role from db:", error);
@@ -46,6 +56,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       } else {
         setUserRole(null);
+        setUserData(null);
       }
       setLoading(false);
     });
@@ -62,7 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, userRole, loading, logout }}>
+    <AuthContext.Provider value={{ currentUser, userRole, userData, setUserData, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

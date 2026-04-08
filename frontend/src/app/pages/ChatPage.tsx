@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
-import { Card } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { Avatar } from '../components/ui/avatar';

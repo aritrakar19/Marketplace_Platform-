@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -6,34 +7,83 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import { Calendar, DollarSign, Users, Briefcase, CheckCircle, ArrowLeft } from 'lucide-react';
-import { mockCampaigns } from '../data/mockData';
+
+interface Campaign {
+  id: string;
+  title: string;
+  description: string;
+  budget: number;
+  category: string;
+  status: string;
+  createdAt: string;
+  requirements?: string[];
+  applicants?: number;
+  brandInfo?: {
+    name?: string;
+    fullName?: string;
+    displayName?: string;
+  };
+}
 
 export default function CampaignDetails() {
   const { id } = useParams();
-  const campaign = mockCampaigns.find((c) => c.id === id);
+  const [campaign, setCampaign] = useState<Campaign | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCampaign = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/campaigns/${id}`);
+        const data = await res.json();
+        if (data.success) {
+          setCampaign(data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching campaign details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (id) fetchCampaign();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-gray-500">Loading campaign details...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!campaign) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 flex flex-col">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center flex-1">
           <h1 className="text-2xl font-bold mb-4">Campaign not found</h1>
           <Link to="/campaigns">
             <Button>Back to Campaigns</Button>
           </Link>
         </div>
+        <Footer />
       </div>
     );
   }
 
+  const brandName = campaign.brandInfo?.displayName || campaign.brandInfo?.fullName || campaign.brandInfo?.name || 'Unknown Brand';
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
         <Link
           to="/campaigns"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 w-fit"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Campaigns
@@ -47,15 +97,15 @@ export default function CampaignDetails() {
                 <div>
                   <h1 className="text-3xl font-bold mb-2">{campaign.title}</h1>
                   <div className="flex items-center gap-3 text-gray-600">
-                    <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                      <span className="font-semibold">{campaign.brand[0]}</span>
+                    <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-lg font-bold text-gray-700">
+                      {brandName.charAt(0)}
                     </div>
-                    <span className="font-medium">{campaign.brand}</span>
+                    <span className="font-medium">{brandName}</span>
                   </div>
                 </div>
                 <Badge
                   className={
-                    campaign.status === 'active'
+                    campaign.status === 'active' || campaign.status === 'open'
                       ? 'bg-green-100 text-green-700'
                       : 'bg-gray-100 text-gray-700'
                   }
@@ -68,22 +118,25 @@ export default function CampaignDetails() {
 
               <div>
                 <h2 className="text-xl font-semibold mb-4">Campaign Description</h2>
-                <p className="text-gray-700 leading-relaxed mb-6">{campaign.description}</p>
+                <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">{campaign.description}</div>
               </div>
 
-              <Separator className="my-6" />
-
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Requirements</h2>
-                <ul className="space-y-3">
-                  {campaign.requirements.map((req, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{req}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {campaign.requirements && campaign.requirements.length > 0 && (
+                <>
+                  <Separator className="my-6" />
+                  <div>
+                    <h2 className="text-xl font-semibold mb-4">Requirements</h2>
+                    <ul className="space-y-3">
+                      {campaign.requirements.map((req, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-700">{req}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
             </Card>
           </div>
 
@@ -98,7 +151,7 @@ export default function CampaignDetails() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500">Budget</div>
-                    <div className="font-semibold">{campaign.budget}</div>
+                    <div className="font-semibold">${campaign.budget}</div>
                   </div>
                 </div>
 
@@ -107,9 +160,9 @@ export default function CampaignDetails() {
                     <Calendar className="w-5 h-5 text-purple-600" />
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500">Deadline</div>
+                    <div className="text-sm text-gray-500">Posted On</div>
                     <div className="font-semibold">
-                      {new Date(campaign.deadline).toLocaleDateString('en-US', {
+                      {new Date(campaign.createdAt).toLocaleDateString('en-US', {
                         month: 'long',
                         day: 'numeric',
                         year: 'numeric',
@@ -124,7 +177,7 @@ export default function CampaignDetails() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500">Applicants</div>
-                    <div className="font-semibold">{campaign.applicants}</div>
+                    <div className="font-semibold">{campaign.applicants || 0}</div>
                   </div>
                 </div>
 

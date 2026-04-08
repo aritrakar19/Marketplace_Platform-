@@ -17,6 +17,7 @@ import {
   DollarSign,
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { useState, useEffect } from 'react';
 
 const performanceData = [
   { month: 'Jan', campaigns: 4, engagement: 3200 },
@@ -37,6 +38,23 @@ import { useAuth } from '../../context/AuthContext';
 
 export default function BrandDashboard() {
   const { userData } = useAuth();
+  const [campaignCount, setCampaignCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/campaigns/count?status=open');
+        const data = await res.json();
+        if (data.success) {
+          setCampaignCount(data.data.count);
+        }
+      } catch (error) {
+        console.error('Error fetching campaign count:', error);
+      }
+    };
+    fetchCount();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar variant="dashboard" />
@@ -120,7 +138,9 @@ export default function BrandDashboard() {
                   </div>
                   <Badge variant="secondary" className="text-xs">+12%</Badge>
                 </div>
-                <div className="text-2xl font-bold mb-1">24</div>
+                <div className="text-2xl font-bold mb-1">
+                  {campaignCount !== null ? campaignCount : '...'}
+                </div>
                 <div className="text-sm text-gray-600">Active Campaigns</div>
               </Card>
 

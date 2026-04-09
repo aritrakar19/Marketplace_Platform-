@@ -6,13 +6,55 @@ import { CheckCircle, MapPin, Users, TrendingUp, Bookmark } from 'lucide-react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { toast } from 'sonner';
 
 interface TalentCardProps {
   talent: any;
+  isConnected?: boolean;
+  isPending?: boolean;
 }
 
-export default function TalentCard({ talent }: TalentCardProps) {
+export default function TalentCard({ talent, isConnected = false, isPending = false }: TalentCardProps) {
   const [saved, setSaved] = useState(false);
+  const [inviting, setInviting] = useState(false);
+  const [inviteSent, setInviteSent] = useState(false);
+  const { currentUser } = useAuth();
+
+  const handleInvite = async () => {
+    if (!currentUser) {
+      toast.error('Please login to send invites');
+      return;
+    }
+
+    setInviting(true);
+    try {
+      const token = await currentUser.getIdToken();
+      const response = await fetch('http://localhost:5000/api/invites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ receiverId: talent.firebaseUid || talent.uid || talent._id || talent.id })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setInviteSent(true);
+        toast.success('Invite Sent!', {
+          description: `You've invited ${talent.name} to collaborate.`
+        });
+      } else {
+        toast.error(data.message || 'Failed to send invite');
+      }
+    } catch (error) {
+      console.error('Invite error:', error);
+      toast.error('Something went wrong');
+    } finally {
+      setInviting(false);
+    }
+  };
 
   const formatFollowers = (count: any) => {
     if (!count) return 'N/A';
@@ -94,16 +136,36 @@ export default function TalentCard({ talent }: TalentCardProps) {
           </div>
 
           <div className="flex gap-2">
-            <Link to={`/talent/${talent._id || talent.id}`} className="flex-1">
-              <Button variant="outline" className="w-full">
-                View Profile
-              </Button>
-            </Link>
-            <Link to="/chat" className="flex-1">
-              <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                Quick Invite
-              </Button>
-            </Link>
+            {!isConnected ? (
+              <>
+                <Link to={`/talent/${talent._id || talent.id}`} className="flex-1">
+                  <Button variant="outline" className="w-full">
+                    View Profile
+                  </Button>
+                </Link>
+                <div className="flex-1">
+                  <Button 
+                    onClick={handleInvite} 
+                    disabled={inviting || inviteSent || isPending}
+                    className={`w-full ${(inviteSent || isPending) ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'}`}
+                  >
+                    {inviting ? 'Sending...' : (inviteSent || isPending) ? 'Invite Sent' : 'Quick Invite'}
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <Button disabled variant="outline" className="flex-1 bg-green-50 text-green-700 border-green-200">
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Friend
+                </Button>
+                <Link to="/chat" className="flex-1">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    Message
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </Card>

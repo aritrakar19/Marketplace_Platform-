@@ -4,6 +4,7 @@ import { Menu, X, Bell, User, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import ProfileModal from './ProfileModal';
+import NotificationsPopover from './NotificationsPopover';
 
 interface NavbarProps {
   variant?: 'default' | 'dashboard';
@@ -25,10 +26,7 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
               <span className="font-semibold text-lg">TalentMatch</span>
             </Link>
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </Button>
+              <NotificationsPopover />
               <Button variant="ghost" onClick={() => logout()} title="Log out" className="hidden md:flex gap-2">
                 <LogOut className="w-4 h-4" />
                 <span className="text-sm">Logout</span>

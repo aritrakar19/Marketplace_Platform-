@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { useState, useEffect } from 'react';
+import InvitesList from '../components/InvitesList';
 
 const performanceData = [
   { month: 'Jan', campaigns: 4, engagement: 3200 },
@@ -37,11 +38,12 @@ const savedTalents = [
 import { useAuth } from '../../context/AuthContext';
 
 export default function BrandDashboard() {
-  const { userData } = useAuth();
+  const { userData, currentUser } = useAuth();
   const [campaignCount, setCampaignCount] = useState<number | null>(null);
+  const [connections, setConnections] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchCount = async () => {
+    const fetchData = async () => {
       try {
         const res = await fetch('http://localhost:5000/api/campaigns/count?status=open');
         const data = await res.json();
@@ -51,9 +53,21 @@ export default function BrandDashboard() {
       } catch (error) {
         console.error('Error fetching campaign count:', error);
       }
+      
+      try {
+        if (!currentUser) return;
+        const token = await currentUser.getIdToken();
+        const res = await fetch('http://localhost:5000/api/connections', { headers: { Authorization: `Bearer ${token}` } });
+        const data = await res.json();
+        if (data.success) {
+          setConnections(data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching connections:', error);
+      }
     };
-    fetchCount();
-  }, []);
+    fetchData();
+  }, [currentUser]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -213,98 +227,115 @@ export default function BrandDashboard() {
               </Card>
             </div>
 
-            {/* Active Campaigns & Saved Talents */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Active Campaigns */}
-              <Card className="lg:col-span-2 p-6 rounded-2xl">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-semibold text-lg">Active Campaigns</h3>
-                  <Link to="/campaigns">
-                    <Button variant="ghost" size="sm">View All</Button>
-                  </Link>
-                </div>
-                <div className="space-y-4">
-                  {[
-                    {
-                      title: 'Summer Athletic Wear Launch',
-                      applicants: 24,
-                      deadline: 'May 15, 2026',
-                      budget: '$5,000 - $10,000',
-                      status: 'active',
-                    },
-                    {
-                      title: 'Sustainable Fashion Campaign',
-                      applicants: 32,
-                      deadline: 'May 20, 2026',
-                      budget: '$4,000 - $8,000',
-                      status: 'active',
-                    },
-                    {
-                      title: 'Beauty Product Review Series',
-                      applicants: 45,
-                      deadline: 'Apr 25, 2026',
-                      budget: '$2,500 - $5,000',
-                      status: 'pending',
-                    },
-                  ].map((campaign, index) => (
-                    <div
-                      key={index}
-                      className="p-4 border border-gray-200 rounded-xl hover:border-blue-600 transition-colors cursor-pointer"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <h4 className="font-semibold">{campaign.title}</h4>
-                        <Badge
-                          className={
-                            campaign.status === 'active'
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-orange-100 text-orange-700'
-                          }
-                        >
-                          {campaign.status}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-6 text-sm text-gray-600">
-                        <div className="flex items-center gap-1">
-                          <UserPlus className="w-4 h-4" />
-                          <span>{campaign.applicants} applicants</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          <span>{campaign.deadline}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <DollarSign className="w-4 h-4" />
-                          <span>{campaign.budget}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
+              {/* Active Campaigns & Invites */}
+              <div className="lg:col-span-2 space-y-6">
+                <Card className="p-6 rounded-2xl">
+                  <InvitesList />
+                </Card>
 
-              {/* Saved Talents */}
+                <Card className="p-6 rounded-2xl">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="font-semibold text-lg">Active Campaigns</h3>
+                    <Link to="/campaigns">
+                      <Button variant="ghost" size="sm">View All</Button>
+                    </Link>
+                  </div>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        title: 'Summer Athletic Wear Launch',
+                        applicants: 24,
+                        deadline: 'May 15, 2026',
+                        budget: '$5,000 - $10,000',
+                        status: 'active',
+                      },
+                      {
+                        title: 'Sustainable Fashion Campaign',
+                        applicants: 32,
+                        deadline: 'May 20, 2026',
+                        budget: '$4,000 - $8,000',
+                        status: 'active',
+                      },
+                      {
+                        title: 'Beauty Product Review Series',
+                        applicants: 45,
+                        deadline: 'Apr 25, 2026',
+                        budget: '$2,500 - $5,000',
+                        status: 'pending',
+                      },
+                    ].map((campaign, index) => (
+                      <div
+                        key={index}
+                        className="p-4 border border-gray-200 rounded-xl hover:border-blue-600 transition-colors cursor-pointer"
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <h4 className="font-semibold">{campaign.title}</h4>
+                          <Badge
+                            className={
+                              campaign.status === 'active'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-orange-100 text-orange-700'
+                            }
+                          >
+                            {campaign.status}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-6 text-sm text-gray-600">
+                          <div className="flex items-center gap-1">
+                            <UserPlus className="w-4 h-4" />
+                            <span>{campaign.applicants} applicants</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            <span>{campaign.deadline}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <DollarSign className="w-4 h-4" />
+                            <span>{campaign.budget}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+
+              {/* My Connections */}
               <Card className="p-6 rounded-2xl">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-semibold text-lg">Saved Talents</h3>
+                  <h3 className="font-semibold text-lg">My Connections</h3>
                   <Link to={userData?.role === 'talent' ? "/explore-brands" : "/explore"}>
-                    <Button variant="ghost" size="sm">View All</Button>
+                    <Button variant="ghost" size="sm">Find More</Button>
                   </Link>
                 </div>
                 <div className="space-y-4">
-                  {savedTalents.map((talent, index) => (
+                  {connections.length > 0 ? connections.map((conn, index) => (
                     <div key={index} className="flex items-center gap-3">
-                      <img
-                        src={talent.image}
-                        alt={talent.name}
-                        className="w-12 h-12 rounded-xl object-cover"
-                      />
+                      {conn.profileImage ? (
+                        <img
+                          src={conn.profileImage}
+                          alt={conn.name}
+                          className="w-12 h-12 rounded-xl object-cover"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 font-bold uppercase">
+                          {conn.name?.charAt(0) || 'U'}
+                        </div>
+                      )}
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm truncate">{talent.name}</div>
-                        <div className="text-xs text-gray-500">{talent.category}</div>
+                        <div className="font-medium text-sm truncate">{conn.name}</div>
+                        <div className="text-xs text-gray-500">{conn.role || 'User'}</div>
                       </div>
-                      <div className="text-xs text-gray-600">{talent.followers}</div>
+                      <Link to="/chat">
+                        <Button size="icon" variant="ghost" className="text-blue-600">
+                          <MessageSquare className="w-4 h-4" />
+                        </Button>
+                      </Link>
                     </div>
-                  ))}
+                  )) : (
+                    <p className="text-sm text-gray-500 text-center py-4">No connections yet.</p>
+                  )}
                   <Link to={userData?.role === 'talent' ? "/explore-brands" : "/explore"}>
                     <Button variant="outline" className="w-full mt-2">
                       {userData?.role === 'talent' ? 'Find More Brands' : 'Find More Talent'}

@@ -29,6 +29,9 @@ export default function ExploreTalent() {
   const { currentUser, userData, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
+  const [connections, setConnections] = useState<any[]>([]);
+  const [sentInvites, setSentInvites] = useState<any[]>([]);
+
   useEffect(() => {
     if (!authLoading) {
       if (!currentUser || userData?.role !== 'brand') {
@@ -36,24 +39,34 @@ export default function ExploreTalent() {
         return;
       }
       
-      const fetchTalents = async () => {
+      const fetchData = async () => {
         try {
           const token = await currentUser.getIdToken();
-          const res = await fetch('http://localhost:5000/api/talents', {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          if (res.ok) {
-            const data = await res.json();
+          const [talentsRes, connRes, invitesRes] = await Promise.all([
+            fetch('http://localhost:5000/api/talents', { headers: { Authorization: `Bearer ${token}` } }),
+            fetch('http://localhost:5000/api/connections', { headers: { Authorization: `Bearer ${token}` } }),
+            fetch('http://localhost:5000/api/invites', { headers: { Authorization: `Bearer ${token}` } })
+          ]);
+          
+          if (talentsRes.ok) {
+            const data = await talentsRes.json();
             setDbTalents(data.data || []);
+          }
+          if (connRes.ok) {
+            const data = await connRes.json();
+            setConnections(data.data || []);
+          }
+          if (invitesRes.ok) {
+            const data = await invitesRes.json();
+            // Store pending invites sent by this user
+            setSentInvites(data.data?.filter((inv: any) => inv.senderId === currentUser.uid && inv.status === 'pending') || []);
           }
         } catch (err) {
           console.error(err);
         }
       };
       
-      fetchTalents();
+      fetchData();
     }
   }, [currentUser, userData, authLoading, navigate]);
 
@@ -433,7 +446,12 @@ export default function ExploreTalent() {
             {filteredTalents.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredTalents.map((talent) => (
-                  <TalentCard key={talent._id || talent.id} talent={talent} />
+                  <TalentCard 
+                    key={talent._id || talent.id} 
+                    talent={talent} 
+                    isConnected={connections.some(c => c.firebaseUid === talent.firebaseUid)}
+                    isPending={sentInvites.some(inv => inv.receiverId === talent.firebaseUid)}
+                  />
                 ))}
               </div>
             ) : (

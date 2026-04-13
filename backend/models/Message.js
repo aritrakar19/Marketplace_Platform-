@@ -10,13 +10,32 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  content: {
+  receiverId: {
     type: String,
     required: true
   },
-  isRead: {
-    type: Boolean,
-    default: false
+  content: {
+    type: String,
+    required: false
+  },
+  type: {
+    type: String,
+    enum: ['text', 'image', 'video', 'file'],
+    default: 'text'
+  },
+  fileUrl: {
+    type: String
+  },
+  fileId: {
+    type: String
+  },
+  fileName: {
+    type: String
+  },
+  status: {
+    type: String,
+    enum: ['sent', 'delivered', 'seen'],
+    default: 'sent'
   }
 }, { timestamps: true });
 

@@ -42,11 +42,52 @@ const initSocket = (server) => {
 
         // Emit to receiver's room
         io.to(receiverId).emit('receive_message', data);
+        io.to(receiverId).emit('new_message', data);
         // Also emit back to sender for sync
+        socket.emit('message_sent', data);
         socket.emit('message_sent', data);
         console.log(`Message sent from ${senderId} to ${receiverId}`);
       } catch (err) {
         console.error('Error in send_message:', err.message);
+      }
+    });
+
+    // Handle message delivered
+    socket.on('message_delivered', async (data) => {
+      // data: { messageId, senderId }
+      try {
+        const Message = require('../models/Message');
+        // Only update if it exists (using string or objectid works)
+        if (data.messageId) {
+          await Message.findByIdAndUpdate(data.messageId, { status: 'delivered' });
+        }
+        // Emit back to sender
+        io.to(data.senderId).emit('message_status_update', {
+          messageId: data.messageId,
+          status: 'delivered'
+        });
+      } catch (err) {
+        console.error('Error in message_delivered:', err.message);
+      }
+    });
+
+    // Handle messages seen
+    socket.on('messages_seen', async (data) => {
+      // data: { senderId, receiverId } - receiverId is the person opening the chat
+      try {
+        const Message = require('../models/Message');
+        // Update all previous messages from senderId to receiverId that are not 'seen'
+        await Message.updateMany(
+          { senderId: data.senderId, receiverId: data.receiverId, status: { $ne: 'seen' } },
+          { status: 'seen' }
+        );
+        // Emit back to sender
+        io.to(data.senderId).emit('messages_status_update', {
+          receiverId: data.receiverId,
+          status: 'seen'
+        });
+      } catch (err) {
+        console.error('Error in messages_seen:', err.message);
       }
     });
 

@@ -54,12 +54,16 @@ export const useSocket = () => {
     }
   }, [currentUser]);
 
-  const sendMessage = (receiverId: string, content: string) => {
+  const sendMessage = (receiverId: string, content: string, type: string = 'text', fileUrl?: string, fileId?: string, fileName?: string) => {
     if (socketRef.current && currentUser) {
       socketRef.current.emit('send_message', {
         senderId: currentUser.uid,
         receiverId,
         content,
+        type,
+        fileUrl,
+        fileId,
+        fileName,
         timestamp: new Date().toISOString()
       });
     }
@@ -75,5 +79,39 @@ export const useSocket = () => {
     return () => {};
   };
 
-  return { socket: socketRef.current, isConnected, sendMessage, onMessage };
+  const onNewMessage = (callback: (data: any) => void) => {
+    if (socketRef.current) {
+      socketRef.current.on('new_message', callback);
+      return () => {
+        socketRef.current?.off('new_message', callback);
+      };
+    }
+    return () => {};
+  };
+
+  const markDelivered = (messageId: string, senderId: string) => {
+    if (socketRef.current) {
+      socketRef.current.emit('message_delivered', { messageId, senderId });
+    }
+  };
+
+  const markSeen = (senderId: string) => {
+    if (socketRef.current && currentUser) {
+      socketRef.current.emit('messages_seen', { senderId, receiverId: currentUser.uid });
+    }
+  };
+
+  const onMessageStatusUpdate = (callback: (data: any) => void) => {
+    if (socketRef.current) {
+      socketRef.current.on('message_status_update', callback);
+      socketRef.current.on('messages_status_update', callback);
+      return () => {
+        socketRef.current?.off('message_status_update', callback);
+        socketRef.current?.off('messages_status_update', callback);
+      };
+    }
+    return () => {};
+  };
+
+  return { socket: socketRef.current, isConnected, sendMessage, onMessage, onNewMessage, markDelivered, markSeen, onMessageStatusUpdate };
 };

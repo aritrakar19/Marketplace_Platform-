@@ -6,8 +6,7 @@ exports.getConversations = async (req, res) => {
   try {
     const userId = req.user.firebaseUid;
     const conversations = await Conversation.find({ participants: userId })
-      .populate('lastMessage')
-      .sort({ updatedAt: -1 });
+      .sort({ lastMessageTime: -1 });
 
     const formattedConvs = await Promise.all(conversations.map(async (conv) => {
       const partnerId = conv.participants.find(p => p !== userId);
@@ -20,8 +19,8 @@ exports.getConversations = async (req, res) => {
         participants: conv.participants,
         partnerName: partnerUser ? (partnerUser.fullName || partnerUser.name || 'User') : 'Unknown User',
         partnerImage: partnerUser?.profileImage || `https://ui-avatars.com/api/?name=${partnerUser?.name || 'User'}&background=random`,
-        lastMessage: conv.lastMessage ? conv.lastMessage.content : '',
-        time: conv.updatedAt,
+        lastMessage: conv.lastMessage || '',
+        time: conv.lastMessageTime || conv.updatedAt,
       };
     }));
 
@@ -43,6 +42,11 @@ exports.getHistory = async (req, res) => {
       senderId: msg.senderId,
       sender: msg.senderId === req.user.firebaseUid ? 'me' : 'them',
       content: msg.content,
+      type: msg.type || 'text',
+      fileUrl: msg.fileId ? `http://localhost:5000/api/file/${msg.fileId}` : msg.fileUrl || '',
+      fileId: msg.fileId || '',
+      fileName: msg.fileName || '',
+      status: msg.status || 'sent',
       time: new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }));
 
@@ -55,19 +59,35 @@ exports.getHistory = async (req, res) => {
 exports.sendMessage = async (req, res) => {
   try {
     const conversationId = req.params.id;
-    const { content } = req.body;
+    const { content, type, fileUrl, fileId, fileName } = req.body;
     const senderId = req.user.firebaseUid;
+    const conversation = await Conversation.findById(conversationId);
+    if (!conversation) {
+      return res.status(404).json({ success: false, message: 'Conversation not found' });
+    }
+    const receiverId = conversation.participants.find(p => p !== senderId) || senderId; // Handle edge cases
 
     const newMsg = new Message({
       conversationId,
       senderId,
-      content
+      receiverId,
+      content,
+      type: type || 'text',
+      fileUrl,
+      fileId,
+      fileName,
+      status: 'sent'
     });
     await newMsg.save();
 
+    let lastMessageText = content;
+    if (type === 'image') lastMessageText = '📷 Image';
+    else if (type === 'video') lastMessageText = '🎥 Video';
+    else if (type === 'file') lastMessageText = `📄 ${fileName || 'File'}`;
+
     await Conversation.findByIdAndUpdate(conversationId, {
-      lastMessage: newMsg._id,
-      updatedAt: new Date()
+      lastMessage: lastMessageText,
+      lastMessageTime: new Date()
     });
 
     res.status(200).json({ success: true, data: newMsg });

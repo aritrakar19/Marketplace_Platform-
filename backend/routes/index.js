@@ -19,4 +19,5 @@ router.use('/reviews', require('../modules/reviews/review.routes'));
 router.use('/admin', require('../modules/admin/admin.routes'));
 router.use('/notifications', require('../modules/notifications/notification.routes'));
 router.use('/connections', require('../modules/connections/connection.routes'));
+router.use('/', require('../modules/upload/upload.routes'));
 module.exports = router;

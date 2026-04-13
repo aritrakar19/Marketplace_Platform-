@@ -153,11 +153,30 @@ const getAllBrands = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const user = await User.findOne({ firebaseUid: req.params.id });
+    if (!user) {
+      // Try by MongoDB _id if not found by firebaseUid, just in case
+      const userByMongoId = await User.findById(req.params.id);
+      if (!userByMongoId) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+      return res.status(200).json({ success: true, data: userByMongoId });
+    }
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    console.error('Fetch user by ID error:', error.message);
+    res.status(500).json({ success: false, message: 'Server error fetching user profile' });
+  }
+};
+
 module.exports = {
   registerUser,
   getUserProfile,
   updateUserProfile,
   getAllTalents,
   getTalentById,
-  getAllBrands
+  getAllBrands,
+  getUserById
 };

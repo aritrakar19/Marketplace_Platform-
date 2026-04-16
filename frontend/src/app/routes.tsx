@@ -11,6 +11,8 @@ import ChatPage from "./pages/ChatPage";
 import PaymentPage from "./pages/PaymentPage";
 import AdminPanel from "./pages/AdminPanel";
 import ProfileSetup from "./pages/ProfileSetup";
+import ProfilePage from "./pages/ProfilePage";
+import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuth } from "../context/AuthContext";
@@ -54,6 +56,14 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard",
         Component: BrandDashboard,
+      },
+      {
+        path: "/profile",
+        Component: ProfilePage,
+      },
+      {
+        path: "/settings",
+        Component: SettingsPage,
       },
       {
         path: "/campaigns",

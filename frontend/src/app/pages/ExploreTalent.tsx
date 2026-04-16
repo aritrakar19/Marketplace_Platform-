@@ -14,6 +14,7 @@ import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import { Search, Filter, X } from 'lucide-react';
 import { categories } from '../data/mockData';
+import { apiUrl } from '@/lib/api';
 
 export default function ExploreTalent() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,9 +44,9 @@ export default function ExploreTalent() {
         try {
           const token = await currentUser.getIdToken();
           const [talentsRes, connRes, invitesRes] = await Promise.all([
-            fetch('http://localhost:5000/api/talents', { headers: { Authorization: `Bearer ${token}` } }),
-            fetch('http://localhost:5000/api/connections', { headers: { Authorization: `Bearer ${token}` } }),
-            fetch('http://localhost:5000/api/invites', { headers: { Authorization: `Bearer ${token}` } })
+            fetch(apiUrl('/talents'), { headers: { Authorization: `Bearer ${token}` } }),
+            fetch(apiUrl('/connections'), { headers: { Authorization: `Bearer ${token}` } }),
+            fetch(apiUrl('/invites'), { headers: { Authorization: `Bearer ${token}` } })
           ]);
           
           if (talentsRes.ok) {

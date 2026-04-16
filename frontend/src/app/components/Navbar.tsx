@@ -1,9 +1,16 @@
 import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
-import { Menu, X, Bell, User, LogOut } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../components/ui/dropdown-menu';
+import { Menu, X, User, LogOut, Settings } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import ProfileModal from './ProfileModal';
 import NotificationsPopover from './NotificationsPopover';
 
 interface NavbarProps {
@@ -25,21 +32,57 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
               </div>
               <span className="font-semibold text-lg">TalentMatch</span>
             </Link>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <NotificationsPopover />
-              <Button variant="ghost" onClick={() => logout()} title="Log out" className="hidden md:flex gap-2">
-                <LogOut className="w-4 h-4" />
-                <span className="text-sm">Logout</span>
-              </Button>
-              <ProfileModal>
-                <Button variant="ghost" size="icon" className="overflow-hidden rounded-full border border-gray-200">
-                  {userData?.profileImage ? (
-                    <img src={userData.profileImage} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <User className="w-5 h-5" />
-                  )}
-                </Button>
-              </ProfileModal>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="overflow-hidden rounded-full border border-gray-200 h-9 w-9"
+                    aria-label="Account menu"
+                  >
+                    {userData?.profileImage ? (
+                      <img src={userData.profileImage} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="w-5 h-5" />
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-52">
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-0.5">
+                      <span className="text-sm font-medium truncate">
+                        {userData?.fullName || userData?.name || 'Account'}
+                      </span>
+                      {userData?.email && (
+                        <span className="text-xs text-muted-foreground truncate">{userData.email}</span>
+                      )}
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/settings" className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-600 focus:text-red-600 cursor-pointer"
+                    onClick={() => logout()}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>

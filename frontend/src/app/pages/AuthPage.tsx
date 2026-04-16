@@ -15,6 +15,7 @@ import {
   GoogleAuthProvider 
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { apiUrl } from '@/lib/api';
 
 export default function AuthPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login');
@@ -40,7 +41,7 @@ export default function AuthPage() {
 
         try {
           // Save user to MongoDB backend
-          const res = await fetch('http://localhost:5000/api/users/register', {
+          const res = await fetch(apiUrl('/users/register'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -66,7 +67,7 @@ export default function AuthPage() {
         // Fetch user from MongoDB to verify/store role if needed in future
         try {
           const token = await user.getIdToken();
-          const response = await fetch('http://localhost:5000/api/users/me', {
+          const response = await fetch(apiUrl('/users/me'), {
             headers: { Authorization: `Bearer ${token}` }
           });
           
@@ -109,14 +110,14 @@ export default function AuthPage() {
       const user = userCredential.user;
 
       const token = await user.getIdToken();
-      const meResponse = await fetch('http://localhost:5000/api/users/me', {
+      const meResponse = await fetch(apiUrl('/users/me'), {
         headers: { Authorization: `Bearer ${token}` }
       });
 
       if (!meResponse.ok) {
         if (mode === 'signup' && role) {
           // New Google Signup
-          const res = await fetch('http://localhost:5000/api/users/register', {
+          const res = await fetch(apiUrl('/users/register'), {
              method: 'POST',
              headers: { 'Content-Type': 'application/json' },
              body: JSON.stringify({

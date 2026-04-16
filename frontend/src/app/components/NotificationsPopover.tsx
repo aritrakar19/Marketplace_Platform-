@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
 } from './ui/popover';
 import { useSocket } from '../../hooks/useSocket';
+import { apiUrl } from '@/lib/api';
 
 interface Notification {
   _id: string;
@@ -31,7 +32,7 @@ export default function NotificationsPopover() {
     if (!currentUser) return;
     try {
       const token = await currentUser.getIdToken();
-      const res = await fetch('http://localhost:5000/api/notifications', {
+      const res = await fetch(apiUrl('/notifications'), {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -69,7 +70,7 @@ export default function NotificationsPopover() {
 
     try {
       const token = await currentUser.getIdToken();
-      await fetch(`http://localhost:5000/api/notifications/${id}/read`, {
+      await fetch(apiUrl(`/notifications/${id}/read`), {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -84,7 +85,7 @@ export default function NotificationsPopover() {
     if (!currentUser) return;
     try {
       const token = await currentUser.getIdToken();
-      const response = await fetch(`http://localhost:5000/api/invites/${inviteId}`, {
+      const response = await fetch(apiUrl(`/invites/${inviteId}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

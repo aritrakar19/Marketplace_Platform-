@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
+import { apiUrl } from '@/lib/api';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -37,7 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Fetch role from backend
         try {
           const token = await user.getIdToken();
-          const response = await fetch('http://localhost:5000/api/users/me', {
+          const response = await fetch(apiUrl('/users/me'), {
             headers: { Authorization: `Bearer ${token}` }
           });
           

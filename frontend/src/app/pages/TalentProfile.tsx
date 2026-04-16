@@ -22,6 +22,8 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { apiUrl } from '@/lib/api';
+import SocialConnectButtons from '../components/SocialConnectButtons';
 
 export default function TalentProfile() {
   const { id } = useParams();
@@ -31,6 +33,9 @@ export default function TalentProfile() {
   const [saved, setSaved] = useState(false);
   const { currentUser } = useAuth();
 
+  const isOwnProfile =
+    Boolean(currentUser?.uid && talent?.firebaseUid && currentUser.uid === talent.firebaseUid);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,13 +44,13 @@ export default function TalentProfile() {
         const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
 
         // Fetch talent by id
-        const res = await fetch(`http://localhost:5000/api/talents/${id}`, { headers });
+        const res = await fetch(apiUrl(`/talents/${id}`), { headers });
         if (res.ok) {
           const data = await res.json();
           setTalent(data.data);
 
           // Fetch similar talents
-          const allRes = await fetch('http://localhost:5000/api/talents', { headers });
+          const allRes = await fetch(apiUrl('/talents'), { headers });
           if (allRes.ok) {
             const allData = await allRes.json();
             setSimilarTalents(
@@ -289,6 +294,16 @@ export default function TalentProfile() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {isOwnProfile && (
+              <Card className="p-6 rounded-2xl border-blue-100 bg-gradient-to-b from-blue-50/50 to-white">
+                <h3 className="font-semibold mb-1">Connect your accounts</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Link Facebook, Instagram (via Meta), or YouTube. Manual handles stay on your profile too.
+                </p>
+                <SocialConnectButtons layout="stack" className="sm:flex-row sm:flex-wrap" />
+              </Card>
+            )}
+
             {/* Social Media */}
             {talent.socialMedia && (
               <Card className="p-6 rounded-2xl">

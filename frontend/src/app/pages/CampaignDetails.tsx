@@ -7,6 +7,7 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import { Calendar, DollarSign, Users, Briefcase, CheckCircle, ArrowLeft } from 'lucide-react';
+import { apiUrl } from '@/lib/api';
 
 interface Campaign {
   id: string;
@@ -33,7 +34,7 @@ export default function CampaignDetails() {
   useEffect(() => {
     const fetchCampaign = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/campaigns/${id}`);
+        const res = await fetch(apiUrl(`/campaigns/${id}`));
         const data = await res.json();
         if (data.success) {
           setCampaign(data.data);

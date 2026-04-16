@@ -10,6 +10,8 @@ import { Progress } from '../components/ui/progress';
 import { Badge } from '../components/ui/badge';
 import { ArrowLeft, ArrowRight, Check, Upload } from 'lucide-react';
 import { categories } from '../data/mockData';
+import { apiUrl } from '@/lib/api';
+import SocialConnectButtons from '../components/SocialConnectButtons';
 
 export default function ProfileSetup() {
   const [step, setStep] = useState(1);
@@ -51,7 +53,7 @@ export default function ProfileSetup() {
     } else {
       try {
         const token = await auth.currentUser?.getIdToken();
-        const response = await fetch('http://localhost:5000/api/users/profile', {
+        const response = await fetch(apiUrl('/users/profile'), {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -263,10 +265,20 @@ export default function ProfileSetup() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-semibold mb-4">Social Media Accounts</h2>
-                <p className="text-gray-600 mb-6">
-                  Connect your social media profiles to showcase your reach
+                <p className="text-gray-600 mb-4">
+                  Connect your accounts or enter handles manually — you can skip and finish this later.
                 </p>
               </div>
+
+              <div className="rounded-xl border border-blue-100 bg-blue-50/60 p-4 space-y-3">
+                <p className="text-sm font-medium text-blue-900">Quick connect</p>
+                <p className="text-xs text-blue-800/80">
+                  Facebook and Instagram use Meta login on our server. You’ll return here after authorizing.
+                </p>
+                <SocialConnectButtons layout="stack" className="sm:flex-row sm:flex-wrap" />
+              </div>
+
+              <p className="text-sm font-medium text-gray-700">Or add handles manually</p>
 
               <div className="space-y-4">
                 <div>
@@ -341,6 +353,12 @@ export default function ProfileSetup() {
                   </div>
                 </div>
               </div>
+
+              <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50/80 p-4 text-sm text-gray-600">
+                <span className="font-medium text-gray-800">Prefer to skip?</span> Use{' '}
+                <span className="font-medium">Skip for now</span> below — you can update social links from your profile
+                anytime.
+              </div>
             </div>
           )}
 
@@ -378,20 +396,27 @@ export default function ProfileSetup() {
           )}
 
           {/* Navigation */}
-          <div className="flex items-center justify-between mt-8 pt-6 border-t">
-            <Button
-              variant="outline"
-              onClick={handleBack}
-              disabled={step === 1}
-              className="gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </Button>
-
-            <div className="text-sm text-gray-500">
-              Profile Completion: {Math.round(progress)}%
+          <div className="flex flex-wrap items-center justify-between gap-3 mt-8 pt-6 border-t">
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={handleBack}
+                disabled={step === 1}
+                className="gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back
+              </Button>
+              {step === 3 && (
+                <Button type="button" variant="ghost" className="text-gray-600" onClick={() => setStep(4)}>
+                  Skip for now
+                </Button>
+              )}
             </div>
+
+            <p className="text-sm text-gray-500 order-last w-full text-center sm:order-none sm:w-auto">
+              Profile completion: {Math.round(progress)}%
+            </p>
 
             <Button onClick={handleNext} className="bg-blue-600 hover:bg-blue-700 gap-2">
               {step === totalSteps ? 'Complete' : 'Next'}

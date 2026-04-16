@@ -8,6 +8,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card } from '../components/ui/card';
 import { Search } from 'lucide-react';
+import { apiUrl } from '@/lib/api';
 
 export default function ExploreBrands() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -26,7 +27,7 @@ export default function ExploreBrands() {
       const fetchBrands = async () => {
         try {
           const token = await currentUser.getIdToken();
-          const res = await fetch('http://localhost:5000/api/brands', {
+          const res = await fetch(apiUrl('/brands'), {
             headers: {
               Authorization: `Bearer ${token}`
             }

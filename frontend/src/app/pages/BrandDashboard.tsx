@@ -36,6 +36,7 @@ const savedTalents = [
 ];
 
 import { useAuth } from '../../context/AuthContext';
+import { apiUrl } from '@/lib/api';
 
 export default function BrandDashboard() {
   const { userData, currentUser } = useAuth();
@@ -45,7 +46,7 @@ export default function BrandDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/campaigns/count?status=open');
+        const res = await fetch(apiUrl('/campaigns/count?status=open'));
         const data = await res.json();
         if (data.success) {
           setCampaignCount(data.data.count);
@@ -57,7 +58,7 @@ export default function BrandDashboard() {
       try {
         if (!currentUser) return;
         const token = await currentUser.getIdToken();
-        const res = await fetch('http://localhost:5000/api/connections', { headers: { Authorization: `Bearer ${token}` } });
+        const res = await fetch(apiUrl('/connections'), { headers: { Authorization: `Bearer ${token}` } });
         const data = await res.json();
         if (data.success) {
           setConnections(data.data);

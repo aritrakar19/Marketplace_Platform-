@@ -6,6 +6,7 @@ import { Badge } from './ui/badge';
 import { toast } from 'sonner';
 import { Check, X, MessageSquare } from 'lucide-react';
 import { Link } from 'react-router';
+import { apiUrl } from '@/lib/api';
 
 export default function InvitesList() {
   const { currentUser, userData } = useAuth();
@@ -16,7 +17,7 @@ export default function InvitesList() {
     if (!currentUser) return;
     try {
       const token = await currentUser.getIdToken();
-      const response = await fetch('http://localhost:5000/api/invites', {
+      const response = await fetch(apiUrl('/invites'), {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await response.json();
@@ -38,7 +39,7 @@ export default function InvitesList() {
     if (!currentUser) return;
     try {
       const token = await currentUser.getIdToken();
-      const response = await fetch(`http://localhost:5000/api/invites/${inviteId}`, {
+      const response = await fetch(apiUrl(`/invites/${inviteId}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -18,6 +18,7 @@ import {
 } from '../components/ui/dropdown-menu';
 import ChatProfileModal from '../components/ChatProfileModal';
 import { User } from 'lucide-react';
+import { apiUrl } from '@/lib/api';
 
 export default function ChatPage() {
   const { currentUser, userData } = useAuth();
@@ -44,7 +45,7 @@ export default function ChatPage() {
       if (!currentUser) return;
       try {
         const token = await currentUser.getIdToken();
-        const response = await fetch('http://localhost:5000/api/chat', {
+        const response = await fetch(apiUrl('/chat'), {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await response.json();
@@ -79,7 +80,7 @@ export default function ChatPage() {
       if (!currentUser || !selectedConversation) return;
       try {
         const token = await currentUser.getIdToken();
-        const response = await fetch(`http://localhost:5000/api/chat/${selectedConversation.id}/messages`, {
+        const response = await fetch(apiUrl(`/chat/${selectedConversation.id}/messages`), {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await response.json();
@@ -114,7 +115,7 @@ export default function ChatPage() {
           markSeen(selectedConversation.partnerId);
         }
 
-        const displayFileUrl = msg.fileId ? `http://localhost:5000/api/file/${msg.fileId}` : (msg.fileUrl || '');
+        const displayFileUrl = msg.fileId ? apiUrl(`/file/${msg.fileId}`) : (msg.fileUrl || '');
 
         setChatMessages((prev) => [...prev, {
           id: Date.now(),
@@ -215,7 +216,7 @@ export default function ChatPage() {
         const formData = new FormData();
         formData.append('file', attachment.file);
 
-        const uploadRes = await fetch('http://localhost:5000/api/upload', {
+        const uploadRes = await fetch(apiUrl('/upload'), {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -226,7 +227,7 @@ export default function ChatPage() {
         const uploadData = await uploadRes.json();
         if (uploadData.success && uploadData.data?.fileId) {
            fileId = uploadData.data.fileId;
-           fileUrl = `http://localhost:5000/api/file/${fileId}`;
+           fileUrl = apiUrl(`/file/${fileId}`);
         }
       }
 
@@ -236,7 +237,7 @@ export default function ChatPage() {
       // Persist to DB
       try {
         const token = await currentUser.getIdToken();
-        const res = await fetch(`http://localhost:5000/api/chat/${selectedConversation.id}/messages`, {
+        const res = await fetch(apiUrl(`/chat/${selectedConversation.id}/messages`), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

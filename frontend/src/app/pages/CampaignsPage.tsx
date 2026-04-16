@@ -9,6 +9,7 @@ import { Link } from 'react-router';
 import { Search, Plus, Calendar, DollarSign, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { auth } from '../../services/firebase';
+import { apiUrl } from '@/lib/api';
 
 interface Campaign {
   id: string;
@@ -37,7 +38,7 @@ export default function CampaignsPage() {
 
   const fetchCampaigns = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/campaigns');
+      const res = await fetch(apiUrl('/campaigns'));
       const data = await res.json();
       if (data.success) {
         setCampaigns(data.data);
@@ -58,7 +59,7 @@ export default function CampaignsPage() {
     setSubmitting(true);
     try {
       const token = await auth.currentUser?.getIdToken();
-      const res = await fetch('http://localhost:5000/api/campaigns', {
+      const res = await fetch(apiUrl('/campaigns'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

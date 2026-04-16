@@ -9,6 +9,7 @@ import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { useAuth } from '../../context/AuthContext';
 import { Users, Activity, Mail, MapPin, Instagram, Youtube, Twitter, Hash, Link as LinkIcon, ExternalLink } from 'lucide-react';
+import { apiUrl } from '@/lib/api';
 
 interface ChatProfileModalProps {
   userId: string;
@@ -30,7 +31,7 @@ export default function ChatProfileModal({ userId, isOpen, onClose }: ChatProfil
       setError(null);
       try {
         const token = await currentUser.getIdToken();
-        const response = await fetch(`http://localhost:5000/api/users/${userId}`, {
+        const response = await fetch(apiUrl(`/users/${userId}`), {
           headers: {
             'Authorization': `Bearer ${token}`
           }

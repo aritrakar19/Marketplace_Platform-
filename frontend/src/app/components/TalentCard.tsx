@@ -8,6 +8,7 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'sonner';
+import { apiUrl } from '@/lib/api';
 
 interface TalentCardProps {
   talent: any;
@@ -30,7 +31,7 @@ export default function TalentCard({ talent, isConnected = false, isPending = fa
     setInviting(true);
     try {
       const token = await currentUser.getIdToken();
-      const response = await fetch('http://localhost:5000/api/invites', {
+      const response = await fetch(apiUrl('/invites'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

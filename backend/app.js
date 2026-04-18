@@ -17,10 +17,12 @@ app.use(helmet());
  *
  * FRONTEND_ORIGIN: comma-separated list, defaults to http://localhost:5173
  */
-const frontendOrigins = (process.env.FRONTEND_ORIGIN || 'http://localhost:5173')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean);
+const frontendOrigins = Array.from(new Set([
+  ...(process.env.FRONTEND_ORIGIN 
+    || 'http://localhost:5173').split(','),
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
+].map((s) => s.trim()).filter(Boolean)));
 
 app.use(
   cors({

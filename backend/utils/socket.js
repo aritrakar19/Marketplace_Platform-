@@ -3,11 +3,18 @@ const Invite = require('../models/Invite');
 
 let io;
 
+const frontendOrigins = Array.from(new Set([
+  ...(process.env.FRONTEND_ORIGIN || 'http://localhost:5173').split(','),
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
+].map((s) => s.trim()).filter(Boolean)));
+
 const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: '*', 
-      methods: ['GET', 'POST']
+      origin: frontendOrigins, 
+      methods: ['GET', 'POST'],
+      credentials: true
     }
   });
 

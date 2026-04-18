@@ -99,7 +99,7 @@ export default function BrandDashboard() {
                 className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
               >
                 <Users className="w-5 h-5" />
-                <span>Find Talent</span>
+                <span>Find Talents</span>
               </Link>
             )}
             <Link
@@ -339,7 +339,7 @@ export default function BrandDashboard() {
                   )}
                   <Link to={userData?.role === 'talent' ? "/explore-brands" : "/explore"}>
                     <Button variant="outline" className="w-full mt-2">
-                      {userData?.role === 'talent' ? 'Find More Brands' : 'Find More Talent'}
+                      {userData?.role === 'talent' ? 'Find More Brands' : 'Find More Talents'}
                     </Button>
                   </Link>
                 </div>

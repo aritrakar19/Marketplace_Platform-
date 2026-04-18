@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { auth } from '../../services/firebase';
 import { useNavigate } from 'react-router';
 import { Button } from '../components/ui/button';
@@ -30,6 +30,30 @@ export default function ProfileSetup() {
   });
   const navigate = useNavigate();
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserRole = () => {
+      const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          try {
+            const token = await user.getIdToken();
+            const response = await fetch(apiUrl('/users/me'), {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.ok) {
+              const result = await response.json();
+              setRole(result.data?.role || null);
+            }
+          } catch (err) {
+            console.error('Error fetching role:', err);
+          }
+        }
+      });
+      return () => unsubscribe();
+    };
+    fetchUserRole();
+  }, []);
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -44,10 +68,40 @@ export default function ProfileSetup() {
     }
   };
 
-  const totalSteps = 4;
+  const getStepsList = () => {
+    const list = ['Basic Info'];
+    if (role === 'talent') {
+      list.push('Category');
+    }
+    list.push('Social Media');
+    return list;
+  };
+  
+  const stepsList = getStepsList();
+  const totalSteps = stepsList.length;
   const progress = (step / totalSteps) * 100;
+  const currentStepTitle = stepsList[step - 1];
+
+  useEffect(() => {
+    if (step > totalSteps && totalSteps > 0) {
+      setStep(totalSteps);
+    }
+  }, [totalSteps, step]);
 
   const handleNext = async () => {
+    // Validate required fields
+    if (currentStepTitle === 'Basic Info') {
+      if (!formData.fullName || !formData.displayName || !formData.location || !formData.bio) {
+        alert('Please fill out all required fields (Full Name, Display Name, Location, Bio).');
+        return;
+      }
+    } else if (currentStepTitle === 'Category') {
+      if (!formData.category || !formData.subCategory) {
+        alert('Please select a category and sub-category.');
+        return;
+      }
+    }
+
     if (step < totalSteps) {
       setStep(step + 1);
     } else {
@@ -99,24 +153,17 @@ export default function ProfileSetup() {
         <div className="mb-8">
           <Progress value={progress} className="h-2" />
           <div className="flex justify-between mt-4 text-sm">
-            <span className={step >= 1 ? 'text-blue-600 font-semibold' : 'text-gray-400'}>
-              Basic Info
-            </span>
-            <span className={step >= 2 ? 'text-blue-600 font-semibold' : 'text-gray-400'}>
-              Category
-            </span>
-            <span className={step >= 3 ? 'text-blue-600 font-semibold' : 'text-gray-400'}>
-              Social Media
-            </span>
-            <span className={step >= 4 ? 'text-blue-600 font-semibold' : 'text-gray-400'}>
-              Portfolio
-            </span>
+            {stepsList.map((title, idx) => (
+              <span key={title} className={step >= idx + 1 ? 'text-blue-600 font-semibold' : 'text-gray-400'}>
+                {title}
+              </span>
+            ))}
           </div>
         </div>
 
         <Card className="p-8 rounded-2xl">
           {/* Step 1: Basic Info */}
-          {step === 1 && (
+          {currentStepTitle === 'Basic Info' && (
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-semibold mb-4">Basic Information</h2>
@@ -210,7 +257,7 @@ export default function ProfileSetup() {
           )}
 
           {/* Step 2: Category */}
-          {step === 2 && (
+          {currentStepTitle === 'Category' && (
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-semibold mb-4">Choose Your Category</h2>
@@ -261,7 +308,7 @@ export default function ProfileSetup() {
           )}
 
           {/* Step 3: Social Media */}
-          {step === 3 && (
+          {currentStepTitle === 'Social Media' && (
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-semibold mb-4">Social Media Accounts</h2>
@@ -362,39 +409,6 @@ export default function ProfileSetup() {
             </div>
           )}
 
-          {/* Step 4: Portfolio */}
-          {step === 4 && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-semibold mb-4">Portfolio</h2>
-                <p className="text-gray-600 mb-6">
-                  Upload your best work to showcase your skills (optional)
-                </p>
-              </div>
-
-              <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-blue-600 transition-colors cursor-pointer">
-                <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                <p className="text-lg font-medium mb-2">Upload Portfolio Images</p>
-                <p className="text-sm text-gray-500 mb-4">
-                  Drag and drop or click to browse
-                </p>
-                <Button variant="outline">Choose Files</Button>
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <div className="flex gap-2">
-                  <Check className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                  <div className="text-sm text-blue-900">
-                    <p className="font-medium mb-1">You can skip this step</p>
-                    <p className="text-blue-700">
-                      You can always add portfolio items later from your dashboard
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Navigation */}
           <div className="flex flex-wrap items-center justify-between gap-3 mt-8 pt-6 border-t">
             <div className="flex flex-wrap items-center gap-2">
@@ -407,8 +421,8 @@ export default function ProfileSetup() {
                 <ArrowLeft className="w-4 h-4" />
                 Back
               </Button>
-              {step === 3 && (
-                <Button type="button" variant="ghost" className="text-gray-600" onClick={() => setStep(4)}>
+              {currentStepTitle === 'Social Media' && (
+                <Button type="button" variant="ghost" className="text-gray-600" onClick={handleNext}>
                   Skip for now
                 </Button>
               )}

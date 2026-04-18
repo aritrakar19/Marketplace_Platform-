@@ -109,7 +109,7 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
               </Link>
             ) : (
               <Link to="/explore" className="text-gray-600 hover:text-gray-900 transition-colors">
-                Find Talent
+                Find Talents
               </Link>
             )}
             <Link to="/campaigns" className="text-gray-600 hover:text-gray-900 transition-colors">
@@ -165,7 +165,7 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                   className="text-gray-600 hover:text-gray-900 transition-colors px-4 py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Find Talent
+                  Find Talents
                 </Link>
               )}
               <Link

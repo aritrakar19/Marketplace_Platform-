@@ -84,13 +84,19 @@ const updateUserProfile = async (req, res) => {
     user.profileImage = profileImage || user.profileImage;
     user.fullName = fullName || user.fullName;
     user.displayName = displayName || user.displayName;
-    user.category = category || user.category;
-    user.subCategory = subCategory || user.subCategory;
+    
+    if (user.role === 'talent') {
+      user.category = category || user.category;
+      user.subCategory = subCategory || user.subCategory;
+    }
+    // Note: category is ignored for 'brand'.
+    // portfolio is ignored for both 'brand' and 'talent'.
+
     user.bio = bio || user.bio;
     user.location = location || user.location;
     user.followers = followers || user.followers;
     user.engagementRate = engagementRate || user.engagementRate;
-    user.portfolio = portfolio || user.portfolio;
+    
     user.socialMedia = {
       instagram: instagram || user.socialMedia?.instagram || '',
       youtube: youtube || user.socialMedia?.youtube || '',

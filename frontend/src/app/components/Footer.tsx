@@ -1,7 +1,9 @@
 import { Link } from 'react-router';
 import { Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Footer() {
+  const { userData } = useAuth();
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -41,15 +43,17 @@ export default function Footer() {
             <h3 className="font-semibold text-white mb-4">For Brands</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/explore" className="text-sm hover:text-white transition-colors">
-                  Find Talent
+                <Link to={userData?.role === 'talent' ? "/explore-brands" : "/explore"} className="text-sm hover:text-white transition-colors">
+                  {userData?.role === 'talent' ? 'Find Brands' : 'Find Talent'}
                 </Link>
               </li>
-              <li>
-                <Link to="/campaigns" className="text-sm hover:text-white transition-colors">
-                  Post Campaign
-                </Link>
-              </li>
+              {userData?.role !== 'talent' && (
+                <li>
+                  <Link to="/campaigns" className="text-sm hover:text-white transition-colors">
+                    Post Campaign
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link to="/#how-it-works" className="text-sm hover:text-white transition-colors">
                   How it Works

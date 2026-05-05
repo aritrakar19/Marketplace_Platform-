@@ -18,7 +18,8 @@ export default function ProfileSetup() {
   const [formData, setFormData] = useState({
     fullName: '',
     displayName: '',
-    category: '',
+    brandName: '',
+    categories: [] as string[],
     subCategory: '',
     bio: '',
     location: '',
@@ -44,6 +45,14 @@ export default function ProfileSetup() {
             if (response.ok) {
               const result = await response.json();
               setRole(result.data?.role || null);
+              if (result.data) {
+                setFormData(prev => ({
+                  ...prev,
+                  brandName: result.data.brandName || prev.brandName,
+                  fullName: result.data.fullName || prev.fullName,
+                  displayName: result.data.displayName || prev.displayName,
+                }));
+              }
             }
           } catch (err) {
             console.error('Error fetching role:', err);
@@ -91,13 +100,20 @@ export default function ProfileSetup() {
   const handleNext = async () => {
     // Validate required fields
     if (currentStepTitle === 'Basic Info') {
-      if (!formData.fullName || !formData.displayName || !formData.location || !formData.bio) {
-        alert('Please fill out all required fields (Full Name, Display Name, Location, Bio).');
-        return;
+      if (role === 'brand') {
+        if (!formData.brandName || !formData.location || !formData.bio) {
+          alert('Please fill out all required fields (Brand Name, Location, Bio).');
+          return;
+        }
+      } else {
+        if (!formData.fullName || !formData.displayName || !formData.location || !formData.bio) {
+          alert('Please fill out all required fields (Full Name, Display Name, Location, Bio).');
+          return;
+        }
       }
     } else if (currentStepTitle === 'Category') {
-      if (!formData.category || !formData.subCategory) {
-        alert('Please select a category and sub-category.');
+      if (formData.categories.length === 0) {
+        alert('Please select at least one sub-category.');
         return;
       }
     }
@@ -134,8 +150,6 @@ export default function ProfileSetup() {
       setStep(step - 1);
     }
   };
-
-  const selectedCategory = categories.find((c) => c.name === formData.category);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -196,34 +210,51 @@ export default function ProfileSetup() {
                   </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="fullName">Full Name *</Label>
-                  <Input
-                    id="fullName"
-                    value={formData.fullName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, fullName: e.target.value })
-                    }
-                    placeholder="John Doe"
-                    className="mt-1"
-                  />
-                </div>
+                {role === 'brand' ? (
+                  <div>
+                    <Label htmlFor="brandName">Brand Name *</Label>
+                    <Input
+                      id="brandName"
+                      value={formData.brandName}
+                      onChange={(e) =>
+                        setFormData({ ...formData, brandName: e.target.value })
+                      }
+                      placeholder="Your Brand Name"
+                      className="mt-1"
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div>
+                      <Label htmlFor="fullName">Full Name *</Label>
+                      <Input
+                        id="fullName"
+                        value={formData.fullName}
+                        onChange={(e) =>
+                          setFormData({ ...formData, fullName: e.target.value })
+                        }
+                        placeholder="John Doe"
+                        className="mt-1"
+                      />
+                    </div>
 
-                <div>
-                  <Label htmlFor="displayName">Display Name *</Label>
-                  <Input
-                    id="displayName"
-                    value={formData.displayName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, displayName: e.target.value })
-                    }
-                    placeholder="johndoe"
-                    className="mt-1"
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    This is how you'll appear to others
-                  </p>
-                </div>
+                    <div>
+                      <Label htmlFor="displayName">Display Name *</Label>
+                      <Input
+                        id="displayName"
+                        value={formData.displayName}
+                        onChange={(e) =>
+                          setFormData({ ...formData, displayName: e.target.value })
+                        }
+                        placeholder="johndoe"
+                        className="mt-1"
+                      />
+                      <p className="text-sm text-gray-500 mt-1">
+                        This is how you'll appear to others
+                      </p>
+                    </div>
+                  </>
+                )}
 
                 <div>
                   <Label htmlFor="location">Location *</Label>
@@ -264,46 +295,49 @@ export default function ProfileSetup() {
                 <p className="text-gray-600 mb-6">Select the category that best describes you</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="space-y-8 mb-6">
                 {categories.map((category) => (
-                  <Card
-                    key={category.id}
-                    className={`p-6 cursor-pointer hover:border-blue-600 transition-all ${
-                      formData.category === category.name
-                        ? 'border-blue-600 border-2 bg-blue-50'
-                        : ''
-                    }`}
-                    onClick={() =>
-                      setFormData({ ...formData, category: category.name, subCategory: '' })
-                    }
-                  >
-                    <div className="text-4xl mb-3">{category.icon}</div>
-                    <h3 className="font-semibold mb-1">{category.name}</h3>
-                    <p className="text-sm text-gray-600">{category.description}</p>
-                  </Card>
+                  <div key={category.id} className="space-y-4">
+                    <div className="flex items-center gap-2 pb-2 border-b">
+                      <span className="text-2xl">{category.icon}</span>
+                      <h3 className="text-lg font-semibold text-gray-800">{category.name}</h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                      {category.subCategories.map((subCat) => {
+                        const isSelected = formData.categories.includes(subCat);
+                        return (
+                          <div
+                            key={subCat}
+                            className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                              isSelected
+                                ? 'border-blue-600 bg-blue-50 shadow-sm'
+                                : 'border-gray-200 hover:border-blue-300 bg-white'
+                            }`}
+                            onClick={() => {
+                              if (isSelected) {
+                                setFormData({
+                                  ...formData,
+                                  categories: formData.categories.filter((c) => c !== subCat),
+                                });
+                              } else {
+                                setFormData({
+                                  ...formData,
+                                  categories: [...formData.categories, subCat],
+                                });
+                              }
+                            }}
+                          >
+                            <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'bg-blue-600 border-blue-600' : 'border-gray-300'}`}>
+                              {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
+                            </div>
+                            <span className="text-sm font-medium text-gray-700 select-none">{subCat}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 ))}
               </div>
-
-              {selectedCategory && (
-                <div>
-                  <Label>Sub-Category *</Label>
-                  <div className="grid grid-cols-2 gap-3 mt-2">
-                    {selectedCategory.subCategories.map((subCat) => (
-                      <button
-                        key={subCat}
-                        onClick={() => setFormData({ ...formData, subCategory: subCat })}
-                        className={`p-3 text-left rounded-xl border-2 hover:border-blue-600 transition-all ${
-                          formData.subCategory === subCat
-                            ? 'border-blue-600 bg-blue-50'
-                            : 'border-gray-200'
-                        }`}
-                      >
-                        <div className="text-sm font-medium">{subCat}</div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           )}
 

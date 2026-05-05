@@ -7,8 +7,10 @@ import { Link } from 'react-router';
 import { Search, Users, Zap, Shield, CheckCircle, ArrowRight, Star } from 'lucide-react';
 import { motion } from 'motion/react';
 import { categories, testimonials, mockTalents } from '../data/mockData';
+import { useAuth } from '../../context/AuthContext';
 
 export default function LandingPage() {
+  const { userData } = useAuth();
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -35,21 +37,23 @@ export default function LandingPage() {
               Connect with verified influencers, athletes, and players for authentic brand collaborations
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/explore">
+              <Link to={userData?.role === 'talent' ? "/explore-brands" : "/explore"}>
                 <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 h-14">
-                  Find Talent
+                  {userData?.role === 'talent' ? 'Find Brands' : 'Find Talent'}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
-              <Link to="/auth">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 h-14"
-                >
-                  Join as Talent
-                </Button>
-              </Link>
+              {!userData && (
+                <Link to="/auth">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 h-14"
+                  >
+                    Join as Talent
+                  </Button>
+                </Link>
+              )}
             </div>
           </motion.div>
         </div>
@@ -130,7 +134,7 @@ export default function LandingPage() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Link to={`/explore?category=${category.id}`}>
+                <Link to={userData?.role === 'talent' ? `/explore-brands?category=${category.id}` : `/explore?category=${category.id}`}>
                   <Card className="p-8 hover:shadow-lg transition-all duration-300 border-2 hover:border-blue-600 rounded-2xl group">
                     <div className="text-5xl mb-4">{category.icon}</div>
                     <h3 className="text-2xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">
@@ -196,9 +200,9 @@ export default function LandingPage() {
           </div>
 
           <div className="text-center">
-            <Link to="/explore">
+            <Link to={userData?.role === 'talent' ? "/explore-brands" : "/explore"}>
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                View All Talent
+                {userData?.role === 'talent' ? 'View All Brands' : 'View All Talent'}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
@@ -267,7 +271,7 @@ export default function LandingPage() {
               Join thousands of brands and talents creating amazing partnerships
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/explore">
+              <Link to={userData?.role === 'talent' ? "/explore-brands" : "/explore"}>
                 <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 h-14">
                   Get Started Now
                   <ArrowRight className="ml-2 w-5 h-5" />

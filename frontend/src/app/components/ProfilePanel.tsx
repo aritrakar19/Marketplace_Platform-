@@ -60,8 +60,9 @@ export default function ProfilePanel({
     name: '',
     fullName: '',
     displayName: '',
+    brandName: '',
     bio: '',
-    category: '',
+    categories: '',
     subCategory: '',
     followers: '',
     engagementRate: '',
@@ -116,8 +117,9 @@ export default function ProfilePanel({
         name: profileData.name || '',
         fullName: profileData.fullName || '',
         displayName: profileData.displayName || '',
+        brandName: profileData.brandName || '',
         bio: profileData.bio || '',
-        category: profileData.category || '',
+        categories: profileData.categories ? profileData.categories.join(', ') : '',
         subCategory: profileData.subCategory || '',
         followers: profileData.followers || '',
         engagementRate: profileData.engagementRate || '',
@@ -141,8 +143,9 @@ export default function ProfilePanel({
         name: formData.name,
         fullName: formData.fullName,
         displayName: formData.displayName,
+        brandName: formData.brandName,
         bio: formData.bio,
-        category: formData.category,
+        categories: formData.categories.split(',').map((s) => s.trim()).filter(Boolean),
         subCategory: formData.subCategory,
         location: formData.location,
         followers: formData.followers,
@@ -280,6 +283,16 @@ export default function ProfilePanel({
                   placeholder="Name on your account"
                 />
               </div>
+              {profileData?.role === 'brand' && (
+                <div>
+                  <Label>Brand Name</Label>
+                  <Input
+                    value={formData.brandName}
+                    onChange={(e) => setFormData({ ...formData, brandName: e.target.value })}
+                    placeholder="Your Brand Name"
+                  />
+                </div>
+              )}
               <div>
                 <Label>Full name</Label>
                 <Input
@@ -297,10 +310,10 @@ export default function ProfilePanel({
                 />
               </div>
               <div>
-                <Label>Category</Label>
+                <Label>Categories (comma-separated)</Label>
                 <Input
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  value={formData.categories}
+                  onChange={(e) => setFormData({ ...formData, categories: e.target.value })}
                   placeholder="e.g. Influencer, Athlete"
                 />
               </div>
@@ -418,6 +431,9 @@ export default function ProfilePanel({
                   {profileData.name && profileData.name !== displayTitle && (
                     <p className="text-sm text-gray-500 mt-1 truncate">Account: {profileData.name}</p>
                   )}
+                  {profileData.role === 'brand' && profileData.brandName && (
+                    <p className="text-sm font-semibold text-blue-600 mt-1 truncate">Brand: {profileData.brandName}</p>
+                  )}
                 </div>
               </div>
 
@@ -443,11 +459,11 @@ export default function ProfilePanel({
               <Badge variant="secondary" className="capitalize select-none">
                 {profileData.role}
               </Badge>
-              {profileData.category && (
-                <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 border-none select-none">
-                  {profileData.category}
+              {profileData.categories && profileData.categories.map((cat: string) => (
+                <Badge key={cat} className="bg-blue-100 text-blue-700 hover:bg-blue-200 border-none select-none">
+                  {cat}
                 </Badge>
-              )}
+              ))}
               {profileData.subCategory && (
                 <Badge variant="outline" className="border-blue-200 text-blue-700 select-none">
                   {profileData.subCategory}

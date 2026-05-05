@@ -136,12 +136,14 @@ export default function BrandDashboard() {
                 <h1 className="text-3xl font-bold mb-2">Welcome back, {userData?.fullName || userData?.name || 'Brand Manager'}!</h1>
                 <p className="text-gray-600">Here's what's happening with your campaigns</p>
               </div>
-              <Link to="/campaigns">
-                <Button className="bg-blue-600 hover:bg-blue-700 mt-4 md:mt-0">
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  Post New Campaign
-                </Button>
-              </Link>
+              {userData?.role !== 'talent' && (
+                <Link to="/campaigns">
+                  <Button className="bg-blue-600 hover:bg-blue-700 mt-4 md:mt-0">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Post New Campaign
+                  </Button>
+                </Link>
+              )}
             </div>
 
             {/* Stats Cards */}

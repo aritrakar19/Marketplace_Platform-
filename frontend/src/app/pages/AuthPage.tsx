@@ -23,6 +23,7 @@ export default function AuthPage() {
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [brandName, setBrandName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -48,7 +49,8 @@ export default function AuthPage() {
               firebaseUid: user.uid,
               name: user.displayName || user.email?.split('@')[0] || 'User',
               email: user.email,
-              role: role
+              role: role,
+              ...(role === 'brand' && { brandName })
             })
           });
           if (!res.ok) throw new Error('Status ' + res.status);
@@ -103,6 +105,11 @@ export default function AuthPage() {
 
   const handleGoogleAuth = async () => {
     setError(null);
+    if (mode === 'signup' && role === 'brand' && !brandName) {
+      setError('Please provide a Brand Name before signing up with Google.');
+      return;
+    }
+    
     setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
@@ -124,7 +131,8 @@ export default function AuthPage() {
                firebaseUid: user.uid,
                name: user.displayName || user.email?.split('@')[0] || 'User',
                email: user.email,
-               role: role
+               role: role,
+               ...(role === 'brand' && { brandName })
              })
           });
           navigate('/profile-setup');
@@ -228,6 +236,22 @@ export default function AuthPage() {
                 <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
                   <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                   <span>{error}</span>
+                </div>
+              )}
+
+              {mode === 'signup' && role === 'brand' && (
+                <div>
+                  <Label htmlFor="brandName">Brand Name</Label>
+                  <Input
+                    id="brandName"
+                    type="text"
+                    placeholder="Your Brand Name"
+                    required
+                    className="mt-1"
+                    value={brandName}
+                    onChange={(e) => setBrandName(e.target.value)}
+                    disabled={loading}
+                  />
                 </div>
               )}
 

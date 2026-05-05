@@ -5,13 +5,20 @@ const User = require('../models/User');
 // @access  Public
 const registerUser = async (req, res) => {
   try {
-    const { firebaseUid, name, email, role, category } = req.body;
+    const { firebaseUid, name, email, role, categories, brandName } = req.body;
 
     // Validate required fields
     if (!firebaseUid || !name || !email || !role) {
       return res.status(400).json({ 
         success: false, 
         message: 'Please provide all required fields' 
+      });
+    }
+
+    if (role === 'brand' && !brandName) {
+      return res.status(400).json({
+        success: false,
+        message: 'Brand Name is required for brand users'
       });
     }
 
@@ -31,7 +38,8 @@ const registerUser = async (req, res) => {
       name,
       email,
       role,
-      category
+      categories,
+      ...(role === 'brand' && { brandName })
     });
 
     res.status(201).json({
@@ -78,7 +86,7 @@ const updateUserProfile = async (req, res) => {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    const { name, fullName, displayName, category, subCategory, bio, location, followers, engagementRate, portfolio, instagram, youtube, twitter, tiktok, profileImage } = req.body;
+    const { name, fullName, displayName, categories, subCategory, bio, location, followers, engagementRate, portfolio, instagram, youtube, twitter, tiktok, profileImage, brandName } = req.body;
 
     user.name = name || user.name;
     user.profileImage = profileImage || user.profileImage;
@@ -86,8 +94,12 @@ const updateUserProfile = async (req, res) => {
     user.displayName = displayName || user.displayName;
     
     if (user.role === 'talent') {
-      user.category = category || user.category;
+      user.categories = categories || user.categories;
       user.subCategory = subCategory || user.subCategory;
+    }
+    
+    if (user.role === 'brand' && brandName) {
+      user.brandName = brandName;
     }
     // Note: category is ignored for 'brand'.
     // portfolio is ignored for both 'brand' and 'talent'.

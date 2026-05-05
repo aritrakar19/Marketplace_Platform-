@@ -20,9 +20,12 @@ const UserSchema = new mongoose.Schema({
     enum: ['talent', 'brand', 'admin'],
     required: true
   },
-  category: {
+  categories: [String],
+  brandName: {
     type: String,
-    required: false
+    required: function () {
+      return this.role === 'brand';
+    }
   },
   fullName: String,
   profileImage: String,

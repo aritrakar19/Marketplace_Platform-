@@ -1,82 +1,90 @@
-@custom-variant dark (&:is(.dark *));
+@import 'tailwindcss';
 
-:root {
-  --font-size: 16px;
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
-  --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: #030213;
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
-  --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
-  --destructive: #d4183d;
-  --destructive-foreground: #ffffff;
-  --border: rgba(0, 0, 0, 0.1);
-  --input: transparent;
-  --input-background: #f3f3f5;
-  --switch-background: #cbced4;
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #030213;
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+@theme {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+@layer base {
+  :root {
+    --font-size: 16px;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --background: #2b2635;
+    --foreground: #c0ff00;
+    --card: #2b2635;
+    --card-foreground: #c0ff00;
+    --popover: #2b2635;
+    --popover-foreground: #c0ff00;
+    --primary: #c0ff00;
+    --primary-foreground: #2b2635;
+    --secondary: #2b2635;
+    --secondary-foreground: #c0ff00;
+    --muted: #2b2635;
+    --muted-foreground: #c0ff00;
+    --accent: #c0ff00;
+    --accent-foreground: #2b2635;
+    --destructive: #2b2635;
+    --destructive-foreground: #c0ff00;
+    --border: #c0ff00;
+    --input: #2b2635;
+    --input-background: #2b2635;
+    --switch-background: #2b2635;
+    --font-weight-medium: 500;
+    --font-weight-normal: 400;
+    --ring: #c0ff00;
+    --chart-1: #c0ff00;
+    --chart-2: #2b2635;
+    --chart-3: #c0ff00;
+    --chart-4: #2b2635;
+    --chart-5: #c0ff00;
+    --radius: 0.625rem;
+    --sidebar: #2b2635;
+    --sidebar-foreground: #c0ff00;
+    --sidebar-primary: #c0ff00;
+    --sidebar-primary-foreground: #2b2635;
+    --sidebar-accent: #2b2635;
+    --sidebar-accent-foreground: #c0ff00;
+    --sidebar-border: #c0ff00;
+    --sidebar-ring: #c0ff00;
+  }
+
+  .dark {
+    --background: #2b2635;
+    --foreground: #c0ff00;
+    --card: #2b2635;
+    --card-foreground: #c0ff00;
+    --popover: #2b2635;
+    --popover-foreground: #c0ff00;
+    --primary: #c0ff00;
+    --primary-foreground: #2b2635;
+    --secondary: #2b2635;
+    --secondary-foreground: #c0ff00;
+    --muted: #2b2635;
+    --muted-foreground: #c0ff00;
+    --accent: #c0ff00;
+    --accent-foreground: #2b2635;
+    --destructive: #2b2635;
+    --destructive-foreground: #c0ff00;
+    --border: #c0ff00;
+    --input: #2b2635;
+    --input-background: #2b2635;
+    --switch-background: #2b2635;
+    --ring: #c0ff00;
+    --font-weight-medium: 500;
+    --font-weight-normal: 400;
+    --chart-1: #c0ff00;
+    --chart-2: #2b2635;
+    --chart-3: #c0ff00;
+    --chart-4: #2b2635;
+    --chart-5: #c0ff00;
+    --sidebar: #2b2635;
+    --sidebar-foreground: #c0ff00;
+    --sidebar-primary: #c0ff00;
+    --sidebar-primary-foreground: #2b2635;
+    --sidebar-accent: #2b2635;
+    --sidebar-accent-foreground: #c0ff00;
+    --sidebar-border: #c0ff00;
+    --sidebar-ring: #c0ff00;
+  }
 }
 
 @theme inline {
@@ -98,8 +106,6 @@
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
-  --color-input-background: var(--input-background);
-  --color-switch-background: var(--switch-background);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -118,66 +124,87 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-
   body {
     @apply bg-background text-foreground;
   }
+}
 
-  /**
-  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
-  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
-  */
+/* Base resets */
+html,
+body,
+#root {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
 
-  html {
-    font-size: var(--font-size);
-    font-family: var(--font-family);
-  }
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  color: var(--foreground);
+  background-color: var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  h1 {
-    font-size: var(--text-2xl);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+  color: var(--foreground);
+}
 
-  h2 {
-    font-size: var(--text-xl);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
 
-  h3 {
-    font-size: var(--text-lg);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
+a:hover {
+  color: var(--primary);
+}
 
-  h4 {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
+/* Form Elements */
+input,
+textarea,
+select {
+  background-color: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
 
-  label {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  button {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  input {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-normal);
-    line-height: 1.5;
-  }
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px var(--ring);
 }

@@ -23,12 +23,12 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
 
   if (variant === 'dashboard') {
     return (
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+      <header className="sticky top-0 z-50 bg-background border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link to="/dashboard" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">TM</span>
+              <div className="w-8 h-8 bg-[#2b2635] text-foreground rounded-lg flex items-center justify-center">
+                <span className="text-foreground font-bold text-sm">TM</span>
               </div>
               <span className="font-semibold text-lg">TalentMatch</span>
             </Link>
@@ -39,7 +39,7 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="overflow-hidden rounded-full border border-gray-200 h-9 w-9"
+                    className="overflow-hidden rounded-full border border-border h-9 w-9"
                     aria-label="Account menu"
                   >
                     {userData?.profileImage ? (
@@ -75,7 +75,7 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    className="text-red-600 focus:text-red-600 cursor-pointer"
+                    className="text-foreground focus:text-foreground cursor-pointer"
                     onClick={() => logout()}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
@@ -91,12 +91,12 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-background backdrop-blur-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">TM</span>
+            <div className="w-8 h-8 bg-[#2b2635] text-foreground rounded-lg flex items-center justify-center">
+              <span className="text-foreground font-bold text-sm">TM</span>
             </div>
             <span className="font-semibold text-lg">TalentMatch</span>
           </Link>
@@ -104,18 +104,21 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {userData?.role === 'talent' ? (
-              <Link to="/explore-brands" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link to="/explore-brands" className="text-foreground hover:text-foreground transition-colors">
                 Find Brands
               </Link>
             ) : (
-              <Link to="/explore" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link to="/explore" className="text-foreground hover:text-foreground transition-colors">
                 Find Talents
               </Link>
             )}
-            <Link to="/campaigns" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link to="/events" className="text-foreground hover:text-foreground transition-colors">
+              Opportunities
+            </Link>
+            <Link to="/campaigns" className="text-foreground hover:text-foreground transition-colors">
               Campaigns
             </Link>
-            <Link to="/#how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link to="/#how-it-works" className="text-foreground hover:text-foreground transition-colors">
               How it Works
             </Link>
             {currentUser ? (
@@ -131,7 +134,7 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                   <Button variant="ghost">Log In</Button>
                 </Link>
                 <Link to="/auth">
-                  <Button className="bg-blue-600 hover:bg-blue-700">Get Started</Button>
+                  <Button className="bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]">Get Started</Button>
                 </Link>
               </div>
             )}
@@ -149,12 +152,12 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className="md:hidden py-4 border-t border-border">
             <nav className="flex flex-col gap-4">
               {userData?.role === 'talent' ? (
                 <Link
                   to="/explore-brands"
-                  className="text-gray-600 hover:text-gray-900 transition-colors px-4 py-2"
+                  className="text-foreground hover:text-foreground transition-colors px-4 py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Find Brands
@@ -162,22 +165,29 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
               ) : (
                 <Link
                   to="/explore"
-                  className="text-gray-600 hover:text-gray-900 transition-colors px-4 py-2"
+                  className="text-foreground hover:text-foreground transition-colors px-4 py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Find Talents
                 </Link>
               )}
               <Link
+                to="/events"
+                className="text-foreground hover:text-foreground transition-colors px-4 py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Opportunities
+              </Link>
+              <Link
                 to="/campaigns"
-                className="text-gray-600 hover:text-gray-900 transition-colors px-4 py-2"
+                className="text-foreground hover:text-foreground transition-colors px-4 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Campaigns
               </Link>
               <Link
                 to="/#how-it-works"
-                className="text-gray-600 hover:text-gray-900 transition-colors px-4 py-2"
+                className="text-foreground hover:text-foreground transition-colors px-4 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 How it Works
@@ -209,7 +219,7 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                       </Button>
                     </Link>
                     <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
-                      <Button className="w-full bg-blue-600 hover:bg-blue-700">Get Started</Button>
+                      <Button className="w-full bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]">Get Started</Button>
                     </Link>
                   </>
                 )}

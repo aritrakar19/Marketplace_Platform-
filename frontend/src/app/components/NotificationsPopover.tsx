@@ -112,15 +112,15 @@ export default function NotificationsPopover() {
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="w-5 h-5" />
           {unreadCount > 0 && (
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            <span className="absolute top-1 right-1 w-2 h-2 bg-background rounded-full"></span>
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+        <div className="p-4 border-b border-border flex items-center justify-between">
           <h4 className="font-semibold text-sm">Notifications</h4>
           {unreadCount > 0 && (
-            <span className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
+            <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
               {unreadCount} new
             </span>
           )}
@@ -131,13 +131,13 @@ export default function NotificationsPopover() {
               {notifications.map((notification) => (
                 <div 
                   key={notification._id} 
-                  className={`p-4 border-b border-gray-50 flex items-start gap-3 transition-colors ${!notification.isRead ? 'bg-blue-50/50' : 'hover:bg-gray-50'}`}
+                  className={`p-4 border-b border-border flex items-start gap-3 transition-colors ${!notification.isRead ? 'bg-primary/10' : 'hover:bg-background'}`}
                 >
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm ${!notification.isRead ? 'font-medium text-gray-900' : 'text-gray-600'}`}>
+                    <p className={`text-sm ${!notification.isRead ? 'font-medium text-foreground' : 'text-foreground'}`}>
                       {notification.message}
                     </p>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-foreground mt-1">
                       {new Date(notification.createdAt).toLocaleDateString()}
                     </p>
                     {notification.type === 'invite' && !notification.isRead && notification.referenceId && (
@@ -145,14 +145,14 @@ export default function NotificationsPopover() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-7 text-xs text-red-600 border-red-200 hover:bg-red-50 flex-1"
+                          className="h-7 text-xs text-foreground border-border hover:bg-background flex-1"
                           onClick={() => handleUpdateStatus(notification.referenceId!, 'rejected', notification._id)}
                         >
                           <X className="w-3 h-3 mr-1" /> Reject
                         </Button>
                         <Button
                           size="sm"
-                          className="h-7 text-xs bg-green-600 hover:bg-green-700 flex-1"
+                          className="h-7 text-xs bg-background hover:bg-background flex-1"
                           onClick={() => handleUpdateStatus(notification.referenceId!, 'accepted', notification._id)}
                         >
                           <Check className="w-3 h-3 mr-1" /> Accept
@@ -164,7 +164,7 @@ export default function NotificationsPopover() {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-6 w-6 text-blue-600 hover:text-blue-700 hover:bg-blue-100"
+                      className="h-6 w-6 text-primary hover:text-primary hover:bg-primary/20"
                       onClick={() => markAsRead(notification._id)}
                       title="Mark as read"
                     >
@@ -175,7 +175,7 @@ export default function NotificationsPopover() {
               ))}
             </div>
           ) : (
-            <div className="p-4 text-center text-sm text-gray-500">
+            <div className="p-4 text-center text-sm text-foreground">
               No notifications yet.
             </div>
           )}

@@ -71,7 +71,7 @@ export default function SocialConnectButtons({ className, layout = 'row' }: Soci
       <Button
         type="button"
         variant="outline"
-        className="gap-2 border-pink-500 text-pink-600 hover:bg-pink-50"
+        className="gap-2 border-border text-foreground hover:bg-background"
         onClick={connectMeta}
       >
         <Instagram className="w-4 h-4 shrink-0" />
@@ -80,7 +80,7 @@ export default function SocialConnectButtons({ className, layout = 'row' }: Soci
       <Button
         type="button"
         variant="outline"
-        className="gap-2 border-red-600 text-red-600 hover:bg-red-50"
+        className="gap-2 border-border text-foreground hover:bg-background"
         onClick={connectYouTube}
       >
         <Youtube className="w-4 h-4 shrink-0" />

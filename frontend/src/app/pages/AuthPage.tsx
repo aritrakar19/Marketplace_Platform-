@@ -160,18 +160,18 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-background flex">
       {/* Left Side - Image */}
-      <div className="hidden lg:block lg:w-1/2 relative bg-gradient-to-br from-blue-600 to-blue-800">
+      <div className="hidden lg:block lg:w-1/2 relative bg-[#2b2635] text-foreground">
         <img
           src="https://images.unsplash.com/photo-1582005450386-52b25f82d9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxicmFuZCUyMGNvbGxhYm9yYXRpb24lMjBtZWV0aW5nfGVufDF8fHx8MTc3NTAyODUzM3ww&ixlib=rb-4.1.0&q=80&w=1080"
           alt="Collaboration"
           className="w-full h-full object-cover opacity-20"
         />
         <div className="absolute inset-0 flex items-center justify-center p-12">
-          <div className="text-white text-center">
+          <div className="text-foreground text-center">
             <h2 className="text-4xl font-bold mb-4">Welcome to TalentMatch</h2>
-            <p className="text-xl text-blue-100">
+            <p className="text-xl text-primary/70">
               Connect with the perfect influencers, athletes, and players for your brand
             </p>
           </div>
@@ -183,7 +183,7 @@ export default function AuthPage() {
         <div className="w-full max-w-md">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-8"
+            className="inline-flex items-center gap-2 text-foreground hover:text-foreground mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -193,7 +193,7 @@ export default function AuthPage() {
             <h1 className="text-3xl font-bold mb-2">
               {mode === 'login' ? 'Welcome Back' : 'Get Started'}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-foreground">
               {mode === 'login'
                 ? 'Log in to your account to continue'
                 : 'Create an account to start collaborating'}
@@ -206,24 +206,24 @@ export default function AuthPage() {
               <Label>I am a...</Label>
               <div className="grid grid-cols-2 gap-4">
                 <Card
-                  className={`p-6 cursor-pointer hover:border-blue-600 transition-all shadow-sm ${
-                    role === 'brand' ? 'border-blue-600 border-2 bg-blue-50' : 'border-gray-200'
+                  className={`p-6 cursor-pointer hover:border-primary transition-all shadow-sm ${
+                    role === 'brand' ? 'border-primary border-2 bg-primary/10' : 'border-border'
                   }`}
                   onClick={() => setRole('brand')}
                 >
-                  <Building2 className={`w-8 h-8 mb-3 ${role === 'brand' ? 'text-blue-600' : 'text-gray-500'}`} />
+                  <Building2 className={`w-8 h-8 mb-3 ${role === 'brand' ? 'text-primary' : 'text-foreground'}`} />
                   <h3 className="font-semibold mb-1">Brand</h3>
-                  <p className="text-sm text-gray-500">Looking for talent</p>
+                  <p className="text-sm text-foreground">Looking for talent</p>
                 </Card>
                 <Card
-                  className={`p-6 cursor-pointer hover:border-blue-600 transition-all shadow-sm ${
-                    role === 'talent' ? 'border-blue-600 border-2 bg-blue-50' : 'border-gray-200'
+                  className={`p-6 cursor-pointer hover:border-primary transition-all shadow-sm ${
+                    role === 'talent' ? 'border-primary border-2 bg-primary/10' : 'border-border'
                   }`}
                   onClick={() => setRole('talent')}
                 >
-                  <User className={`w-8 h-8 mb-3 ${role === 'talent' ? 'text-blue-600' : 'text-gray-500'}`} />
+                  <User className={`w-8 h-8 mb-3 ${role === 'talent' ? 'text-primary' : 'text-foreground'}`} />
                   <h3 className="font-semibold mb-1">Talent</h3>
-                  <p className="text-sm text-gray-500">Offering services</p>
+                  <p className="text-sm text-foreground">Offering services</p>
                 </Card>
               </div>
             </div>
@@ -233,7 +233,7 @@ export default function AuthPage() {
           {(mode === 'login' || role) && (
             <form onSubmit={handleAuth} className="space-y-4">
               {error && (
-                <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
+                <div className="p-3 text-sm text-foreground bg-background border border-border rounded-lg flex items-start gap-2">
                   <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                   <span>{error}</span>
                 </div>
@@ -286,22 +286,22 @@ export default function AuthPage() {
               {mode === 'login' && (
                 <div className="flex items-center justify-between text-sm">
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded border-gray-300" />
-                    <span className="text-gray-600">Remember me</span>
+                    <input type="checkbox" className="rounded border-border" />
+                    <span className="text-foreground">Remember me</span>
                   </label>
-                  <a href="#" className="text-blue-600 hover:text-blue-700 font-medium">
+                  <a href="#" className="text-primary hover:text-primary font-medium">
                     Forgot password?
                   </a>
                 </div>
               )}
 
-              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" size="lg" disabled={loading}>
+              <Button type="submit" className="w-full bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]" size="lg" disabled={loading}>
                 {loading ? 'Processing...' : (mode === 'login' ? 'Log In' : 'Continue')}
               </Button>
 
               <div className="relative my-6">
                 <Separator />
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-50 px-4 text-sm text-gray-500 font-medium">
+                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-4 text-sm text-foreground font-medium">
                   Or continue with
                 </span>
               </div>
@@ -335,7 +335,7 @@ export default function AuthPage() {
                 Sign {mode === 'login' ? 'in' : 'up'} with Google
               </Button>
 
-              <div className="text-center text-sm text-gray-600 mt-4">
+              <div className="text-center text-sm text-foreground mt-4">
                 {mode === 'login' ? "Don't have an account? " : 'Already have an account? '}
                 <button
                   type="button"
@@ -344,7 +344,7 @@ export default function AuthPage() {
                     setRole(null);
                     setError(null);
                   }}
-                  className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+                  className="text-primary hover:text-primary font-semibold transition-colors"
                 >
                   {mode === 'login' ? 'Sign up' : 'Log in'}
                 </button>

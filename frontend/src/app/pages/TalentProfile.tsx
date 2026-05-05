@@ -71,10 +71,10 @@ export default function TalentProfile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="min-h-screen bg-background flex flex-col">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       </div>
     );
@@ -82,7 +82,7 @@ export default function TalentProfile() {
 
   if (!talent) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <Navbar />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <h1 className="text-2xl font-bold mb-4">Talent not found</h1>
@@ -107,11 +107,11 @@ export default function TalentProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
       {/* Cover Image */}
-      <div className="relative h-80 bg-gradient-to-r from-blue-600 to-blue-800">
+      <div className="relative h-80 bg-[#2b2635] text-foreground">
         {talent.coverImage && (
           <img
             src={talent.coverImage}
@@ -126,7 +126,7 @@ export default function TalentProfile() {
         <Card className="p-8 mb-8 rounded-2xl">
           <div className="flex flex-col md:flex-row gap-6 items-start">
             <div className="relative">
-              <div className="w-32 h-32 rounded-2xl border-4 border-white shadow-lg overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+              <div className="w-32 h-32 rounded-2xl border-4 border-border shadow-lg overflow-hidden bg-[#2b2635] text-foreground flex items-center justify-center">
                 {talent.profileImage ? (
                   <img
                     src={talent.profileImage}
@@ -134,12 +134,12 @@ export default function TalentProfile() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-4xl font-bold text-blue-500 uppercase">{talent.name?.charAt(0) || 'T'}</span>
+                  <span className="text-4xl font-bold text-primary uppercase">{talent.name?.charAt(0) || 'T'}</span>
                 )}
               </div>
               {talent.verified && (
-                <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center border-4 border-white">
-                  <CheckCircle className="w-5 h-5 text-white" />
+                <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-primary text-[#2b2635] rounded-full flex items-center justify-center border-4 border-border">
+                  <CheckCircle className="w-5 h-5 text-foreground" />
                 </div>
               )}
             </div>
@@ -148,8 +148,8 @@ export default function TalentProfile() {
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
                 <div>
                   <h1 className="text-3xl font-bold mb-2">{talent.name}</h1>
-                  <p className="text-lg text-gray-600 mb-2">{talent.subCategory}</p>
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <p className="text-lg text-foreground mb-2">{talent.subCategory}</p>
+                  <div className="flex items-center gap-2 text-foreground">
                     <MapPin className="w-4 h-4" />
                     <span>{talent.location ? talent.location.split(',')[0] : 'Remote'}</span>
                   </div>
@@ -163,7 +163,7 @@ export default function TalentProfile() {
                   >
                     <Bookmark
                       className={`w-5 h-5 ${
-                        saved ? 'fill-blue-600 text-blue-600' : ''
+                        saved ? 'fill-primary text-primary' : ''
                       }`}
                     />
                   </Button>
@@ -171,7 +171,7 @@ export default function TalentProfile() {
                     <Share2 className="w-5 h-5" />
                   </Button>
                   <Link to="/chat">
-                    <Button className="bg-blue-600 hover:bg-blue-700">
+                    <Button className="bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]">
                       <MessageCircle className="w-4 h-4 mr-2" />
                       Invite for Collaboration
                     </Button>
@@ -181,8 +181,8 @@ export default function TalentProfile() {
 
               {/* Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="flex items-center gap-2 text-gray-600 mb-1">
+                <div className="bg-background p-4 rounded-xl">
+                  <div className="flex items-center gap-2 text-foreground mb-1">
                     <Users className="w-4 h-4" />
                     <span className="text-sm">Followers</span>
                   </div>
@@ -190,15 +190,15 @@ export default function TalentProfile() {
                     {formatFollowers(talent.followers)}
                   </div>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="flex items-center gap-2 text-gray-600 mb-1">
+                <div className="bg-background p-4 rounded-xl">
+                  <div className="flex items-center gap-2 text-foreground mb-1">
                     <TrendingUp className="w-4 h-4" />
                     <span className="text-sm">Engagement</span>
                   </div>
                   <div className="text-2xl font-bold">{talent.engagementRate || 'N/A'}{talent.engagementRate && !talent.engagementRate.includes('%') ? '%' : ''}</div>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="flex items-center gap-2 text-gray-600 mb-1">
+                <div className="bg-background p-4 rounded-xl">
+                  <div className="flex items-center gap-2 text-foreground mb-1">
                     <ImageIcon className="w-4 h-4" />
                     <span className="text-sm">Posts</span>
                   </div>
@@ -206,8 +206,8 @@ export default function TalentProfile() {
                     {talent.stats?.posts?.toLocaleString() || 'N/A'}
                   </div>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="flex items-center gap-2 text-gray-600 mb-1">
+                <div className="bg-background p-4 rounded-xl">
+                  <div className="flex items-center gap-2 text-foreground mb-1">
                     <CheckCircle className="w-4 h-4" />
                     <span className="text-sm">Avg. Likes</span>
                   </div>
@@ -226,7 +226,7 @@ export default function TalentProfile() {
             {/* About */}
             <Card className="p-6 rounded-2xl">
               <h2 className="text-xl font-semibold mb-4">About</h2>
-              <p className="text-gray-700 leading-relaxed">{talent.bio || 'No bio provided.'}</p>
+              <p className="text-foreground leading-relaxed">{talent.bio || 'No bio provided.'}</p>
 
               <div className="mt-6 flex flex-wrap gap-2">
                 {(talent.tags || []).map((tag: string) => (
@@ -268,15 +268,15 @@ export default function TalentProfile() {
                   {talent.collaborations.map((collab: any, index: number) => (
                     <div key={index}>
                       <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <div className="w-12 h-12 bg-background rounded-xl flex items-center justify-center flex-shrink-0">
                           <span className="text-xl">{collab.brand[0]}</span>
                         </div>
                         <div className="flex-1">
                           <h3 className="font-semibold">{collab.brand}</h3>
-                          <p className="text-gray-600 text-sm mb-1">
+                          <p className="text-foreground text-sm mb-1">
                             {collab.description}
                           </p>
-                          <div className="flex items-center gap-1 text-gray-500 text-sm">
+                          <div className="flex items-center gap-1 text-foreground text-sm">
                             <Calendar className="w-4 h-4" />
                             <span>{collab.date}</span>
                           </div>
@@ -295,9 +295,9 @@ export default function TalentProfile() {
           {/* Sidebar */}
           <div className="space-y-6">
             {isOwnProfile && (
-              <Card className="p-6 rounded-2xl border-blue-100 bg-gradient-to-b from-blue-50/50 to-white">
+              <Card className="p-6 rounded-2xl border-primary/20 bg-[#2b2635] text-foreground">
                 <h3 className="font-semibold mb-1">Connect your accounts</h3>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-foreground mb-4">
                   Link Facebook, Instagram (via Meta), or YouTube. Manual handles stay on your profile too.
                 </p>
                 <SocialConnectButtons layout="stack" className="sm:flex-row sm:flex-wrap" />
@@ -314,9 +314,9 @@ export default function TalentProfile() {
                       href={`https://instagram.com/${talent.socialMedia.instagram}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-background transition-colors"
                   >
-                    <Instagram className="w-5 h-5 text-pink-600" />
+                    <Instagram className="w-5 h-5 text-foreground" />
                     <span className="text-sm">{talent.socialMedia.instagram}</span>
                   </a>
                 )}
@@ -325,9 +325,9 @@ export default function TalentProfile() {
                     href={`https://youtube.com/@${talent.socialMedia.youtube}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-background transition-colors"
                   >
-                    <Youtube className="w-5 h-5 text-red-600" />
+                    <Youtube className="w-5 h-5 text-foreground" />
                     <span className="text-sm">{talent.socialMedia.youtube}</span>
                   </a>
                 )}
@@ -336,9 +336,9 @@ export default function TalentProfile() {
                     href={`https://twitter.com/${talent.socialMedia.twitter}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-background transition-colors"
                   >
-                    <Twitter className="w-5 h-5 text-blue-500" />
+                    <Twitter className="w-5 h-5 text-primary" />
                     <span className="text-sm">{talent.socialMedia.twitter}</span>
                   </a>
                 )}
@@ -349,7 +349,7 @@ export default function TalentProfile() {
             {/* Category */}
             <Card className="p-6 rounded-2xl">
               <h3 className="font-semibold mb-4">Category</h3>
-              <Badge className="bg-blue-600 text-white">{talent.category}</Badge>
+              <Badge className="bg-primary text-[#2b2635] text-foreground">{talent.category}</Badge>
             </Card>
 
             {/* Recommended Talents */}
@@ -361,7 +361,7 @@ export default function TalentProfile() {
                     <Link
                       key={t._id}
                       to={`/talent/${t._id}`}
-                      className="flex items-center gap-3 hover:bg-gray-50 p-2 rounded-xl transition-colors"
+                      className="flex items-center gap-3 hover:bg-background p-2 rounded-xl transition-colors"
                     >
                       <img
                         src={t.profileImage}
@@ -370,7 +370,7 @@ export default function TalentProfile() {
                       />
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-sm truncate">{t.name}</div>
-                        <div className="text-xs text-gray-500 truncate">
+                        <div className="text-xs text-foreground truncate">
                           {formatFollowers(t.followers)} followers
                         </div>
                       </div>

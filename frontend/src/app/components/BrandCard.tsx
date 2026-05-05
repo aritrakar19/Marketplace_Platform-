@@ -19,9 +19,9 @@ export default function BrandCard({ brand }: BrandCardProps) {
       transition={{ duration: 0.3 }}
       whileHover={{ y: -4 }}
     >
-      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200 rounded-2xl flex flex-col h-full">
+      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-border rounded-2xl flex flex-col h-full">
         <div className="relative">
-          <div className="w-full h-32 bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center overflow-hidden">
+          <div className="w-full h-32 bg-gradient-to-br from-background to-primary/20 flex items-center justify-center overflow-hidden">
             {brand.profileImage ? (
               <img
                 src={brand.profileImage}
@@ -32,18 +32,18 @@ export default function BrandCard({ brand }: BrandCardProps) {
           </div>
           <button
             onClick={() => setSaved(!saved)}
-            className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform"
+            className="absolute top-3 right-3 w-8 h-8 bg-background rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform"
           >
             <Bookmark
-              className={`w-4 h-4 ${saved ? 'fill-blue-600 text-blue-600' : 'text-gray-600'}`}
+              className={`w-4 h-4 ${saved ? 'fill-primary text-primary' : 'text-foreground'}`}
             />
           </button>
           <div className="absolute -bottom-8 left-5">
-            <div className="w-16 h-16 bg-white rounded-xl shadow-md border border-gray-100 flex items-center justify-center overflow-hidden">
+            <div className="w-16 h-16 bg-background rounded-xl shadow-md border border-border flex items-center justify-center overflow-hidden">
                  {brand.profileImage ? (
                     <img src={brand.profileImage} alt={brand.name} className="w-full h-full object-cover" />
                  ) : (
-                    <span className="text-xl font-bold text-indigo-500 uppercase">{brand.name?.charAt(0) || 'B'}</span>
+                    <span className="text-xl font-bold text-foreground uppercase">{brand.name?.charAt(0) || 'B'}</span>
                  )}
             </div>
           </div>
@@ -52,17 +52,17 @@ export default function BrandCard({ brand }: BrandCardProps) {
         <div className="p-5 pt-10 flex-1 flex flex-col">
           <div className="mb-3">
             <h3 className="font-semibold text-lg mb-1">{brand.name}</h3>
-            {brand.category && <p className="text-sm text-gray-500">{brand.category}</p>}
+            {brand.category && <p className="text-sm text-foreground">{brand.category}</p>}
           </div>
 
           <div className="flex flex-col gap-2 mb-4 text-sm flex-1">
             {brand.location && (
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-foreground">
                 <MapPin className="w-4 h-4" />
                 <span className="truncate">{brand.location.split(',')[0]}</span>
               </div>
             )}
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-foreground">
                 <Briefcase className="w-4 h-4" />
                 <span className="truncate">Active Campaigns Available</span>
             </div>

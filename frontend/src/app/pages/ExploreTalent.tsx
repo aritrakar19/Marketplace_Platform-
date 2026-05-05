@@ -288,7 +288,7 @@ export default function ExploreTalent() {
             step={50000}
             className="my-4"
           />
-          <div className="flex items-center justify-between text-sm text-gray-600">
+          <div className="flex items-center justify-between text-sm text-foreground">
             <span>{(followersRange[0] / 1000).toFixed(0)}K</span>
             <span>{(followersRange[1] / 1000).toFixed(0)}K</span>
           </div>
@@ -358,14 +358,14 @@ export default function ExploreTalent() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Find Talents</h1>
-          <p className="text-gray-600">
+          <p className="text-foreground">
             Find the perfect influencer, athlete, or player for your brand
           </p>
         </div>
@@ -373,7 +373,7 @@ export default function ExploreTalent() {
         {/* Search Bar */}
         <div className="mb-6">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
             <Input
               type="text"
               placeholder="Search by name, category, or tags..."
@@ -404,7 +404,7 @@ export default function ExploreTalent() {
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
                 {hasActiveFilters && (
-                  <Badge className="ml-2 bg-blue-600">Active</Badge>
+                  <Badge className="ml-2 bg-primary text-[#2b2635]">Active</Badge>
                 )}
               </Button>
             </div>
@@ -437,7 +437,7 @@ export default function ExploreTalent() {
 
             {/* Results Header */}
             <div className="mb-6">
-              <p className="text-gray-600">
+              <p className="text-foreground">
                 Showing <span className="font-semibold">{filteredTalents.length}</span>{' '}
                 {filteredTalents.length === 1 ? 'talent' : 'talents'}
               </p>
@@ -457,7 +457,7 @@ export default function ExploreTalent() {
               </div>
             ) : (
               <Card className="p-12 text-center rounded-2xl">
-                <p className="text-gray-600 mb-4">
+                <p className="text-foreground mb-4">
                   No talents found matching your criteria
                 </p>
                 <Button onClick={clearFilters} variant="outline">
@@ -473,10 +473,10 @@ export default function ExploreTalent() {
       {mobileFiltersOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-background"
             onClick={() => setMobileFiltersOpen(false)}
           />
-          <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-white overflow-y-auto">
+          <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-background overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="font-semibold text-lg">Filters</h3>
@@ -491,7 +491,7 @@ export default function ExploreTalent() {
               <FilterPanel />
               <div className="mt-6">
                 <Button
-                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  className="w-full bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]"
                   onClick={() => setMobileFiltersOpen(false)}
                 >
                   Apply Filters

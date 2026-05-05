@@ -88,30 +88,30 @@ const recentCampaigns = [
 
 export default function AdminPanel() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar variant="dashboard" />
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className="hidden lg:block w-64 bg-white border-r border-gray-200 min-h-[calc(100vh-4rem)] sticky top-16">
+        <aside className="hidden lg:block w-64 bg-background border-r border-border min-h-[calc(100vh-4rem)] sticky top-16">
           <nav className="p-4 space-y-1">
             <Link
               to="/admin"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 text-blue-600 font-medium"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-medium"
             >
               <LayoutDashboard className="w-5 h-5" />
               <span>Overview</span>
             </Link>
             <Link
               to="/admin/users"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
             >
               <Users className="w-5 h-5" />
               <span>Users</span>
             </Link>
             <Link
               to="/admin/campaigns"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
             >
               <Briefcase className="w-5 h-5" />
               <span>Campaigns</span>
@@ -125,17 +125,17 @@ export default function AdminPanel() {
             {/* Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
-              <p className="text-gray-600">Monitor and manage your platform</p>
+              <p className="text-foreground">Monitor and manage your platform</p>
             </div>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {stats.map((stat, index) => {
                 const colorClasses = {
-                  blue: 'bg-blue-100 text-blue-600',
-                  green: 'bg-green-100 text-green-600',
-                  purple: 'bg-purple-100 text-purple-600',
-                  orange: 'bg-orange-100 text-orange-600',
+                  blue: 'bg-primary/20 text-primary',
+                  green: 'bg-background text-foreground',
+                  purple: 'bg-background text-foreground',
+                  orange: 'bg-background text-foreground',
                 };
 
                 return (
@@ -153,7 +153,7 @@ export default function AdminPanel() {
                       </Badge>
                     </div>
                     <div className="text-2xl font-bold mb-1">{stat.value}</div>
-                    <div className="text-sm text-gray-600">{stat.label}</div>
+                    <div className="text-sm text-foreground">{stat.label}</div>
                   </Card>
                 );
               })}
@@ -166,7 +166,7 @@ export default function AdminPanel() {
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="font-semibold text-lg">Recent Users</h3>
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground" />
                     <Input type="text" placeholder="Search..." className="pl-9 h-9 w-48" />
                   </div>
                 </div>
@@ -175,22 +175,22 @@ export default function AdminPanel() {
                   {recentUsers.map((user) => (
                     <div
                       key={user.id}
-                      className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors"
+                      className="flex items-center justify-between p-3 hover:bg-background rounded-xl transition-colors"
                     >
                       <div className="flex-1">
                         <div className="font-medium text-sm">{user.name}</div>
-                        <div className="text-xs text-gray-500">{user.email}</div>
+                        <div className="text-xs text-foreground">{user.email}</div>
                       </div>
                       <div className="flex items-center gap-3">
                         <Badge variant="secondary" className="text-xs">
                           {user.role}
                         </Badge>
                         {user.status === 'active' ? (
-                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <CheckCircle className="w-4 h-4 text-foreground" />
                         ) : user.status === 'pending' ? (
-                          <Clock className="w-4 h-4 text-orange-600" />
+                          <Clock className="w-4 h-4 text-foreground" />
                         ) : (
-                          <XCircle className="w-4 h-4 text-red-600" />
+                          <XCircle className="w-4 h-4 text-foreground" />
                         )}
                         <Button variant="ghost" size="icon" className="h-8 w-8">
                           <MoreVertical className="w-4 h-4" />
@@ -218,24 +218,24 @@ export default function AdminPanel() {
                   {recentCampaigns.map((campaign) => (
                     <div
                       key={campaign.id}
-                      className="p-4 border border-gray-200 rounded-xl hover:border-blue-600 transition-colors"
+                      className="p-4 border border-border rounded-xl hover:border-primary transition-colors"
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <div className="font-semibold text-sm mb-1">{campaign.title}</div>
-                          <div className="text-xs text-gray-500">{campaign.brand}</div>
+                          <div className="text-xs text-foreground">{campaign.brand}</div>
                         </div>
                         <Badge
                           className={
                             campaign.status === 'active'
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-orange-100 text-orange-700'
+                              ? 'bg-background text-foreground'
+                              : 'bg-background text-foreground'
                           }
                         >
                           {campaign.status}
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-4 text-xs text-gray-600">
+                      <div className="flex items-center gap-4 text-xs text-foreground">
                         <span>{campaign.budget}</span>
                         <span>•</span>
                         <span>{campaign.applicants} applicants</span>

@@ -181,7 +181,7 @@ export default function ProfilePanel({
 
   const loading = authLoading || (fetchOnMount && remoteLoading);
   const titleClass =
-    'text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600';
+    'text-2xl font-bold bg-clip-text text-transparent bg-[#2b2635] text-foreground';
 
   const displayTitle = profileData?.fullName || profileData?.name || 'Your profile';
   const displayHandle =
@@ -230,13 +230,13 @@ export default function ProfilePanel({
       <div className="space-y-6">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-12 gap-3 text-sm text-muted-foreground">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
             <span>Loading your profile from the server…</span>
           </div>
         ) : fetchOnMount && remoteError && !profileData ? (
-          <div className="text-center py-10 px-4 rounded-xl border border-red-100 bg-red-50/80 space-y-4">
-            <p className="text-red-800 font-medium">{remoteError}</p>
-            <p className="text-sm text-red-700/90">We could not load your user record. Check that you are logged in and the API is running.</p>
+          <div className="text-center py-10 px-4 rounded-xl border border-border bg-background space-y-4">
+            <p className="text-foreground font-medium">{remoteError}</p>
+            <p className="text-sm text-foreground">We could not load your user record. Check that you are logged in and the API is running.</p>
             <Button type="button" variant="outline" className="gap-2" onClick={() => loadProfileFromApi()}>
               <RefreshCw className="h-4 w-4" />
               Try again
@@ -248,11 +248,11 @@ export default function ProfilePanel({
               <div>
                 <Label>Profile Photo</Label>
                 <div className="flex items-center gap-4 mt-2 mb-4">
-                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden border border-gray-300">
+                  <div className="w-16 h-16 bg-background rounded-full flex items-center justify-center overflow-hidden border border-border">
                     {formData.profileImage ? (
                       <img src={formData.profileImage} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-gray-400 text-xs">No Photo</span>
+                      <span className="text-foreground text-xs">No Photo</span>
                     )}
                   </div>
                   <Input
@@ -273,7 +273,7 @@ export default function ProfilePanel({
               </div>
               <div>
                 <Label>Email (read-only)</Label>
-                <Input value={profileData?.email || ''} disabled className="bg-gray-100" />
+                <Input value={profileData?.email || ''} disabled className="bg-background" />
               </div>
               <div>
                 <Label>Account name</Label>
@@ -407,7 +407,7 @@ export default function ProfilePanel({
               <Button variant="outline" onClick={() => setIsEditing(false)} disabled={saving}>
                 Cancel
               </Button>
-              <Button onClick={handleSave} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleSave} disabled={saving} className="bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]">
                 {saving ? 'Saving...' : 'Save changes'}
               </Button>
             </div>
@@ -416,7 +416,7 @@ export default function ProfilePanel({
           <div className="space-y-6">
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full overflow-hidden flex items-center justify-center text-blue-600 font-bold text-2xl uppercase border-2 border-white shadow-sm shrink-0">
+                <div className="w-20 h-20 bg-[#2b2635] text-foreground rounded-full overflow-hidden flex items-center justify-center text-primary font-bold text-2xl uppercase border-2 border-border shadow-sm shrink-0">
                   {profileData.profileImage ? (
                     <img src={profileData.profileImage} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -424,31 +424,31 @@ export default function ProfilePanel({
                   )}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-xl font-bold text-gray-900 truncate">{displayTitle}</h3>
+                  <h3 className="text-xl font-bold text-foreground truncate">{displayTitle}</h3>
                   {displayHandle && (
-                    <p className="text-gray-500 font-medium truncate">@{displayHandle}</p>
+                    <p className="text-foreground font-medium truncate">@{displayHandle}</p>
                   )}
                   {profileData.name && profileData.name !== displayTitle && (
-                    <p className="text-sm text-gray-500 mt-1 truncate">Account: {profileData.name}</p>
+                    <p className="text-sm text-foreground mt-1 truncate">Account: {profileData.name}</p>
                   )}
                   {profileData.role === 'brand' && profileData.brandName && (
-                    <p className="text-sm font-semibold text-blue-600 mt-1 truncate">Brand: {profileData.brandName}</p>
+                    <p className="text-sm font-semibold text-primary mt-1 truncate">Brand: {profileData.brandName}</p>
                   )}
                 </div>
               </div>
 
               {(profileData.followers || profileData.engagementRate) && (
-                <div className="flex flex-wrap gap-4 p-3 bg-blue-50 rounded-xl">
+                <div className="flex flex-wrap gap-4 p-3 bg-primary/10 rounded-xl">
                   {profileData.followers && (
                     <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-blue-600 shrink-0" />
-                      <span className="font-semibold text-blue-900">{profileData.followers} followers</span>
+                      <Users className="w-4 h-4 text-primary shrink-0" />
+                      <span className="font-semibold text-primary">{profileData.followers} followers</span>
                     </div>
                   )}
                   {profileData.engagementRate && (
                     <div className="flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-blue-600 shrink-0" />
-                      <span className="font-semibold text-blue-900">{profileData.engagementRate} engagement</span>
+                      <Activity className="w-4 h-4 text-primary shrink-0" />
+                      <span className="font-semibold text-primary">{profileData.engagementRate} engagement</span>
                     </div>
                   )}
                 </div>
@@ -460,33 +460,33 @@ export default function ProfilePanel({
                 {profileData.role}
               </Badge>
               {profileData.categories && profileData.categories.map((cat: string) => (
-                <Badge key={cat} className="bg-blue-100 text-blue-700 hover:bg-blue-200 border-none select-none">
+                <Badge key={cat} className="bg-primary/20 text-primary hover:bg-background border-none select-none">
                   {cat}
                 </Badge>
               ))}
               {profileData.subCategory && (
-                <Badge variant="outline" className="border-blue-200 text-blue-700 select-none">
+                <Badge variant="outline" className="border-primary/20 text-primary select-none">
                   {profileData.subCategory}
                 </Badge>
               )}
             </div>
 
-            <Card className="p-4 bg-gray-50/50 border border-gray-100 shadow-sm">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">Account</h4>
+            <Card className="p-4 bg-background border border-border shadow-sm">
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-foreground mb-3">Account</h4>
               <div className="space-y-3">
-                <div className="flex items-center gap-3 text-sm text-gray-700">
-                  <Mail className="w-4 h-4 text-gray-400 shrink-0" />
+                <div className="flex items-center gap-3 text-sm text-foreground">
+                  <Mail className="w-4 h-4 text-foreground shrink-0" />
                   <span className="break-all">{profileData.email}</span>
                 </div>
                 {profileData.location && (
-                  <div className="flex items-center gap-3 text-sm text-gray-700">
-                    <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
+                  <div className="flex items-center gap-3 text-sm text-foreground">
+                    <MapPin className="w-4 h-4 text-foreground shrink-0" />
                     <span>{profileData.location}</span>
                   </div>
                 )}
                 {memberSince && (
-                  <div className="flex items-center gap-3 text-sm text-gray-700">
-                    <Calendar className="w-4 h-4 text-gray-400 shrink-0" />
+                  <div className="flex items-center gap-3 text-sm text-foreground">
+                    <Calendar className="w-4 h-4 text-foreground shrink-0" />
                     <span>Member since {memberSince}</span>
                   </div>
                 )}
@@ -495,8 +495,8 @@ export default function ProfilePanel({
 
             {profileData.bio && (
               <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-2">About</h4>
-                <p className="text-sm text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">
+                <h4 className="text-sm font-semibold text-foreground mb-2">About</h4>
+                <p className="text-sm text-foreground leading-relaxed bg-background p-3 rounded-lg whitespace-pre-wrap">
                   {profileData.bio}
                 </p>
               </div>
@@ -504,7 +504,7 @@ export default function ProfilePanel({
 
             {profileData.portfolio && profileData.portfolio.length > 0 && (
               <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-2">Portfolio</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-2">Portfolio</h4>
                 <div className="space-y-2">
                   {profileData.portfolio.map((link: string, idx: number) => (
                     <a
@@ -512,7 +512,7 @@ export default function ProfilePanel({
                       href={link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-sm text-blue-600 hover:underline p-2 border rounded-lg bg-gray-50"
+                      className="flex items-center gap-2 text-sm text-primary hover:underline p-2 border rounded-lg bg-background"
                     >
                       <LinkIcon className="w-4 h-4 shrink-0" />
                       <span className="truncate">{link}</span>
@@ -524,29 +524,29 @@ export default function ProfilePanel({
 
             {profileData.socialMedia && Object.values(profileData.socialMedia).some((val) => val) && (
               <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">Social</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-3">Social</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {profileData.socialMedia.instagram && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 p-2 border rounded-lg hover:bg-gray-50 transition-colors">
-                      <Instagram className="w-4 h-4 text-pink-600 shrink-0" />
+                    <div className="flex items-center gap-2 text-sm text-foreground p-2 border rounded-lg hover:bg-background transition-colors">
+                      <Instagram className="w-4 h-4 text-foreground shrink-0" />
                       <span className="truncate">@{profileData.socialMedia.instagram}</span>
                     </div>
                   )}
                   {profileData.socialMedia.youtube && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 p-2 border rounded-lg hover:bg-gray-50 transition-colors">
-                      <Youtube className="w-4 h-4 text-red-600 shrink-0" />
+                    <div className="flex items-center gap-2 text-sm text-foreground p-2 border rounded-lg hover:bg-background transition-colors">
+                      <Youtube className="w-4 h-4 text-foreground shrink-0" />
                       <span className="truncate">@{profileData.socialMedia.youtube}</span>
                     </div>
                   )}
                   {profileData.socialMedia.twitter && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 p-2 border rounded-lg hover:bg-gray-50 transition-colors">
-                      <Twitter className="w-4 h-4 text-blue-400 shrink-0" />
+                    <div className="flex items-center gap-2 text-sm text-foreground p-2 border rounded-lg hover:bg-background transition-colors">
+                      <Twitter className="w-4 h-4 text-primary/70 shrink-0" />
                       <span className="truncate">@{profileData.socialMedia.twitter}</span>
                     </div>
                   )}
                   {profileData.socialMedia.tiktok && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 p-2 border rounded-lg hover:bg-gray-50 transition-colors">
-                      <Hash className="w-4 h-4 text-black shrink-0" />
+                    <div className="flex items-center gap-2 text-sm text-foreground p-2 border rounded-lg hover:bg-background transition-colors">
+                      <Hash className="w-4 h-4 text-foreground shrink-0" />
                       <span className="truncate">@{profileData.socialMedia.tiktok}</span>
                     </div>
                   )}
@@ -555,7 +555,7 @@ export default function ProfilePanel({
             )}
           </div>
         ) : (
-          <div className="text-center py-8 text-gray-500 bg-red-50 rounded-xl border border-red-100">
+          <div className="text-center py-8 text-foreground bg-background rounded-xl border border-border">
             <p>No profile data loaded.</p>
             <p className="text-sm mt-1">Try signing in again or complete profile setup.</p>
           </div>

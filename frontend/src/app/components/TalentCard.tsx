@@ -76,9 +76,9 @@ export default function TalentCard({ talent, isConnected = false, isPending = fa
       transition={{ duration: 0.3 }}
       whileHover={{ y: -4 }}
     >
-      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200 rounded-2xl">
+      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-border rounded-2xl">
         <div className="relative">
-          <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center overflow-hidden">
+          <div className="w-full h-48 bg-[#2b2635] text-foreground flex items-center justify-center overflow-hidden">
             {talent.profileImage ? (
               <img
                 src={talent.profileImage}
@@ -86,20 +86,20 @@ export default function TalentCard({ talent, isConnected = false, isPending = fa
                 className="w-full h-full object-cover"
               />
             ) : (
-              <span className="text-4xl font-bold text-blue-500 uppercase">{talent.name?.charAt(0) || 'T'}</span>
+              <span className="text-4xl font-bold text-primary uppercase">{talent.name?.charAt(0) || 'T'}</span>
             )}
           </div>
           <button
             onClick={() => setSaved(!saved)}
-            className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform"
+            className="absolute top-3 right-3 w-8 h-8 bg-background rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform"
           >
             <Bookmark
-              className={`w-4 h-4 ${saved ? 'fill-blue-600 text-blue-600' : 'text-gray-600'}`}
+              className={`w-4 h-4 ${saved ? 'fill-primary text-primary' : 'text-foreground'}`}
             />
           </button>
           {talent.verified && (
             <div className="absolute top-3 left-3">
-              <Badge className="bg-blue-600 text-white gap-1 py-1">
+              <Badge className="bg-primary text-[#2b2635] text-foreground gap-1 py-1">
                 <CheckCircle className="w-3 h-3" />
                 Verified
               </Badge>
@@ -110,19 +110,19 @@ export default function TalentCard({ talent, isConnected = false, isPending = fa
         <div className="p-5">
           <div className="mb-3">
             <h3 className="font-semibold text-lg mb-1">{talent.name}</h3>
-            <p className="text-sm text-gray-500">{talent.subCategory}</p>
+            <p className="text-sm text-foreground">{talent.subCategory}</p>
           </div>
 
           <div className="flex items-center gap-4 mb-4 text-sm">
-            <div className="flex items-center gap-1 text-gray-600">
+            <div className="flex items-center gap-1 text-foreground">
               <Users className="w-4 h-4" />
               <span>{formatFollowers(talent.followers)}</span>
             </div>
-            <div className="flex items-center gap-1 text-gray-600">
+            <div className="flex items-center gap-1 text-foreground">
               <TrendingUp className="w-4 h-4" />
               <span>{talent.engagementRate || 'N/A'}{talent.engagementRate && !talent.engagementRate.includes('%') ? '%' : ''}</span>
             </div>
-            <div className="flex items-center gap-1 text-gray-600">
+            <div className="flex items-center gap-1 text-foreground">
               <MapPin className="w-4 h-4" />
               <span className="truncate">{talent.location ? talent.location.split(',')[0] : 'Remote'}</span>
             </div>
@@ -148,7 +148,7 @@ export default function TalentCard({ talent, isConnected = false, isPending = fa
                   <Button 
                     onClick={handleInvite} 
                     disabled={inviting || inviteSent || isPending}
-                    className={`w-full ${(inviteSent || isPending) ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'}`}
+                    className={`w-full ${(inviteSent || isPending) ? 'bg-background hover:bg-background' : 'bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]'}`}
                   >
                     {inviting ? 'Sending...' : (inviteSent || isPending) ? 'Invite Sent' : 'Quick Invite'}
                   </Button>
@@ -156,12 +156,12 @@ export default function TalentCard({ talent, isConnected = false, isPending = fa
               </>
             ) : (
               <>
-                <Button disabled variant="outline" className="flex-1 bg-green-50 text-green-700 border-green-200">
+                <Button disabled variant="outline" className="flex-1 bg-background text-foreground border-border">
                   <CheckCircle className="w-4 h-4 mr-2" />
                   Friend
                 </Button>
                 <Link to="/chat" className="flex-1">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  <Button className="w-full bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]">
                     Message
                   </Button>
                 </Link>

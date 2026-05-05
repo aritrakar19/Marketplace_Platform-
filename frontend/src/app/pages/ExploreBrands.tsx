@@ -59,32 +59,32 @@ export default function ExploreBrands() {
   }, [searchQuery, dbBrands]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Find Brands</h1>
-          <p className="text-gray-600">
+          <p className="text-foreground">
             Find innovative brands looking to collaborate with you.
           </p>
         </div>
 
         <div className="mb-8 max-w-2xl">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
             <Input
               type="text"
               placeholder="Search by brand name or category..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 text-lg bg-white border-0 shadow-sm"
+              className="pl-12 h-14 text-lg bg-background border-0 shadow-sm"
             />
           </div>
         </div>
 
         <div className="mb-6">
-          <p className="text-gray-600">
+          <p className="text-foreground">
             Showing <span className="font-semibold">{filteredBrands.length}</span>{' '}
             {filteredBrands.length === 1 ? 'brand' : 'brands'}
           </p>
@@ -97,8 +97,8 @@ export default function ExploreBrands() {
             ))}
           </div>
         ) : (
-          <Card className="p-12 text-center rounded-2xl bg-white shadow-sm border-0">
-            <p className="text-gray-600 mb-4">
+          <Card className="p-12 text-center rounded-2xl bg-background shadow-sm border-0">
+            <p className="text-foreground mb-4">
               No brands found matching your search.
             </p>
             <Button onClick={() => setSearchQuery('')} variant="outline">

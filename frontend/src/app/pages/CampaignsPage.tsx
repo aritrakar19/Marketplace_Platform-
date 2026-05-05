@@ -87,17 +87,17 @@ export default function CampaignsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">Campaigns</h1>
-            <p className="text-gray-600">Browse active campaigns and opportunities</p>
+            <p className="text-foreground">Browse active campaigns and opportunities</p>
           </div>
           {userData?.role === 'brand' && (
-            <Button className="bg-blue-600 hover:bg-blue-700 mt-4 md:mt-0" onClick={() => setShowModal(true)}>
+            <Button className="bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635] mt-4 md:mt-0" onClick={() => setShowModal(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Post Campaign
             </Button>
@@ -106,7 +106,7 @@ export default function CampaignsPage() {
 
         <div className="mb-6">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
             <Input
               type="text"
               placeholder="Search campaigns..."
@@ -118,16 +118,16 @@ export default function CampaignsPage() {
         {loading ? (
           <div className="text-center py-12">Loading campaigns...</div>
         ) : campaigns.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">No campaigns found.</div>
+          <div className="text-center py-12 text-foreground">No campaigns found.</div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {campaigns.map((campaign) => (
               <Link key={campaign.id} to={`/campaigns/${campaign.id}`}>
-                <Card className="p-6 rounded-2xl hover:shadow-lg transition-all hover:border-blue-600">
+                <Card className="p-6 rounded-2xl hover:shadow-lg transition-all hover:border-primary">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-xl font-semibold mb-2">{campaign.title}</h3>
-                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+                      <div className="flex items-center gap-2 text-sm text-foreground mb-2">
                         <span className="font-medium">
                           {campaign.brandInfo?.displayName || campaign.brandInfo?.fullName || campaign.brandInfo?.name || 'Unknown Brand'}
                         </span>
@@ -138,17 +138,17 @@ export default function CampaignsPage() {
                     <Badge
                       className={
                         campaign.status === 'open' || campaign.status === 'active'
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-700'
+                          ? 'bg-background text-foreground'
+                          : 'bg-background text-foreground'
                       }
                     >
                       {campaign.status}
                     </Badge>
                   </div>
 
-                  <p className="text-gray-700 mb-4 line-clamp-2">{campaign.description}</p>
+                  <p className="text-foreground mb-4 line-clamp-2">{campaign.description}</p>
 
-                  <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
+                  <div className="flex flex-wrap gap-4 text-sm text-foreground mb-4">
                     <div className="flex items-center gap-1">
                       <DollarSign className="w-4 h-4" />
                       <span>{campaign.budget}</span>
@@ -159,7 +159,7 @@ export default function CampaignsPage() {
                     </div>
                   </div>
 
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  <Button className="w-full bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]">
                     View Details
                   </Button>
                 </Card>
@@ -170,29 +170,29 @@ export default function CampaignsPage() {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-background flex items-center justify-center p-4 z-50">
           <Card className="w-full max-w-lg p-6 rounded-2xl shadow-xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">Post New Campaign</h2>
-              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
-                <X className="w-5 h-5 text-gray-500" />
+              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-background rounded-full">
+                <X className="w-5 h-5 text-foreground" />
               </button>
             </div>
 
             <form onSubmit={handleCreateCampaign} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Title</label>
                 <Input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="Campaign Title" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Category</label>
                 <Input required value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} placeholder="e.g. Fashion, Tech, Sports" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Type</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Campaign Type</label>
                 <select 
                   required 
-                  className="flex h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="flex h-10 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
                   value={formData.campaignType} 
                   onChange={e => setFormData({...formData, campaignType: e.target.value})}
                 >
@@ -205,10 +205,10 @@ export default function CampaignsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Platform</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Platform</label>
                 <select 
                   required 
-                  className="flex h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="flex h-10 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
                   value={formData.platform} 
                   onChange={e => setFormData({...formData, platform: e.target.value})}
                 >
@@ -219,14 +219,14 @@ export default function CampaignsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Budget ($)</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Budget ($)</label>
                 <Input type="number" required min="1" value={formData.budget} onChange={e => setFormData({...formData, budget: e.target.value})} placeholder="5000" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Description</label>
                 <textarea 
                   required 
-                  className="w-full min-h-[100px] p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="w-full min-h-[100px] p-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
                   value={formData.description} 
                   onChange={e => setFormData({...formData, description: e.target.value})} 
                   placeholder="Describe the campaign requirements..."
@@ -235,7 +235,7 @@ export default function CampaignsPage() {
 
               <div className="pt-4 flex justify-end gap-3">
                 <Button type="button" variant="outline" onClick={() => setShowModal(false)}>Cancel</Button>
-                <Button type="submit" disabled={submitting} className="bg-blue-600 hover:bg-blue-700">
+                <Button type="submit" disabled={submitting} className="bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]">
                   {submitting ? 'Posting...' : 'Post Campaign'}
                 </Button>
               </div>

@@ -280,16 +280,16 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar variant="dashboard" />
 
       <div className="h-[calc(100vh-4rem)] flex">
         {/* Conversations List */}
-        <aside className="w-80 bg-white border-r border-gray-200 flex flex-col">
-          <div className="p-4 border-b border-gray-200">
+        <aside className="w-80 bg-background border-r border-border flex flex-col">
+          <div className="p-4 border-b border-border">
             <h2 className="text-xl font-bold mb-4">Messages</h2>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground" />
               <Input
                 type="text"
                 placeholder="Search conversations..."
@@ -300,7 +300,7 @@ export default function ChatPage() {
 
           <div className="flex-1 overflow-y-auto">
             {loading ? (
-              <p className="p-4 text-center text-gray-500">Loading...</p>
+              <p className="p-4 text-center text-foreground">Loading...</p>
             ) : conversations.length > 0 ? (
               conversations.map((conversation) => (
                 <button
@@ -309,8 +309,8 @@ export default function ChatPage() {
                     setSelectedConversation(conversation);
                     setChatMessages([]); // Clear for new partner in this simplified demo
                   }}
-                  className={`w-full p-4 flex items-start gap-3 hover:bg-gray-50 transition-colors border-b border-gray-100 ${
-                    selectedConversation?.partnerId === conversation.partnerId ? 'bg-blue-50' : ''
+                  className={`w-full p-4 flex items-start gap-3 hover:bg-background transition-colors border-b border-border ${
+                    selectedConversation?.partnerId === conversation.partnerId ? 'bg-primary/10' : ''
                   }`}
                 >
                   <div className="relative">
@@ -320,7 +320,7 @@ export default function ChatPage() {
                       className="w-12 h-12 rounded-full object-cover"
                     />
                     {conversation.online && (
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-background rounded-full border-2 border-border"></div>
                     )}
                   </div>
                   <div className="flex-1 text-left min-w-0">
@@ -328,9 +328,9 @@ export default function ChatPage() {
                       <span className="font-semibold text-sm truncate">
                         {conversation.name}
                       </span>
-                      <span className="text-xs text-gray-500 whitespace-nowrap ml-2">{conversation.time}</span>
+                      <span className="text-xs text-foreground whitespace-nowrap ml-2">{conversation.time}</span>
                     </div>
-                    <p className="text-sm text-gray-600 truncate break-all">
+                    <p className="text-sm text-foreground truncate break-all">
                       {conversation.lastMessage || 'No messages yet'}
                     </p>
                   </div>
@@ -338,19 +338,19 @@ export default function ChatPage() {
               ))
             ) : (
               <div className="p-8 text-center">
-                <Lock className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-                <p className="text-gray-500 text-sm">No accepted invites found. You can only chat after an invite is accepted.</p>
+                <Lock className="w-12 h-12 text-foreground mx-auto mb-2" />
+                <p className="text-foreground text-sm">No accepted invites found. You can only chat after an invite is accepted.</p>
               </div>
             )}
           </div>
         </aside>
 
         {/* Chat Window */}
-        <main className="flex-1 flex flex-col bg-white">
+        <main className="flex-1 flex flex-col bg-background">
           {selectedConversation ? (
             <>
               {/* Chat Header */}
-              <div className="h-16 px-6 flex items-center justify-between border-b border-gray-200">
+              <div className="h-16 px-6 flex items-center justify-between border-b border-border">
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <img
@@ -359,12 +359,12 @@ export default function ChatPage() {
                       className="w-10 h-10 rounded-full object-cover"
                     />
                     {selectedConversation.online && (
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-background rounded-full border-2 border-border"></div>
                     )}
                   </div>
                   <div>
                     <div className="font-semibold">{selectedConversation.name}</div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-foreground">
                       {selectedConversation.online ? 'Online' : 'Offline'}
                     </div>
                   </div>
@@ -404,8 +404,8 @@ export default function ChatPage() {
                     <div
                       className={`max-w-md px-4 py-3 rounded-2xl ${
                         message.sender === 'me'
-                          ? 'bg-blue-600 text-white rounded-br-sm'
-                          : 'bg-gray-100 text-gray-900 rounded-bl-sm'
+                          ? 'bg-primary text-[#2b2635] text-foreground rounded-br-sm'
+                          : 'bg-background text-foreground rounded-bl-sm'
                       }`}
                     >
                       {message.type === 'image' && message.fileUrl && (
@@ -419,8 +419,8 @@ export default function ChatPage() {
                         </div>
                       )}
                       {message.type === 'file' && message.fileUrl && (
-                        <div className="mb-2 flex items-center gap-3 p-3 bg-black/10 rounded-lg cursor-pointer hover:bg-black/20 transition-colors" onClick={() => window.open(message.fileUrl, '_blank')}>
-                          <div className="bg-white/20 p-2 rounded">
+                        <div className="mb-2 flex items-center gap-3 p-3 bg-background rounded-lg cursor-pointer hover:bg-background transition-colors" onClick={() => window.open(message.fileUrl, '_blank')}>
+                          <div className="bg-background p-2 rounded">
                             <FileText className="w-5 h-5 text-current" />
                           </div>
                           <span className="text-sm font-medium truncate max-w-[150px]">{message.fileName || 'Document'}</span>
@@ -430,7 +430,7 @@ export default function ChatPage() {
                       {message.content && <p className="text-sm break-words">{message.content}</p>}
                       <div
                         className={`mt-1 flex items-center gap-1 text-xs ${
-                          message.sender === 'me' ? 'text-blue-100 justify-end' : 'text-gray-500'
+                          message.sender === 'me' ? 'text-primary/70 justify-end' : 'text-foreground'
                         }`}
                       >
                         <span>{message.time}</span>
@@ -438,7 +438,7 @@ export default function ChatPage() {
                           <div className="flex items-center">
                             {message.status === 'sent' && <Check className="w-3 h-3 opacity-80" />}
                             {message.status === 'delivered' && <CheckCheck className="w-3 h-3 opacity-80" />}
-                            {message.status === 'seen' && <CheckCheck className="w-3 h-3 text-blue-400 transition-colors duration-300" />}
+                            {message.status === 'seen' && <CheckCheck className="w-3 h-3 text-primary/70 transition-colors duration-300" />}
                             {message.status === 'sending' && <span className="opacity-70 text-[10px] animate-pulse">...</span>}
                           </div>
                         )}
@@ -446,33 +446,33 @@ export default function ChatPage() {
                     </div>
                   </div>
                 )) : (
-                  <p className="text-center text-gray-400 mt-10">No messages yet. Say hi!</p>
+                  <p className="text-center text-foreground mt-10">No messages yet. Say hi!</p>
                 )}
                 <div ref={messagesEndRef} />
               </div>
 
               {/* Input */}
-              <div className="p-4 border-t border-gray-200">
+              <div className="p-4 border-t border-border">
                 {/* Preview Section */}
                 {attachment && (
-                  <div className="mb-3 p-3 bg-gray-50 border border-gray-200 rounded-xl relative flex items-center gap-4">
-                    <button onClick={removeAttachment} className="absolute -top-2 -right-2 bg-gray-200 hover:bg-gray-300 rounded-full p-1 shadow-sm">
+                  <div className="mb-3 p-3 bg-background border border-border rounded-xl relative flex items-center gap-4">
+                    <button onClick={removeAttachment} className="absolute -top-2 -right-2 bg-background hover:bg-background rounded-full p-1 shadow-sm">
                       <X className="w-4 h-4" />
                     </button>
                     {attachment.type === 'image' && (
-                      <img src={attachment.previewUrl} alt="Preview" className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
+                      <img src={attachment.previewUrl} alt="Preview" className="w-16 h-16 object-cover rounded-lg border border-border" />
                     )}
                     {attachment.type === 'video' && (
-                      <video src={attachment.previewUrl} className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
+                      <video src={attachment.previewUrl} className="w-16 h-16 object-cover rounded-lg border border-border" />
                     )}
                     {attachment.type === 'file' && (
-                      <div className="w-16 h-16 bg-white border border-gray-200 rounded-lg flex items-center justify-center">
-                        <FileText className="w-8 h-8 text-blue-500" />
+                      <div className="w-16 h-16 bg-background border border-border rounded-lg flex items-center justify-center">
+                        <FileText className="w-8 h-8 text-primary" />
                       </div>
                     )}
                     <div className="flex-1 truncate">
                       <p className="text-sm font-medium truncate">{attachment.file.name}</p>
-                      <p className="text-xs text-gray-500">{(attachment.file.size / 1024 / 1024).toFixed(2)} MB</p>
+                      <p className="text-xs text-foreground">{(attachment.file.size / 1024 / 1024).toFixed(2)} MB</p>
                     </div>
                   </div>
                 )}
@@ -486,17 +486,17 @@ export default function ChatPage() {
                         <Paperclip className="w-5 h-5" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" sideOffset={10} className="w-48 bg-white border border-gray-200 shadow-xl rounded-xl">
-                      <DropdownMenuItem onClick={() => { if(fileInputRef.current) { fileInputRef.current.accept = 'image/*'; fileInputRef.current.click(); }}} className="gap-3 py-3 cursor-pointer hover:bg-blue-50 focus:bg-blue-50">
-                        <div className="bg-blue-100 p-2 rounded-full text-blue-600"><ImageIcon className="w-4 h-4" /></div>
+                    <DropdownMenuContent align="start" sideOffset={10} className="w-48 bg-background border border-border shadow-xl rounded-xl">
+                      <DropdownMenuItem onClick={() => { if(fileInputRef.current) { fileInputRef.current.accept = 'image/*'; fileInputRef.current.click(); }}} className="gap-3 py-3 cursor-pointer hover:bg-primary/10 focus:bg-primary/10">
+                        <div className="bg-primary/20 p-2 rounded-full text-primary"><ImageIcon className="w-4 h-4" /></div>
                         <span className="font-medium">Image</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => { if(fileInputRef.current) { fileInputRef.current.accept = 'video/*'; fileInputRef.current.click(); }}} className="gap-3 py-3 cursor-pointer hover:bg-purple-50 focus:bg-purple-50">
-                        <div className="bg-purple-100 p-2 rounded-full text-purple-600"><Video className="w-4 h-4" /></div>
+                      <DropdownMenuItem onClick={() => { if(fileInputRef.current) { fileInputRef.current.accept = 'video/*'; fileInputRef.current.click(); }}} className="gap-3 py-3 cursor-pointer hover:bg-background focus:bg-background">
+                        <div className="bg-background p-2 rounded-full text-foreground"><Video className="w-4 h-4" /></div>
                         <span className="font-medium">Video</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => { if(fileInputRef.current) { fileInputRef.current.accept = '.pdf,.doc,.docx,.txt,.xls,.xlsx'; fileInputRef.current.click(); }}} className="gap-3 py-3 cursor-pointer hover:bg-green-50 focus:bg-green-50">
-                        <div className="bg-green-100 p-2 rounded-full text-green-600"><FileText className="w-4 h-4" /></div>
+                      <DropdownMenuItem onClick={() => { if(fileInputRef.current) { fileInputRef.current.accept = '.pdf,.doc,.docx,.txt,.xls,.xlsx'; fileInputRef.current.click(); }}} className="gap-3 py-3 cursor-pointer hover:bg-background focus:bg-background">
+                        <div className="bg-background p-2 rounded-full text-foreground"><FileText className="w-4 h-4" /></div>
                         <span className="font-medium">Document</span>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -526,7 +526,7 @@ export default function ChatPage() {
                       size="icon"
                       disabled={isUploading}
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 text-foreground hover:text-foreground"
                     >
                       <Smile className="w-5 h-5" />
                     </Button>
@@ -534,11 +534,11 @@ export default function ChatPage() {
                   <Button
                     onClick={handleSendMessage}
                     disabled={isUploading || (!messageInput.trim() && !attachment)}
-                    className="bg-blue-600 hover:bg-blue-700 flex-shrink-0 relative overflow-hidden"
+                    className="bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635] flex-shrink-0 relative overflow-hidden"
                     size="icon"
                   >
                     {isUploading ? (
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-border border-t-transparent rounded-full animate-spin" />
                     ) : (
                       <Send className="w-5 h-5" />
                     )}
@@ -548,11 +548,11 @@ export default function ChatPage() {
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-              <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                <MessageSquare className="w-10 h-10 text-blue-600" />
+              <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                <MessageSquare className="w-10 h-10 text-primary" />
               </div>
               <h3 className="text-xl font-bold mb-2">Select a conversation</h3>
-              <p className="text-gray-500 max-w-xs">
+              <p className="text-foreground max-w-xs">
                 You can only chat with users who have accepted your invite or whose invite you have accepted.
               </p>
             </div>

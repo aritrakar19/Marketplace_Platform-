@@ -71,16 +71,16 @@ export default function BrandDashboard() {
   }, [currentUser]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar variant="dashboard" />
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className="hidden lg:block w-64 bg-white border-r border-gray-200 min-h-[calc(100vh-4rem)] sticky top-16">
+        <aside className="hidden lg:block w-64 bg-background border-r border-border min-h-[calc(100vh-4rem)] sticky top-16">
           <nav className="p-4 space-y-1">
             <Link
               to="/dashboard"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 text-blue-600 font-medium"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-medium"
             >
               <LayoutDashboard className="w-5 h-5" />
               <span>Dashboard</span>
@@ -88,7 +88,7 @@ export default function BrandDashboard() {
             {userData?.role === 'talent' ? (
               <Link
                 to="/explore-brands"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
               >
                 <Users className="w-5 h-5" />
                 <span>Find Brands</span>
@@ -96,7 +96,7 @@ export default function BrandDashboard() {
             ) : (
               <Link
                 to="/explore"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
               >
                 <Users className="w-5 h-5" />
                 <span>Find Talents</span>
@@ -104,22 +104,29 @@ export default function BrandDashboard() {
             )}
             <Link
               to="/campaigns"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
             >
               <Briefcase className="w-5 h-5" />
               <span>Campaigns</span>
             </Link>
             <Link
+              to="/my-events"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
+            >
+              <Calendar className="w-5 h-5" />
+              <span>Events</span>
+            </Link>
+            <Link
               to="/chat"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors relative"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors relative"
             >
               <MessageSquare className="w-5 h-5" />
               <span>Messages</span>
-              <Badge className="ml-auto bg-red-500">3</Badge>
+              <Badge className="ml-auto bg-background">3</Badge>
             </Link>
             <Link
               to="#"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
             >
               <Bookmark className="w-5 h-5" />
               <span>Saved Talents</span>
@@ -134,11 +141,11 @@ export default function BrandDashboard() {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
               <div>
                 <h1 className="text-3xl font-bold mb-2">Welcome back, {userData?.fullName || userData?.name || 'Brand Manager'}!</h1>
-                <p className="text-gray-600">Here's what's happening with your campaigns</p>
+                <p className="text-foreground">Here's what's happening with your campaigns</p>
               </div>
               {userData?.role !== 'talent' && (
                 <Link to="/campaigns">
-                  <Button className="bg-blue-600 hover:bg-blue-700 mt-4 md:mt-0">
+                  <Button className="bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635] mt-4 md:mt-0">
                     <UserPlus className="w-4 h-4 mr-2" />
                     Post New Campaign
                   </Button>
@@ -150,48 +157,48 @@ export default function BrandDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <Card className="p-6 rounded-2xl">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <Briefcase className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center">
+                    <Briefcase className="w-6 h-6 text-primary" />
                   </div>
                   <Badge variant="secondary" className="text-xs">+12%</Badge>
                 </div>
                 <div className="text-2xl font-bold mb-1">
                   {campaignCount !== null ? campaignCount : '...'}
                 </div>
-                <div className="text-sm text-gray-600">Active Campaigns</div>
+                <div className="text-sm text-foreground">Active Campaigns</div>
               </Card>
 
               <Card className="p-6 rounded-2xl">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                    <Users className="w-6 h-6 text-green-600" />
+                  <div className="w-12 h-12 bg-background rounded-xl flex items-center justify-center">
+                    <Users className="w-6 h-6 text-foreground" />
                   </div>
                   <Badge variant="secondary" className="text-xs">+8%</Badge>
                 </div>
                 <div className="text-2xl font-bold mb-1">156</div>
-                <div className="text-sm text-gray-600">Collaborations</div>
+                <div className="text-sm text-foreground">Collaborations</div>
               </Card>
 
               <Card className="p-6 rounded-2xl">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-purple-600" />
+                  <div className="w-12 h-12 bg-background rounded-xl flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-foreground" />
                   </div>
                   <Badge variant="secondary" className="text-xs">+24%</Badge>
                 </div>
                 <div className="text-2xl font-bold mb-1">4.8M</div>
-                <div className="text-sm text-gray-600">Total Reach</div>
+                <div className="text-sm text-foreground">Total Reach</div>
               </Card>
 
               <Card className="p-6 rounded-2xl">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <DollarSign className="w-6 h-6 text-orange-600" />
+                  <div className="w-12 h-12 bg-background rounded-xl flex items-center justify-center">
+                    <DollarSign className="w-6 h-6 text-foreground" />
                   </div>
                   <Badge variant="secondary" className="text-xs">+16%</Badge>
                 </div>
                 <div className="text-2xl font-bold mb-1">$84K</div>
-                <div className="text-sm text-gray-600">Total Spent</div>
+                <div className="text-sm text-foreground">Total Spent</div>
               </Card>
             </div>
 
@@ -270,21 +277,21 @@ export default function BrandDashboard() {
                     ].map((campaign, index) => (
                       <div
                         key={index}
-                        className="p-4 border border-gray-200 rounded-xl hover:border-blue-600 transition-colors cursor-pointer"
+                        className="p-4 border border-border rounded-xl hover:border-primary transition-colors cursor-pointer"
                       >
                         <div className="flex items-start justify-between mb-3">
                           <h4 className="font-semibold">{campaign.title}</h4>
                           <Badge
                             className={
                               campaign.status === 'active'
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-orange-100 text-orange-700'
+                                ? 'bg-background text-foreground'
+                                : 'bg-background text-foreground'
                             }
                           >
                             {campaign.status}
                           </Badge>
                         </div>
-                        <div className="flex items-center gap-6 text-sm text-gray-600">
+                        <div className="flex items-center gap-6 text-sm text-foreground">
                           <div className="flex items-center gap-1">
                             <UserPlus className="w-4 h-4" />
                             <span>{campaign.applicants} applicants</span>
@@ -322,22 +329,22 @@ export default function BrandDashboard() {
                           className="w-12 h-12 rounded-xl object-cover"
                         />
                       ) : (
-                        <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 font-bold uppercase">
+                        <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center text-primary font-bold uppercase">
                           {conn.name?.charAt(0) || 'U'}
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-sm truncate">{conn.name}</div>
-                        <div className="text-xs text-gray-500">{conn.role || 'User'}</div>
+                        <div className="text-xs text-foreground">{conn.role || 'User'}</div>
                       </div>
                       <Link to="/chat">
-                        <Button size="icon" variant="ghost" className="text-blue-600">
+                        <Button size="icon" variant="ghost" className="text-primary">
                           <MessageSquare className="w-4 h-4" />
                         </Button>
                       </Link>
                     </div>
                   )) : (
-                    <p className="text-sm text-gray-500 text-center py-4">No connections yet.</p>
+                    <p className="text-sm text-foreground text-center py-4">No connections yet.</p>
                   )}
                   <Link to={userData?.role === 'talent' ? "/explore-brands" : "/explore"}>
                     <Button variant="outline" className="w-full mt-2">

@@ -19,22 +19,22 @@ export default function PaymentPage() {
 
   if (paymentComplete) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <Navbar />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <Card className="p-12 text-center rounded-2xl">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-10 h-10 text-green-600" />
+            <div className="w-20 h-20 bg-background rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-10 h-10 text-foreground" />
             </div>
             <h1 className="text-3xl font-bold mb-4">Payment Successful!</h1>
-            <p className="text-gray-600 mb-8">
+            <p className="text-foreground mb-8">
               Your collaboration request has been sent. The talent will be notified and can review
               your proposal.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 onClick={() => navigate('/dashboard')}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]"
               >
                 Go to Dashboard
               </Button>
@@ -50,13 +50,13 @@ export default function PaymentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <button
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+          className="inline-flex items-center gap-2 text-foreground hover:text-foreground mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           Back
@@ -75,9 +75,9 @@ export default function PaymentPage() {
                     <input
                       type="text"
                       placeholder="1234 5678 9012 3456"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
-                    <CreditCard className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <CreditCard className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
                   </div>
                 </div>
 
@@ -87,7 +87,7 @@ export default function PaymentPage() {
                     <input
                       type="text"
                       placeholder="MM/YY"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                   <div>
@@ -95,7 +95,7 @@ export default function PaymentPage() {
                     <input
                       type="text"
                       placeholder="123"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -105,7 +105,7 @@ export default function PaymentPage() {
                   <input
                     type="text"
                     placeholder="John Doe"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
 
@@ -117,18 +117,18 @@ export default function PaymentPage() {
                     <input
                       type="text"
                       placeholder="Address Line 1"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                     <div className="grid grid-cols-2 gap-4">
                       <input
                         type="text"
                         placeholder="City"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                       <input
                         type="text"
                         placeholder="ZIP Code"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -136,12 +136,12 @@ export default function PaymentPage() {
               </div>
             </Card>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+            <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 mb-6">
               <div className="flex gap-3">
-                <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-blue-900">
+                <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-primary">
                   <p className="font-medium mb-1">Secure Payment</p>
-                  <p className="text-blue-700">
+                  <p className="text-primary">
                     Your payment information is encrypted and secure. We never store your card
                     details.
                   </p>
@@ -164,8 +164,8 @@ export default function PaymentPage() {
                   />
                   <div>
                     <div className="font-medium">Sarah Johnson</div>
-                    <div className="text-sm text-gray-600">Influencer Collaboration</div>
-                    <div className="text-sm text-gray-500">Campaign: Summer Launch</div>
+                    <div className="text-sm text-foreground">Influencer Collaboration</div>
+                    <div className="text-sm text-foreground">Campaign: Summer Launch</div>
                   </div>
                 </div>
               </div>
@@ -174,15 +174,15 @@ export default function PaymentPage() {
 
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Collaboration Fee</span>
+                  <span className="text-foreground">Collaboration Fee</span>
                   <span className="font-medium">$5,000.00</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Platform Fee (5%)</span>
+                  <span className="text-foreground">Platform Fee (5%)</span>
                   <span className="font-medium">$250.00</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Processing Fee</span>
+                  <span className="text-foreground">Processing Fee</span>
                   <span className="font-medium">$50.00</span>
                 </div>
 
@@ -190,19 +190,19 @@ export default function PaymentPage() {
 
                 <div className="flex justify-between text-lg">
                   <span className="font-semibold">Total</span>
-                  <span className="font-bold text-blue-600">$5,300.00</span>
+                  <span className="font-bold text-primary">$5,300.00</span>
                 </div>
               </div>
 
               <Button
                 onClick={handlePayment}
-                className="w-full bg-blue-600 hover:bg-blue-700 mt-6"
+                className="w-full bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635] mt-6"
                 size="lg"
               >
                 Proceed to Payment
               </Button>
 
-              <p className="text-xs text-gray-500 text-center mt-4">
+              <p className="text-xs text-foreground text-center mt-4">
                 By proceeding, you agree to our Terms of Service and Privacy Policy
               </p>
             </Card>

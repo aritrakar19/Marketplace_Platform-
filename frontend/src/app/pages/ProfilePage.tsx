@@ -13,7 +13,7 @@ export default function ProfilePage() {
   const isTalent = userData?.role === 'talent' || userRole === 'talent';
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <Navbar variant="dashboard" />
       <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <div className="flex items-center gap-3">
@@ -23,15 +23,15 @@ export default function ProfilePage() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
-            <p className="text-sm text-gray-500">View and edit how others see you</p>
+            <h1 className="text-2xl font-bold text-foreground">Profile</h1>
+            <p className="text-sm text-foreground">View and edit how others see you</p>
           </div>
         </div>
 
         {isTalent && (
-          <Card className="p-6 shadow-sm border border-blue-100 bg-gradient-to-b from-blue-50/70 to-white">
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">Connect your social accounts</h2>
-            <p className="text-sm text-gray-600 mb-4">
+          <Card className="p-6 shadow-sm border border-primary/20 bg-[#2b2635] text-foreground">
+            <h2 className="text-lg font-semibold text-foreground mb-1">Connect your social accounts</h2>
+            <p className="text-sm text-foreground mb-4">
               Link Facebook and Instagram through Meta, or connect YouTube. You can still add handles manually in your
               profile below.
             </p>
@@ -39,7 +39,7 @@ export default function ProfilePage() {
           </Card>
         )}
 
-        <Card className="p-6 sm:p-8 shadow-sm border border-gray-200 bg-white">
+        <Card className="p-6 sm:p-8 shadow-sm border border-border bg-background">
           <ProfilePanel showHeading={false} fetchOnMount />
         </Card>
       </main>

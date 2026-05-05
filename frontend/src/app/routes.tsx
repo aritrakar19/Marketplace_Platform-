@@ -17,6 +17,12 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuth } from "../context/AuthContext";
 
+// Event Pages
+import EventsFeedPage from "./pages/EventsFeedPage";
+import CreateEventPage from "./pages/CreateEventPage";
+import EventDetailsPage from "./pages/EventDetailsPage";
+import MyEventsPage from "./pages/MyEventsPage";
+
 // Wrapper for /auth to redirect logged in users to dashboard
 const AuthRoute = () => {
   const { currentUser, loading } = useAuth();
@@ -41,6 +47,14 @@ export const router = createBrowserRouter([
   {
     path: "/talent/:id",
     Component: TalentProfile,
+  },
+  {
+    path: "/events",
+    Component: EventsFeedPage,
+  },
+  {
+    path: "/events/:id",
+    Component: EventDetailsPage,
   },
   {
     element: <ProtectedRoute />, // All children are protected
@@ -84,6 +98,14 @@ export const router = createBrowserRouter([
       {
         path: "/admin",
         Component: AdminPanel,
+      },
+      {
+        path: "/events/create",
+        Component: CreateEventPage,
+      },
+      {
+        path: "/my-events",
+        Component: MyEventsPage,
       },
     ],
   },

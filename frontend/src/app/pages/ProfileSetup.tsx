@@ -152,13 +152,13 @@ export default function ProfileSetup() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-background py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
           <Badge className="mb-4">Profile Setup</Badge>
           <h1 className="text-3xl font-bold mb-2">Complete Your Profile</h1>
-          <p className="text-gray-600">
+          <p className="text-foreground">
             Step {step} of {totalSteps}
           </p>
         </div>
@@ -168,7 +168,7 @@ export default function ProfileSetup() {
           <Progress value={progress} className="h-2" />
           <div className="flex justify-between mt-4 text-sm">
             {stepsList.map((title, idx) => (
-              <span key={title} className={step >= idx + 1 ? 'text-blue-600 font-semibold' : 'text-gray-400'}>
+              <span key={title} className={step >= idx + 1 ? 'text-primary font-semibold' : 'text-foreground'}>
                 {title}
               </span>
             ))}
@@ -181,7 +181,7 @@ export default function ProfileSetup() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-semibold mb-4">Basic Information</h2>
-                <p className="text-gray-600 mb-6">
+                <p className="text-foreground mb-6">
                   Let's start with some basic information about you
                 </p>
               </div>
@@ -190,11 +190,11 @@ export default function ProfileSetup() {
                 <div className="flex flex-col gap-2">
                   <Label>Profile Photo</Label>
                   <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden border border-gray-300">
+                    <div className="w-20 h-20 bg-background rounded-full flex items-center justify-center overflow-hidden border border-border">
                       {formData.profileImage ? (
                         <img src={formData.profileImage} alt="Profile" className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-gray-400 text-xs">No Photo</span>
+                        <span className="text-foreground text-xs">No Photo</span>
                       )}
                     </div>
                     <div className="flex-1">
@@ -205,7 +205,7 @@ export default function ProfileSetup() {
                         className="cursor-pointer"
                         disabled={isUploadingPhoto}
                       />
-                      <p className="text-xs text-gray-500 mt-1">Recommended size: 256x256px</p>
+                      <p className="text-xs text-foreground mt-1">Recommended size: 256x256px</p>
                     </div>
                   </div>
                 </div>
@@ -249,7 +249,7 @@ export default function ProfileSetup() {
                         placeholder="johndoe"
                         className="mt-1"
                       />
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-foreground mt-1">
                         This is how you'll appear to others
                       </p>
                     </div>
@@ -279,7 +279,7 @@ export default function ProfileSetup() {
                     rows={4}
                     className="mt-1"
                   />
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-foreground mt-1">
                     {formData.bio.length}/500 characters
                   </p>
                 </div>
@@ -292,7 +292,7 @@ export default function ProfileSetup() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-semibold mb-4">Choose Your Category</h2>
-                <p className="text-gray-600 mb-6">Select the category that best describes you</p>
+                <p className="text-foreground mb-6">Select the category that best describes you</p>
               </div>
 
               <div className="space-y-8 mb-6">
@@ -300,7 +300,7 @@ export default function ProfileSetup() {
                   <div key={category.id} className="space-y-4">
                     <div className="flex items-center gap-2 pb-2 border-b">
                       <span className="text-2xl">{category.icon}</span>
-                      <h3 className="text-lg font-semibold text-gray-800">{category.name}</h3>
+                      <h3 className="text-lg font-semibold text-foreground">{category.name}</h3>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                       {category.subCategories.map((subCat) => {
@@ -310,8 +310,8 @@ export default function ProfileSetup() {
                             key={subCat}
                             className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
                               isSelected
-                                ? 'border-blue-600 bg-blue-50 shadow-sm'
-                                : 'border-gray-200 hover:border-blue-300 bg-white'
+                                ? 'border-primary bg-primary/10 shadow-sm'
+                                : 'border-border hover:border-primary bg-background'
                             }`}
                             onClick={() => {
                               if (isSelected) {
@@ -327,10 +327,10 @@ export default function ProfileSetup() {
                               }
                             }}
                           >
-                            <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'bg-blue-600 border-blue-600' : 'border-gray-300'}`}>
-                              {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
+                            <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'bg-primary text-[#2b2635] border-primary' : 'border-border'}`}>
+                              {isSelected && <Check className="w-3.5 h-3.5 text-foreground" />}
                             </div>
-                            <span className="text-sm font-medium text-gray-700 select-none">{subCat}</span>
+                            <span className="text-sm font-medium text-foreground select-none">{subCat}</span>
                           </div>
                         );
                       })}
@@ -346,26 +346,26 @@ export default function ProfileSetup() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-semibold mb-4">Social Media Accounts</h2>
-                <p className="text-gray-600 mb-4">
+                <p className="text-foreground mb-4">
                   Connect your accounts or enter handles manually — you can skip and finish this later.
                 </p>
               </div>
 
-              <div className="rounded-xl border border-blue-100 bg-blue-50/60 p-4 space-y-3">
-                <p className="text-sm font-medium text-blue-900">Quick connect</p>
-                <p className="text-xs text-blue-800/80">
+              <div className="rounded-xl border border-primary/20 bg-primary/10 p-4 space-y-3">
+                <p className="text-sm font-medium text-primary">Quick connect</p>
+                <p className="text-xs text-primary/80">
                   Facebook and Instagram use Meta login on our server. You’ll return here after authorizing.
                 </p>
                 <SocialConnectButtons layout="stack" className="sm:flex-row sm:flex-wrap" />
               </div>
 
-              <p className="text-sm font-medium text-gray-700">Or add handles manually</p>
+              <p className="text-sm font-medium text-foreground">Or add handles manually</p>
 
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="instagram">Instagram</Label>
                   <div className="relative mt-1">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground">
                       @
                     </span>
                     <Input
@@ -383,7 +383,7 @@ export default function ProfileSetup() {
                 <div>
                   <Label htmlFor="youtube">YouTube</Label>
                   <div className="relative mt-1">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground">
                       youtube.com/@
                     </span>
                     <Input
@@ -401,7 +401,7 @@ export default function ProfileSetup() {
                 <div>
                   <Label htmlFor="twitter">Twitter / X</Label>
                   <div className="relative mt-1">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground">
                       @
                     </span>
                     <Input
@@ -419,7 +419,7 @@ export default function ProfileSetup() {
                 <div>
                   <Label htmlFor="tiktok">TikTok</Label>
                   <div className="relative mt-1">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground">
                       @
                     </span>
                     <Input
@@ -435,8 +435,8 @@ export default function ProfileSetup() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50/80 p-4 text-sm text-gray-600">
-                <span className="font-medium text-gray-800">Prefer to skip?</span> Use{' '}
+              <div className="rounded-xl border border-dashed border-border bg-background p-4 text-sm text-foreground">
+                <span className="font-medium text-foreground">Prefer to skip?</span> Use{' '}
                 <span className="font-medium">Skip for now</span> below — you can update social links from your profile
                 anytime.
               </div>
@@ -456,17 +456,17 @@ export default function ProfileSetup() {
                 Back
               </Button>
               {currentStepTitle === 'Social Media' && (
-                <Button type="button" variant="ghost" className="text-gray-600" onClick={handleNext}>
+                <Button type="button" variant="ghost" className="text-foreground" onClick={handleNext}>
                   Skip for now
                 </Button>
               )}
             </div>
 
-            <p className="text-sm text-gray-500 order-last w-full text-center sm:order-none sm:w-auto">
+            <p className="text-sm text-foreground order-last w-full text-center sm:order-none sm:w-auto">
               Profile completion: {Math.round(progress)}%
             </p>
 
-            <Button onClick={handleNext} className="bg-blue-600 hover:bg-blue-700 gap-2">
+            <Button onClick={handleNext} className="bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635] gap-2">
               {step === totalSteps ? 'Complete' : 'Next'}
               {step === totalSteps ? (
                 <Check className="w-4 h-4" />

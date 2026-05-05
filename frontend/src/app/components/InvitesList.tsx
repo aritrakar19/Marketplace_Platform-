@@ -60,7 +60,7 @@ export default function InvitesList() {
     }
   };
 
-  if (loading) return <p className="text-gray-500">Loading invites...</p>;
+  if (loading) return <p className="text-foreground">Loading invites...</p>;
 
   const incomingInvites = invites.filter(inv => inv.receiverId === currentUser?.uid && inv.status === 'pending');
 
@@ -77,20 +77,20 @@ export default function InvitesList() {
               <Card key={invite._id} className="p-4 flex items-center justify-between">
                 <div>
                   <p className="font-medium">New Invite from Brand</p>
-                  <p className="text-sm text-gray-500">{new Date(invite.createdAt).toLocaleDateString()}</p>
+                  <p className="text-sm text-foreground">{new Date(invite.createdAt).toLocaleDateString()}</p>
                 </div>
                 <div className="flex gap-2">
                   <Button 
                     size="sm" 
                     variant="outline" 
-                    className="text-red-600 border-red-200 hover:bg-red-50"
+                    className="text-foreground border-border hover:bg-background"
                     onClick={() => handleUpdateStatus(invite._id, 'rejected')}
                   >
                     <X className="w-4 h-4 mr-1" /> Reject
                   </Button>
                   <Button 
                     size="sm" 
-                    className="bg-green-600 hover:bg-green-700"
+                    className="bg-background hover:bg-background"
                     onClick={() => handleUpdateStatus(invite._id, 'accepted')}
                   >
                     <Check className="w-4 h-4 mr-1" /> Accept
@@ -100,7 +100,7 @@ export default function InvitesList() {
             ))}
           </div>
         ) : (
-          <p className="text-gray-500 text-sm italic">No pending invites.</p>
+          <p className="text-foreground text-sm italic">No pending invites.</p>
         )
       ) : (
         <div className="grid gap-4">
@@ -108,7 +108,7 @@ export default function InvitesList() {
             <Card key={invite._id} className="p-4 flex items-center justify-between">
               <div>
                 <p className="font-medium">Invite to Talent</p>
-                <p className="text-sm text-gray-500">{new Date(invite.createdAt).toLocaleDateString()}</p>
+                <p className="text-sm text-foreground">{new Date(invite.createdAt).toLocaleDateString()}</p>
               </div>
               <div className="flex items-center gap-3">
                 <Badge variant={invite.status === 'accepted' ? 'success' : invite.status === 'pending' ? 'secondary' : 'destructive'}>
@@ -117,7 +117,7 @@ export default function InvitesList() {
                 {invite.status === 'accepted' && (
                   <Link to="/chat">
                     <Button size="sm" variant="ghost">
-                      <MessageSquare className="w-4 h-4 text-blue-600" />
+                      <MessageSquare className="w-4 h-4 text-primary" />
                     </Button>
                   </Link>
                 )}
@@ -125,7 +125,7 @@ export default function InvitesList() {
             </Card>
           ))}
           {invites.filter(inv => inv.senderId === currentUser?.uid).length === 0 && (
-             <p className="text-gray-500 text-sm italic">You haven't sent any invites yet.</p>
+             <p className="text-foreground text-sm italic">You haven't sent any invites yet.</p>
           )}
         </div>
       )}

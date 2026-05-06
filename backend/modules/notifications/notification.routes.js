@@ -7,5 +7,6 @@ router.use(verifyFirebaseToken);
 
 router.get('/', getNotifications);
 router.put('/:id/read', markAsRead);
+router.patch('/:id', markAsRead);
 
 module.exports = router;

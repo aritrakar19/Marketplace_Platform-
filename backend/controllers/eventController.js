@@ -1,4 +1,5 @@
 const Event = require('../models/Event');
+const Notification = require('../models/Notification');
 
 // 1. POST /api/events -> Create event
 exports.createEvent = async (req, res) => {
@@ -23,12 +24,11 @@ exports.createEvent = async (req, res) => {
 // 2. GET /api/events -> Get all public events (with filtering)
 exports.getEvents = async (req, res) => {
   try {
-    const { category, eventType, role } = req.query;
+    const { category, eventType } = req.query;
     let query = { visibility: 'public' };
 
     if (category) query.category = category;
     if (eventType) query.eventType = eventType;
-    if (role) query.role = role;
 
     const events = await Event.find(query).sort({ createdAt: -1 });
     return res.status(200).json({ success: true, data: events });
@@ -72,6 +72,17 @@ exports.applyToEvent = async (req, res) => {
 
     event.applicants.push({ userId, message, status: 'pending' });
     await event.save();
+
+    // Create a notification for the event creator
+    const notification = new Notification({
+      userId: event.createdBy,
+      senderId: userId,
+      type: 'application',
+      message: 'A user applied to your event',
+      eventId: event._id.toString(),
+      fromUser: userId
+    });
+    await notification.save();
 
     return res.status(200).json({ success: true, message: 'Application submitted successfully', data: event });
   } catch (error) {

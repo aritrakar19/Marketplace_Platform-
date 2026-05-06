@@ -11,7 +11,7 @@ const notificationSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['invite', 'system', 'other'],
+    enum: ['invite', 'system', 'other', 'application'],
     default: 'invite',
   },
   message: {
@@ -19,6 +19,12 @@ const notificationSchema = new mongoose.Schema({
     required: true,
   },
   referenceId: {
+    type: String,
+  },
+  eventId: {
+    type: String,
+  },
+  fromUser: {
     type: String,
   },
   isRead: {

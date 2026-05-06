@@ -82,7 +82,7 @@ export default function MyEventsPage() {
         {/* Events List */}
         <div className="w-full lg:w-1/3">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-foreground">My Opportunities</h1>
+            <h1 className="text-2xl font-bold text-foreground">My Events</h1>
             <Link to="/events/create">
               <Button size="icon" className="bg-primary text-[#2b2635] hover:bg-primary/90">
                 <PlusCircle className="w-5 h-5" />
@@ -97,7 +97,7 @@ export default function MyEventsPage() {
               </div>
             ) : events.length === 0 ? (
               <Card className="p-6 text-center border-dashed">
-                <p className="text-foreground mb-4">You haven't posted any opportunities yet.</p>
+                <p className="text-foreground mb-4">You haven't posted any events yet.</p>
                 <Link to="/events/create">
                   <Button variant="outline">Create One Now</Button>
                 </Link>
@@ -141,7 +141,7 @@ export default function MyEventsPage() {
               
               {selectedEvent.applicants?.length === 0 ? (
                 <div className="text-center py-12 text-foreground bg-background rounded-xl">
-                  No one has applied to this opportunity yet.
+                  No one has applied to this event yet.
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -183,7 +183,7 @@ export default function MyEventsPage() {
             </Card>
           ) : (
             <div className="h-full flex items-center justify-center text-foreground border-2 border-dashed border-border rounded-2xl">
-              Select an opportunity to view details and applicants
+              Select an event to view details and applicants
             </div>
           )}
         </div>

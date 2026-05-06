@@ -46,14 +46,14 @@ export default function EventsFeedPage() {
       <main className="flex-1 max-w-7xl w-full mx-auto p-6 lg:p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Opportunities & Events</h1>
+            <h1 className="text-3xl font-bold text-foreground">Explore Events</h1>
             <p className="text-foreground">Discover and apply to sponsorships, collaborations, and events.</p>
           </div>
           {currentUser && (
             <Link to="/events/create">
               <Button className="bg-primary text-[#2b2635] hover:bg-primary/90">
                 <PlusCircle className="w-4 h-4 mr-2" />
-                Post Opportunity
+                Post Event
               </Button>
             </Link>
           )}
@@ -94,11 +94,11 @@ export default function EventsFeedPage() {
           </div>
         ) : events.length === 0 ? (
           <div className="text-center py-20 bg-background rounded-2xl border border-border">
-            <h3 className="text-xl font-bold text-foreground mb-2">No opportunities found</h3>
-            <p className="text-foreground mb-6">Try adjusting your filters or post a new opportunity.</p>
+            <h3 className="text-xl font-bold text-foreground mb-2">No events found</h3>
+            <p className="text-foreground mb-6">Try adjusting your filters or post a new event.</p>
             {currentUser && (
               <Link to="/events/create">
-                <Button className="bg-primary text-[#2b2635]">Post Opportunity</Button>
+                <Button className="bg-primary text-[#2b2635]">Post Event</Button>
               </Link>
             )}
           </div>

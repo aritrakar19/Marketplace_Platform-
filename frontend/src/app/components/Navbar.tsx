@@ -113,8 +113,13 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
               </Link>
             )}
             <Link to="/events" className="text-foreground hover:text-foreground transition-colors">
-              Opportunities
+              Explore Events
             </Link>
+            {currentUser && (
+              <Link to="/my-events" className="text-foreground hover:text-foreground transition-colors">
+                My Events
+              </Link>
+            )}
             <Link to="/campaigns" className="text-foreground hover:text-foreground transition-colors">
               Campaigns
             </Link>
@@ -176,8 +181,17 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                 className="text-foreground hover:text-foreground transition-colors px-4 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Opportunities
+                Explore Events
               </Link>
+              {currentUser && (
+                <Link
+                  to="/my-events"
+                  className="text-foreground hover:text-foreground transition-colors px-4 py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  My Events
+                </Link>
+              )}
               <Link
                 to="/campaigns"
                 className="text-foreground hover:text-foreground transition-colors px-4 py-2"

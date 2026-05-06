@@ -84,7 +84,7 @@ export default function EventDetailsPage() {
   }
 
   if (!event) {
-    return <div className="min-h-screen flex items-center justify-center bg-background text-foreground text-xl font-bold">Opportunity not found</div>;
+    return <div className="min-h-screen flex items-center justify-center bg-background text-foreground text-xl font-bold">Event not found</div>;
   }
 
   const isOwner = currentUser && (currentUser.uid === event.createdBy);
@@ -114,7 +114,7 @@ export default function EventDetailsPage() {
               </div>
 
               <div className="prose max-w-none text-foreground">
-                <h3 className="text-xl font-semibold text-foreground mb-3">About the Opportunity</h3>
+                <h3 className="text-xl font-semibold text-foreground mb-3">About the Event</h3>
                 <p className="whitespace-pre-wrap leading-relaxed">{event.description}</p>
               </div>
 
@@ -148,7 +148,7 @@ export default function EventDetailsPage() {
           {/* Sidebar */}
           <div className="space-y-6">
             <Card className="p-6 rounded-2xl border-border bg-background sticky top-24">
-              <h3 className="text-lg font-bold text-foreground mb-4">Opportunity Overview</h3>
+              <h3 className="text-lg font-bold text-foreground mb-4">Event Overview</h3>
               
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between pb-3 border-b border-border">
@@ -197,7 +197,7 @@ export default function EventDetailsPage() {
                 )
               ) : (
                 <div className="bg-primary/10 text-primary p-4 rounded-xl text-center font-medium border border-primary/20">
-                  You posted this opportunity
+                  You posted this event
                 </div>
               )}
             </Card>

@@ -85,37 +85,6 @@ export default function BrandDashboard() {
               <LayoutDashboard className="w-5 h-5" />
               <span>Dashboard</span>
             </Link>
-            {userData?.role === 'talent' ? (
-              <Link
-                to="/explore-brands"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
-              >
-                <Users className="w-5 h-5" />
-                <span>Find Brands</span>
-              </Link>
-            ) : (
-              <Link
-                to="/explore"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
-              >
-                <Users className="w-5 h-5" />
-                <span>Find Talents</span>
-              </Link>
-            )}
-            <Link
-              to="/campaigns"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
-            >
-              <Briefcase className="w-5 h-5" />
-              <span>Campaigns</span>
-            </Link>
-            <Link
-              to="/my-events"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors"
-            >
-              <Calendar className="w-5 h-5" />
-              <span>Events</span>
-            </Link>
             <Link
               to="/chat"
               className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-background transition-colors relative"

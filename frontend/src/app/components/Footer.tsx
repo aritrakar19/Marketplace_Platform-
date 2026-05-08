@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import logo from '../../assets/marketplace_logo.jpeg';
 
 export default function Footer() {
   const { userData } = useAuth();
@@ -11,10 +12,8 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-[#2b2635] text-foreground rounded-lg flex items-center justify-center">
-                <span className="text-foreground font-bold text-sm">TM</span>
-              </div>
-              <span className="font-semibold text-lg text-foreground">TalentMatch</span>
+              <img src={logo} alt="TalentMatch Logo" className="w-35 h-8 rounded-lg object-cover" />
+              {/* <span className="font-semibold text-lg text-foreground">TalentMatch</span> */}
             </Link>
             <p className="text-sm text-foreground mb-4">
               Connecting brands with the perfect influencers, athletes, and players for impactful collaborations.

@@ -12,6 +12,7 @@ import { Menu, X, User, LogOut, Settings } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import NotificationsPopover from './NotificationsPopover';
+import logo from '../../assets/marketplace_logo.jpeg';
 
 interface NavbarProps {
   variant?: 'default' | 'dashboard';
@@ -27,12 +28,36 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link to="/dashboard" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#2b2635] text-foreground rounded-lg flex items-center justify-center">
-                <span className="text-foreground font-bold text-sm">TM</span>
-              </div>
-              <span className="font-semibold text-lg">TalentMatch</span>
+              <img src={logo} alt="TalentMatch Logo" className="w-35 h-8 rounded-lg object-cover" />
+              {/* <span className="font-semibold text-lg">TalentMatch</span> */}
             </Link>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-8">
+              {userData?.role === 'talent' ? (
+                <Link to="/explore-brands" className="text-foreground hover:text-foreground transition-colors">
+                  Find Brands
+                </Link>
+              ) : (
+                <Link to="/explore" className="text-foreground hover:text-foreground transition-colors">
+                  Find Talents
+                </Link>
+              )}
+              <Link to="/events" className="text-foreground hover:text-foreground transition-colors">
+                Events
+              </Link>
+              <Link to="/campaigns" className="text-foreground hover:text-foreground transition-colors">
+                Campaigns
+              </Link>
+              <Link to="/#how-it-works" className="text-foreground hover:text-foreground transition-colors">
+                How it Works
+              </Link>
+            </nav>
+
             <div className="flex items-center gap-2 sm:gap-4">
+              <Link to="/dashboard" className="hidden md:block">
+                <Button variant="ghost">Dashboard</Button>
+              </Link>
               <NotificationsPopover />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -95,10 +120,8 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#2b2635] text-foreground rounded-lg flex items-center justify-center">
-              <span className="text-foreground font-bold text-sm">TM</span>
-            </div>
-            <span className="font-semibold text-lg">TalentMatch</span>
+            <img src={logo} alt="TalentMatch Logo" className="w-35 h-8 rounded-lg object-cover" />
+            {/* <span className="font-semibold text-lg">TalentMatch</span> */}
           </Link>
 
           {/* Desktop Navigation */}
@@ -113,13 +136,13 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
               </Link>
             )}
             <Link to="/events" className="text-foreground hover:text-foreground transition-colors">
-              Explore Events
+              Events
             </Link>
-            {currentUser && (
+            {/* {currentUser && (
               <Link to="/my-events" className="text-foreground hover:text-foreground transition-colors">
                 My Events
               </Link>
-            )}
+            )} */}
             <Link to="/campaigns" className="text-foreground hover:text-foreground transition-colors">
               Campaigns
             </Link>

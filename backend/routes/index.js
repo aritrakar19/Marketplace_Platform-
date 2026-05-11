@@ -21,4 +21,6 @@ router.use('/notifications', require('../modules/notifications/notification.rout
 router.use('/connections', require('../modules/connections/connection.routes'));
 router.use('/', require('../modules/upload/upload.routes'));
 router.use('/events', require('./eventRoutes'));
+router.use('/stories', require('./storyRoutes'));
+router.use('/posts', require('./feedPostRoutes'));
 module.exports = router;

@@ -8,7 +8,9 @@ const appRoutes = require('./routes');
 const { errorHandler } = require('./middleware/error.middleware');
 
 const app = express();
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 
 /**
  * CORS with credentials so the browser may send the session cookie on cross-origin

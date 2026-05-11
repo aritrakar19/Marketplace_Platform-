@@ -8,12 +8,18 @@ const upload = multer({ storage });
 let gfsBucket;
 
 // Initialize GridFSBucket when connected
-mongoose.connection.once('open', () => {
+const initGridFS = () => {
   gfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
     bucketName: 'chat_attachments'
   });
   console.log('GridFSBucket initialized');
-});
+};
+
+if (mongoose.connection.readyState === 1) {
+  initGridFS();
+} else {
+  mongoose.connection.once('open', initGridFS);
+}
 
 exports.uploadFile = async (req, res) => {
   try {
@@ -72,6 +78,8 @@ exports.getFile = async (req, res) => {
 
     const file = files[0];
     res.set('Content-Type', file.contentType);
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.set('Access-Control-Allow-Origin', '*');
     // res.set('Content-Disposition', `inline; filename="${file.filename}"`);
     
     const downloadStream = gfsBucket.openDownloadStream(file._id);

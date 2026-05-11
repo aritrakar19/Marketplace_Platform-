@@ -13,7 +13,7 @@ export default function BottomNav() {
     { icon: Home, label: 'Home', href: currentUser ? '/dashboard' : '/' },
     { icon: Search, label: 'Explore', href: explorePath },
     { icon: PlusCircle, label: 'Create', href: '/events/create', isCreate: true },
-    { icon: Calendar, label: 'Events', href: '/events' },
+    { icon: Calendar, label: 'Feed', href: '/feed' },
     { icon: User, label: 'Profile', href: currentUser ? '/profile' : '/auth' },
   ];
 

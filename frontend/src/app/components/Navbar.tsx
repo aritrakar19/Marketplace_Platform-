@@ -46,6 +46,9 @@ export default function Navbar({ variant = 'default', showSearch = false }: Navb
               <Link to="/events" className="text-sm text-[#9d97a8] hover:text-[#c0ff00] transition-colors font-medium">
                 Events
               </Link>
+              <Link to="/feed" className="text-sm text-[#9d97a8] hover:text-[#c0ff00] transition-colors font-medium">
+                Feed
+              </Link>
               <Link to="/campaigns" className="text-sm text-[#9d97a8] hover:text-[#c0ff00] transition-colors font-medium">
                 Campaigns
               </Link>
@@ -139,6 +142,9 @@ export default function Navbar({ variant = 'default', showSearch = false }: Navb
             <Link to="/events" className="text-sm text-[#9d97a8] hover:text-[#c0ff00] transition-colors font-medium">
               Events
             </Link>
+            <Link to="/feed" className="text-sm text-[#9d97a8] hover:text-[#c0ff00] transition-colors font-medium">
+              Feed
+            </Link>
             {/* {currentUser && (
               <Link to="/my-events" className="text-sm text-[#9d97a8] hover:text-[#c0ff00] transition-colors font-medium">
                 My Events
@@ -217,6 +223,13 @@ export default function Navbar({ variant = 'default', showSearch = false }: Navb
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Events
+              </Link>
+              <Link
+                to="/feed"
+                className="text-[#e8e6ed] hover:text-[#c0ff00] transition-colors px-4 py-3 rounded-xl hover:bg-[#342e40]/50"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Feed
               </Link>
               {currentUser && (
                 <Link

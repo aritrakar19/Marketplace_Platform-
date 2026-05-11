@@ -22,10 +22,16 @@ import {
   Calendar,
   AlertCircle,
   RefreshCw,
+  Image,
+  MessageCircle,
+  Heart,
+  Trash2,
+  MoreVertical
 } from 'lucide-react';
 import { auth } from '../../services/firebase';
 import { apiUrl } from '@/lib/api';
 import { cn } from './ui/utils';
+import { motion } from 'motion/react';
 
 interface ProfilePanelProps {
   /** When true, the main title uses Radix DialogTitle for accessibility inside a dialog. */
@@ -55,6 +61,10 @@ export default function ProfilePanel({
   const [saving, setSaving] = useState(false);
   const [remoteLoading, setRemoteLoading] = useState(() => !!fetchOnMount);
   const [remoteError, setRemoteError] = useState<string | null>(null);
+  
+  const [userPosts, setUserPosts] = useState<any[]>([]);
+  const [postsLoading, setPostsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<'about' | 'posts'>('about');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -91,6 +101,22 @@ export default function ProfilePanel({
       }
       const doc = json.data ?? json;
       setUserData(doc);
+      
+      // Fetch posts
+      if (doc && doc._id) {
+        setPostsLoading(true);
+        try {
+          const postsRes = await fetch(apiUrl(`/posts/user/${doc._id}`));
+          const postsData = await postsRes.json();
+          if (postsData.success) {
+            setUserPosts(postsData.data);
+          }
+        } catch (err) {
+          console.error('Failed to load posts:', err);
+        } finally {
+          setPostsLoading(false);
+        }
+      }
     } catch {
       setRemoteError('Network error while loading profile.');
     } finally {
@@ -176,6 +202,22 @@ export default function ProfilePanel({
       console.error('Failed to update profile:', err);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDeletePost = async (postId: string) => {
+    if (!currentUser) return;
+    try {
+      const token = await currentUser.getIdToken();
+      const res = await fetch(apiUrl(`/posts/${postId}`), {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setUserPosts(userPosts.filter(p => p._id !== postId));
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
     }
   };
 
@@ -437,22 +479,25 @@ export default function ProfilePanel({
                 </div>
               </div>
 
-              {(profileData.followers || profileData.engagementRate) && (
-                <div className="flex flex-wrap gap-4 p-3 bg-primary/10 rounded-xl">
-                  {profileData.followers && (
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-primary shrink-0" />
-                      <span className="font-semibold text-primary">{profileData.followers} followers</span>
-                    </div>
-                  )}
-                  {profileData.engagementRate && (
-                    <div className="flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-primary shrink-0" />
-                      <span className="font-semibold text-primary">{profileData.engagementRate} engagement</span>
-                    </div>
-                  )}
+              {/* Stats Bar */}
+              <div className="flex flex-wrap gap-4 p-3 bg-primary/10 rounded-xl">
+                {profileData.followers && (
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-primary shrink-0" />
+                    <span className="font-semibold text-primary">{profileData.followers} followers</span>
+                  </div>
+                )}
+                {profileData.engagementRate && (
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-primary shrink-0" />
+                    <span className="font-semibold text-primary">{profileData.engagementRate} engagement</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <Image className="w-4 h-4 text-primary shrink-0" />
+                  <span className="font-semibold text-primary">{userPosts.length} posts</span>
                 </div>
-              )}
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -471,8 +516,26 @@ export default function ProfilePanel({
               )}
             </div>
 
-            <Card className="p-4 bg-background border border-border shadow-sm">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-foreground mb-3">Account</h4>
+            {/* Tabs for About / Posts */}
+            <div className="flex items-center gap-4 border-b border-border mb-4">
+              <button
+                onClick={() => setActiveTab('about')}
+                className={cn('pb-2 text-sm font-semibold transition-colors', activeTab === 'about' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground')}
+              >
+                About
+              </button>
+              <button
+                onClick={() => setActiveTab('posts')}
+                className={cn('pb-2 text-sm font-semibold transition-colors', activeTab === 'posts' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground')}
+              >
+                Posts
+              </button>
+            </div>
+
+            {activeTab === 'about' && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <Card className="p-4 bg-background border border-border shadow-sm">
+                  <h4 className="text-xs font-semibold uppercase tracking-wide text-foreground mb-3">Account</h4>
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-sm text-foreground">
                   <Mail className="w-4 h-4 text-foreground shrink-0" />
@@ -551,6 +614,57 @@ export default function ProfilePanel({
                     </div>
                   )}
                 </div>
+              </div>
+            )}
+              </div>
+            )}
+
+            {activeTab === 'posts' && (
+              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                {postsLoading ? (
+                  <div className="text-center py-6 text-muted-foreground">Loading posts...</div>
+                ) : userPosts.length === 0 ? (
+                  <div className="text-center py-10 bg-background rounded-xl border border-border">
+                    <Image className="w-10 h-10 mx-auto text-muted-foreground mb-3 opacity-50" />
+                    <p className="text-foreground">No posts yet</p>
+                    <p className="text-sm text-muted-foreground">Share something to see it here.</p>
+                  </div>
+                ) : (
+                  userPosts.map((post) => (
+                    <Card key={post._id} className="p-4 bg-background border border-border shadow-sm relative group overflow-hidden">
+                      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button variant="destructive" size="icon" className="h-8 w-8 rounded-full" onClick={() => handleDeletePost(post._id)}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <div className="flex items-center gap-3 mb-3">
+                        <img src={profileData.profileImage || 'https://ui-avatars.com/api/?name=U&background=342e40&color=c0ff00&size=150'} alt="Profile" className="w-8 h-8 rounded-full object-cover" />
+                        <div>
+                          <div className="text-sm font-semibold text-foreground">{profileData.name}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {new Date(post.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                          </div>
+                        </div>
+                      </div>
+                      {post.caption && <p className="text-sm text-foreground mb-3">{post.caption}</p>}
+                      {post.images && post.images.length > 0 && (
+                        <div className="rounded-xl overflow-hidden mb-3 max-h-64 bg-[#1a1520]">
+                          <img src={post.images[0]} alt="Post" className="w-full h-full object-contain" />
+                        </div>
+                      )}
+                      <div className="flex items-center gap-4 pt-2 border-t border-border">
+                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                          <Heart className="w-4 h-4" />
+                          <span className="text-xs">{post.likes?.length || 0}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                          <MessageCircle className="w-4 h-4" />
+                          <span className="text-xs">{post.comments?.length || 0}</span>
+                        </div>
+                      </div>
+                    </Card>
+                  ))
+                )}
               </div>
             )}
           </div>

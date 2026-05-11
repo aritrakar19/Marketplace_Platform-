@@ -21,6 +21,7 @@ import {
   Share2,
   Calendar,
   Image as ImageIcon,
+  Heart,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { apiUrl } from '@/lib/api';
@@ -32,6 +33,7 @@ export default function TalentProfile() {
   const [similarTalents, setSimilarTalents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [userPosts, setUserPosts] = useState<any[]>([]);
   const { currentUser } = useAuth();
 
   const isOwnProfile =
@@ -49,6 +51,19 @@ export default function TalentProfile() {
         if (res.ok) {
           const data = await res.json();
           setTalent(data.data);
+
+          // Fetch user posts
+          if (data.data && data.data._id) {
+            try {
+              const postsRes = await fetch(apiUrl(`/posts/user/${data.data._id}`));
+              const postsData = await postsRes.json();
+              if (postsData.success) {
+                setUserPosts(postsData.data);
+              }
+            } catch (e) {
+              console.error('Failed to fetch user posts:', e);
+            }
+          }
 
           // Fetch similar talents
           const allRes = await fetch(apiUrl('/talents'), { headers });
@@ -204,7 +219,7 @@ export default function TalentProfile() {
                     <span className="text-sm">Posts</span>
                   </div>
                   <div className="text-2xl font-bold">
-                    {talent.stats?.posts?.toLocaleString() || 'N/A'}
+                    {userPosts.length || talent.stats?.posts?.toLocaleString() || '0'}
                   </div>
                 </div>
                 <div className="bg-background p-4 rounded-xl">
@@ -291,6 +306,48 @@ export default function TalentProfile() {
                 </div>
               </Card>
             )}
+
+            {/* Posts */}
+            <Card className="p-6 rounded-2xl">
+              <h2 className="text-xl font-semibold mb-4">Posts</h2>
+              <div className="space-y-4">
+                {userPosts.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground bg-background rounded-xl">
+                    No posts yet.
+                  </div>
+                ) : (
+                  userPosts.map((post) => (
+                    <div key={post._id} className="p-4 bg-background border border-border shadow-sm rounded-xl">
+                      <div className="flex items-center gap-3 mb-3">
+                        <img src={talent.profileImage || 'https://ui-avatars.com/api/?name=U&background=342e40&color=c0ff00&size=150'} alt="Profile" className="w-8 h-8 rounded-full object-cover" />
+                        <div>
+                          <div className="text-sm font-semibold text-foreground">{talent.name}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {new Date(post.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                          </div>
+                        </div>
+                      </div>
+                      {post.caption && <p className="text-sm text-foreground mb-3">{post.caption}</p>}
+                      {post.images && post.images.length > 0 && (
+                        <div className="rounded-xl overflow-hidden mb-3 max-h-64 bg-[#1a1520]">
+                          <img src={post.images[0]} alt="Post" className="w-full h-full object-contain" />
+                        </div>
+                      )}
+                      <div className="flex items-center gap-4 pt-2 border-t border-border">
+                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                          <Heart className="w-4 h-4" />
+                          <span className="text-xs">{post.likes?.length || 0}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                          <MessageCircle className="w-4 h-4" />
+                          <span className="text-xs">{post.comments?.length || 0}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </Card>
           </div>
 
           {/* Sidebar */}

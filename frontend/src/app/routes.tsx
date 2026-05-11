@@ -23,6 +23,9 @@ import CreateEventPage from "./pages/CreateEventPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import MyEventsPage from "./pages/MyEventsPage";
 
+// Social Feed
+import SocialFeedPage from "./pages/SocialFeedPage";
+
 // Wrapper for /auth to redirect logged in users to dashboard
 const AuthRoute = () => {
   const { currentUser, loading } = useAuth();
@@ -55,6 +58,10 @@ export const router = createBrowserRouter([
   {
     path: "/events/:id",
     Component: EventDetailsPage,
+  },
+  {
+    path: "/feed",
+    Component: SocialFeedPage,
   },
   {
     element: <ProtectedRoute />, // All children are protected

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BottomNav from '../components/BottomNav';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -87,17 +88,17 @@ export default function CampaignsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#2b2635]">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-bottom-nav">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Campaigns</h1>
-            <p className="text-foreground">Browse active campaigns and opportunities</p>
+            <h1 className="text-2xl md:text-3xl font-bold mb-1 text-[#e8e6ed]">Campaigns</h1>
+            <p className="text-sm text-[#9d97a8]">Browse active campaigns and opportunities</p>
           </div>
           {userData?.role === 'brand' && (
-            <Button className="bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635] mt-4 md:mt-0" onClick={() => setShowModal(true)}>
+            <Button className="bg-[#c0ff00] text-[#1a1520] hover:bg-[#a8e000] mt-3 md:mt-0 rounded-full px-5 font-semibold" onClick={() => setShowModal(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Post Campaign
             </Button>
@@ -106,11 +107,11 @@ export default function CampaignsPage() {
 
         <div className="mb-6">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#9d97a8]" />
             <Input
               type="text"
               placeholder="Search campaigns..."
-              className="pl-12 h-12"
+              className="pl-12 h-12 bg-[#342e40] border-0 rounded-full text-[#e8e6ed] placeholder:text-[#9d97a8]"
             />
           </div>
         </div>
@@ -123,7 +124,7 @@ export default function CampaignsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {campaigns.map((campaign) => (
               <Link key={campaign.id} to={`/campaigns/${campaign.id}`}>
-                <Card className="p-6 rounded-2xl hover:shadow-lg transition-all hover:border-primary">
+                <Card className="p-5 md:p-6 glass-card border-0 rounded-[20px] hover:shadow-[0_0_30px_rgba(192,255,0,0.06)] transition-all duration-300 group">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-xl font-semibold mb-2">{campaign.title}</h3>
@@ -159,7 +160,7 @@ export default function CampaignsPage() {
                     </div>
                   </div>
 
-                  <Button className="w-full bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]">
+                  <Button className="w-full bg-[#342e40] text-[#e8e6ed] hover:bg-[#c0ff00] hover:text-[#1a1520] rounded-xl font-medium transition-all">
                     View Details
                   </Button>
                 </Card>
@@ -245,6 +246,7 @@ export default function CampaignsPage() {
       )}
 
       <Footer />
+      <BottomNav />
     </div>
   );
 }

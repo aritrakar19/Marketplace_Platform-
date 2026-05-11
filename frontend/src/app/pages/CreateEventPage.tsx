@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BottomNav from '../components/BottomNav';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -66,15 +67,15 @@ export default function CreateEventPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-[#2b2635] flex flex-col">
       <Navbar variant="dashboard" />
-      <main className="flex-1 max-w-4xl w-full mx-auto p-6 lg:p-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Post an Opportunity</h1>
-          <p className="text-foreground">Post any opportunity — sponsorship, collaboration, hiring, or anything you need.</p>
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-bottom-nav">
+        <div className="mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#e8e6ed] mb-1">Post an Opportunity</h1>
+          <p className="text-sm text-[#9d97a8]">Post any opportunity — sponsorship, collaboration, hiring, or anything you need.</p>
         </div>
 
-        <Card className="p-6 md:p-8 rounded-2xl border-border bg-background">
+        <Card className="p-4 md:p-6 lg:p-8 glass-card border-0 rounded-[20px]">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="p-4 text-sm text-foreground bg-background rounded-lg">
@@ -195,10 +196,10 @@ export default function CreateEventPage() {
             </div>
 
             <div className="pt-4 border-t border-border flex justify-end gap-3">
-              <Button type="button" variant="outline" onClick={() => navigate(-1)} className="border-border text-foreground hover:text-foreground">
+              <Button type="button" variant="outline" onClick={() => navigate(-1)} className="border-[rgba(192,255,0,0.15)] text-[#e8e6ed] hover:bg-[#342e40] rounded-xl">
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading} className="bg-primary text-[#2b2635] hover:bg-primary/90">
+              <Button type="submit" disabled={loading} className="bg-[#c0ff00] text-[#1a1520] hover:bg-[#a8e000] rounded-full px-6 font-semibold">
                 {loading ? 'Posting...' : 'Post Opportunity'}
               </Button>
             </div>
@@ -206,6 +207,7 @@ export default function CreateEventPage() {
         </Card>
       </main>
       <Footer />
+      <BottomNav />
     </div>
   );
 }

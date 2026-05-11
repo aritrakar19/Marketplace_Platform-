@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BottomNav from '../components/BottomNav';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router';
 import TalentCard from '../components/TalentCard';
@@ -358,14 +359,14 @@ export default function ExploreTalent() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#2b2635]">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-bottom-nav">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Find Talents</h1>
-          <p className="text-foreground">
+        <div className="mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold mb-1 text-[#e8e6ed]">Find Talents</h1>
+          <p className="text-sm text-[#9d97a8]">
             Find the perfect influencer, athlete, or player for your brand
           </p>
         </div>
@@ -373,13 +374,13 @@ export default function ExploreTalent() {
         {/* Search Bar */}
         <div className="mb-6">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#9d97a8]" />
             <Input
               type="text"
               placeholder="Search by name, category, or tags..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 text-lg"
+              className="pl-12 h-12 md:h-14 text-base md:text-lg bg-[#342e40] border-0 rounded-full text-[#e8e6ed] placeholder:text-[#9d97a8] focus:ring-[rgba(192,255,0,0.3)]"
             />
           </div>
         </div>
@@ -503,6 +504,7 @@ export default function ExploreTalent() {
       )}
 
       <Footer />
+      <BottomNav />
     </div>
   );
 }

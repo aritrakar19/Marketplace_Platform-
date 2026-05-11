@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BottomNav from '../components/BottomNav';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
@@ -107,11 +108,11 @@ export default function TalentProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#2b2635]">
       <Navbar />
 
       {/* Cover Image */}
-      <div className="relative h-80 bg-[#2b2635] text-foreground">
+      <div className="relative h-56 md:h-80 bg-[#1a1520]">
         {talent.coverImage && (
           <img
             src={talent.coverImage}
@@ -384,6 +385,7 @@ export default function TalentProfile() {
       </div>
 
       <Footer />
+      <BottomNav />
     </div>
   );
 }

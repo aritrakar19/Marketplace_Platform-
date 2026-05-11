@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BottomNav from '../components/BottomNav';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -75,9 +76,9 @@ export default function MyEventsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-[#2b2635] flex flex-col">
       <Navbar variant="dashboard" />
-      <main className="flex-1 max-w-7xl w-full mx-auto p-6 lg:p-8 flex gap-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8 flex flex-col lg:flex-row gap-6 md:gap-8 pb-bottom-nav">
         
         {/* Events List */}
         <div className="w-full lg:w-1/3">
@@ -189,6 +190,7 @@ export default function MyEventsPage() {
         </div>
       </main>
       <Footer />
+      <BottomNav />
     </div>
   );
 }

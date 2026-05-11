@@ -160,18 +160,19 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-[#2b2635] flex">
       {/* Left Side - Image */}
-      <div className="hidden lg:block lg:w-1/2 relative bg-[#2b2635] text-foreground">
+      <div className="hidden lg:block lg:w-1/2 relative bg-[#1a1520]">
         <img
           src="https://images.unsplash.com/photo-1582005450386-52b25f82d9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxicmFuZCUyMGNvbGxhYm9yYXRpb24lMjBtZWV0aW5nfGVufDF8fHx8MTc3NTAyODUzM3ww&ixlib=rb-4.1.0&q=80&w=1080"
           alt="Collaboration"
           className="w-full h-full object-cover opacity-20"
         />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#c0ff00]/5 to-transparent" />
         <div className="absolute inset-0 flex items-center justify-center p-12">
-          <div className="text-foreground text-center">
-            <h2 className="text-4xl font-bold mb-4">Welcome to TalentMatch</h2>
-            <p className="text-xl text-primary/70">
+          <div className="text-center">
+            <h2 className="text-4xl font-bold mb-4 text-[#e8e6ed]">Welcome to TalentMatch</h2>
+            <p className="text-xl text-[#9d97a8]">
               Connect with the perfect influencers, athletes, and players for your brand
             </p>
           </div>
@@ -189,11 +190,11 @@ export default function AuthPage() {
             Back to Home
           </Link>
 
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">
+          <div className="mb-6 md:mb-8">
+            <h1 className="text-2xl md:text-3xl font-bold mb-2 text-[#e8e6ed]">
               {mode === 'login' ? 'Welcome Back' : 'Get Started'}
             </h1>
-            <p className="text-foreground">
+            <p className="text-sm text-[#9d97a8]">
               {mode === 'login'
                 ? 'Log in to your account to continue'
                 : 'Create an account to start collaborating'}
@@ -295,7 +296,7 @@ export default function AuthPage() {
                 </div>
               )}
 
-              <Button type="submit" className="w-full bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635]" size="lg" disabled={loading}>
+              <Button type="submit" className="w-full bg-[#c0ff00] text-[#1a1520] hover:bg-[#a8e000] font-semibold rounded-full" size="lg" disabled={loading}>
                 {loading ? 'Processing...' : (mode === 'login' ? 'Log In' : 'Continue')}
               </Button>
 

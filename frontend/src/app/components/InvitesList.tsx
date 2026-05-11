@@ -60,13 +60,13 @@ export default function InvitesList() {
     }
   };
 
-  if (loading) return <p className="text-foreground">Loading invites...</p>;
+  if (loading) return <p className="text-[#9d97a8] text-sm">Loading invites...</p>;
 
   const incomingInvites = invites.filter(inv => inv.receiverId === currentUser?.uid && inv.status === 'pending');
 
   return (
     <div className="space-y-4">
-      <h3 className="font-semibold text-lg mb-4">
+      <h3 className="font-semibold text-base md:text-lg text-[#e8e6ed] mb-4">
         {userData?.role === 'talent' ? 'Incoming Invites' : 'Sent Invites'}
       </h3>
       
@@ -74,50 +74,50 @@ export default function InvitesList() {
         incomingInvites.length > 0 ? (
           <div className="grid gap-4">
             {incomingInvites.map((invite) => (
-              <Card key={invite._id} className="p-4 flex items-center justify-between">
+              <Card key={invite._id} className="p-3 md:p-4 bg-[#3d3549]/30 border-0 rounded-[14px] flex items-center justify-between">
                 <div>
-                  <p className="font-medium">New Invite from Brand</p>
-                  <p className="text-sm text-foreground">{new Date(invite.createdAt).toLocaleDateString()}</p>
+                  <p className="font-medium text-sm text-[#e8e6ed]">New Invite from Brand</p>
+                  <p className="text-xs text-[#9d97a8]">{new Date(invite.createdAt).toLocaleDateString()}</p>
                 </div>
                 <div className="flex gap-2">
                   <Button 
                     size="sm" 
                     variant="outline" 
-                    className="text-foreground border-border hover:bg-background"
+                    className="border-[rgba(192,255,0,0.15)] text-[#9d97a8] hover:bg-[#342e40] rounded-xl text-xs"
                     onClick={() => handleUpdateStatus(invite._id, 'rejected')}
                   >
-                    <X className="w-4 h-4 mr-1" /> Reject
+                    <X className="w-3.5 h-3.5 mr-1" /> Reject
                   </Button>
                   <Button 
                     size="sm" 
-                    className="bg-background hover:bg-background"
+                    className="bg-[#c0ff00] text-[#1a1520] hover:bg-[#a8e000] rounded-xl text-xs"
                     onClick={() => handleUpdateStatus(invite._id, 'accepted')}
                   >
-                    <Check className="w-4 h-4 mr-1" /> Accept
+                    <Check className="w-3.5 h-3.5 mr-1" /> Accept
                   </Button>
                 </div>
               </Card>
             ))}
           </div>
         ) : (
-          <p className="text-foreground text-sm italic">No pending invites.</p>
+          <p className="text-[#9d97a8] text-sm italic">No pending invites.</p>
         )
       ) : (
         <div className="grid gap-4">
           {invites.filter(inv => inv.senderId === currentUser?.uid).map((invite) => (
-            <Card key={invite._id} className="p-4 flex items-center justify-between">
+            <Card key={invite._id} className="p-3 md:p-4 bg-[#3d3549]/30 border-0 rounded-[14px] flex items-center justify-between">
               <div>
-                <p className="font-medium">Invite to Talent</p>
-                <p className="text-sm text-foreground">{new Date(invite.createdAt).toLocaleDateString()}</p>
+                <p className="font-medium text-sm text-[#e8e6ed]">Invite to Talent</p>
+                <p className="text-xs text-[#9d97a8]">{new Date(invite.createdAt).toLocaleDateString()}</p>
               </div>
               <div className="flex items-center gap-3">
-                <Badge variant={invite.status === 'accepted' ? 'success' : invite.status === 'pending' ? 'secondary' : 'destructive'}>
+                <Badge variant={invite.status === 'accepted' ? 'success' : invite.status === 'pending' ? 'secondary' : 'destructive'} className="text-[10px] rounded-full">
                   {invite.status}
                 </Badge>
                 {invite.status === 'accepted' && (
                   <Link to="/chat">
-                    <Button size="sm" variant="ghost">
-                      <MessageSquare className="w-4 h-4 text-primary" />
+                    <Button size="sm" variant="ghost" className="text-[#c0ff00] hover:bg-[#c0ff00]/10 rounded-xl">
+                      <MessageSquare className="w-4 h-4" />
                     </Button>
                   </Link>
                 )}
@@ -125,7 +125,7 @@ export default function InvitesList() {
             </Card>
           ))}
           {invites.filter(inv => inv.senderId === currentUser?.uid).length === 0 && (
-             <p className="text-foreground text-sm italic">You haven't sent any invites yet.</p>
+             <p className="text-[#9d97a8] text-sm italic">You haven't sent any invites yet.</p>
           )}
         </div>
       )}

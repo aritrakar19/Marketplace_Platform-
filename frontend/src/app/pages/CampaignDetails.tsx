@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BottomNav from '../components/BottomNav';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -50,7 +51,7 @@ export default function CampaignDetails() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
+      <div className="min-h-screen bg-[#2b2635] flex flex-col">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
           <p className="text-foreground">Loading campaign details...</p>
@@ -62,7 +63,7 @@ export default function CampaignDetails() {
 
   if (!campaign) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
+      <div className="min-h-screen bg-[#2b2635] flex flex-col">
         <Navbar />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center flex-1">
           <h1 className="text-2xl font-bold mb-4">Campaign not found</h1>
@@ -78,10 +79,10 @@ export default function CampaignDetails() {
   const brandName = campaign.brandInfo?.displayName || campaign.brandInfo?.fullName || campaign.brandInfo?.name || 'Unknown Brand';
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-[#2b2635] flex flex-col">
       <Navbar />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 flex-1 w-full pb-bottom-nav">
         <Link
           to="/campaigns"
           className="inline-flex items-center gap-2 text-foreground hover:text-foreground mb-6 w-fit"
@@ -93,7 +94,7 @@ export default function CampaignDetails() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            <Card className="p-8 rounded-2xl mb-6">
+            <Card className="p-5 md:p-8 glass-card border-0 rounded-[20px] mb-4 md:mb-6">
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <h1 className="text-3xl font-bold mb-2">{campaign.title}</h1>
@@ -143,7 +144,7 @@ export default function CampaignDetails() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <Card className="p-6 rounded-2xl">
+            <Card className="p-4 md:p-6 glass-card border-0 rounded-[20px]">
               <h3 className="font-semibold mb-4">Campaign Details</h3>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
@@ -194,11 +195,11 @@ export default function CampaignDetails() {
               </div>
             </Card>
 
-            <Card className="p-6 rounded-2xl">
-              <Button className="w-full bg-primary text-[#2b2635] hover:bg-primary text-[#2b2635] mb-3" size="lg">
+            <Card className="p-4 md:p-6 glass-card border-0 rounded-[20px]">
+              <Button className="w-full bg-[#c0ff00] text-[#1a1520] hover:bg-[#a8e000] mb-3 rounded-full font-semibold" size="lg">
                 Apply Now
               </Button>
-              <Button variant="outline" className="w-full" size="lg">
+              <Button variant="outline" className="w-full border-[rgba(192,255,0,0.15)] text-[#e8e6ed] hover:bg-[#342e40] rounded-xl" size="lg">
                 Contact Brand
               </Button>
             </Card>
@@ -217,6 +218,7 @@ export default function CampaignDetails() {
       </div>
 
       <Footer />
+      <BottomNav />
     </div>
   );
 }

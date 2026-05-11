@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BottomNav from '../components/BottomNav';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -80,24 +81,24 @@ export default function EventDetailsPage() {
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center bg-background"><div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" /></div>;
+    return <div className="min-h-screen flex items-center justify-center bg-[#2b2635]"><div className="animate-spin w-8 h-8 border-4 border-[#c0ff00] border-t-transparent rounded-full" /></div>;
   }
 
   if (!event) {
-    return <div className="min-h-screen flex items-center justify-center bg-background text-foreground text-xl font-bold">Event not found</div>;
+    return <div className="min-h-screen flex items-center justify-center bg-[#2b2635] text-[#e8e6ed] text-xl font-bold">Event not found</div>;
   }
 
   const isOwner = currentUser && (currentUser.uid === event.createdBy);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-[#2b2635] flex flex-col">
       <Navbar variant="dashboard" />
-      <main className="flex-1 max-w-5xl w-full mx-auto p-6 lg:p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-bottom-nav">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
           
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card className="p-8 rounded-2xl border-border bg-background">
+          <div className="lg:col-span-2 space-y-4 md:space-y-6">
+            <Card className="p-5 md:p-8 glass-card border-0 rounded-[20px]">
               <div className="flex gap-2 mb-4">
                 <Badge className="bg-primary/20 text-primary border-none">{event.category}</Badge>
                 <Badge variant="outline" className="border-border text-foreground">{event.eventType}</Badge>
@@ -147,7 +148,7 @@ export default function EventDetailsPage() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <Card className="p-6 rounded-2xl border-border bg-background sticky top-24">
+            <Card className="p-4 md:p-6 glass-card border-0 rounded-[20px] sticky top-20">
               <h3 className="text-lg font-bold text-foreground mb-4">Event Overview</h3>
               
               <div className="space-y-4 mb-6">
@@ -191,7 +192,7 @@ export default function EventDetailsPage() {
                     </div>
                   </form>
                 ) : (
-                  <Button onClick={() => setShowApply(true)} className="w-full bg-[#2b2635] text-foreground hover:bg-background h-12 text-lg font-medium shadow-lg">
+                  <Button onClick={() => setShowApply(true)} className="w-full bg-[#c0ff00] text-[#1a1520] hover:bg-[#a8e000] h-12 text-lg font-semibold rounded-full shadow-[0_0_16px_rgba(192,255,0,0.2)]">
                     Apply Now
                   </Button>
                 )
@@ -206,6 +207,7 @@ export default function EventDetailsPage() {
         </div>
       </main>
       <Footer />
+      <BottomNav />
     </div>
   );
 }

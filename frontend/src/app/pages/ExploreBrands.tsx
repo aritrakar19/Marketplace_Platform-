@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BottomNav from '../components/BottomNav';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router';
 import BrandCard from '../components/BrandCard';
@@ -59,26 +60,26 @@ export default function ExploreBrands() {
   }, [searchQuery, dbBrands]);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-[#2b2635] flex flex-col">
       <Navbar />
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Find Brands</h1>
-          <p className="text-foreground">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-bottom-nav">
+        <div className="mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold mb-1 text-[#e8e6ed]">Find Brands</h1>
+          <p className="text-sm text-[#9d97a8]">
             Find innovative brands looking to collaborate with you.
           </p>
         </div>
 
-        <div className="mb-8 max-w-2xl">
+        <div className="mb-6 max-w-2xl">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#9d97a8]" />
             <Input
               type="text"
               placeholder="Search by brand name or category..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 text-lg bg-background border-0 shadow-sm"
+              className="pl-12 h-12 md:h-14 text-base md:text-lg bg-[#342e40] border-0 rounded-full text-[#e8e6ed] placeholder:text-[#9d97a8] focus:ring-[rgba(192,255,0,0.3)]"
             />
           </div>
         </div>
@@ -109,6 +110,7 @@ export default function ExploreBrands() {
       </main>
 
       <Footer />
+      <BottomNav />
     </div>
   );
 }

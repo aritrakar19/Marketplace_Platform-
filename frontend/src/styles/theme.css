@@ -9,81 +9,81 @@
     --font-size: 16px;
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --background: #2b2635;
-    --foreground: #c0ff00;
-    --card: #2b2635;
-    --card-foreground: #c0ff00;
-    --popover: #2b2635;
-    --popover-foreground: #c0ff00;
+    --foreground: #e8e6ed;
+    --card: #342e40;
+    --card-foreground: #e8e6ed;
+    --popover: #342e40;
+    --popover-foreground: #e8e6ed;
     --primary: #c0ff00;
-    --primary-foreground: #2b2635;
-    --secondary: #2b2635;
-    --secondary-foreground: #c0ff00;
-    --muted: #2b2635;
-    --muted-foreground: #c0ff00;
+    --primary-foreground: #1a1520;
+    --secondary: #3d3549;
+    --secondary-foreground: #e8e6ed;
+    --muted: #3d3549;
+    --muted-foreground: #9d97a8;
     --accent: #c0ff00;
-    --accent-foreground: #2b2635;
-    --destructive: #2b2635;
-    --destructive-foreground: #c0ff00;
-    --border: #c0ff00;
-    --input: #2b2635;
-    --input-background: #2b2635;
-    --switch-background: #2b2635;
+    --accent-foreground: #1a1520;
+    --destructive: #ff4d6a;
+    --destructive-foreground: #ffffff;
+    --border: rgba(192, 255, 0, 0.12);
+    --input: #3d3549;
+    --input-background: #3d3549;
+    --switch-background: #3d3549;
     --font-weight-medium: 500;
     --font-weight-normal: 400;
-    --ring: #c0ff00;
+    --ring: rgba(192, 255, 0, 0.4);
     --chart-1: #c0ff00;
-    --chart-2: #2b2635;
-    --chart-3: #c0ff00;
-    --chart-4: #2b2635;
-    --chart-5: #c0ff00;
-    --radius: 0.625rem;
+    --chart-2: #7c3aed;
+    --chart-3: #06d6a0;
+    --chart-4: #ff6b6b;
+    --chart-5: #4cc9f0;
+    --radius: 0.875rem;
     --sidebar: #2b2635;
-    --sidebar-foreground: #c0ff00;
+    --sidebar-foreground: #e8e6ed;
     --sidebar-primary: #c0ff00;
-    --sidebar-primary-foreground: #2b2635;
-    --sidebar-accent: #2b2635;
-    --sidebar-accent-foreground: #c0ff00;
-    --sidebar-border: #c0ff00;
-    --sidebar-ring: #c0ff00;
+    --sidebar-primary-foreground: #1a1520;
+    --sidebar-accent: #3d3549;
+    --sidebar-accent-foreground: #e8e6ed;
+    --sidebar-border: rgba(192, 255, 0, 0.12);
+    --sidebar-ring: rgba(192, 255, 0, 0.4);
   }
 
   .dark {
     --background: #2b2635;
-    --foreground: #c0ff00;
-    --card: #2b2635;
-    --card-foreground: #c0ff00;
-    --popover: #2b2635;
-    --popover-foreground: #c0ff00;
+    --foreground: #e8e6ed;
+    --card: #342e40;
+    --card-foreground: #e8e6ed;
+    --popover: #342e40;
+    --popover-foreground: #e8e6ed;
     --primary: #c0ff00;
-    --primary-foreground: #2b2635;
-    --secondary: #2b2635;
-    --secondary-foreground: #c0ff00;
-    --muted: #2b2635;
-    --muted-foreground: #c0ff00;
+    --primary-foreground: #1a1520;
+    --secondary: #3d3549;
+    --secondary-foreground: #e8e6ed;
+    --muted: #3d3549;
+    --muted-foreground: #9d97a8;
     --accent: #c0ff00;
-    --accent-foreground: #2b2635;
-    --destructive: #2b2635;
-    --destructive-foreground: #c0ff00;
-    --border: #c0ff00;
-    --input: #2b2635;
-    --input-background: #2b2635;
-    --switch-background: #2b2635;
-    --ring: #c0ff00;
+    --accent-foreground: #1a1520;
+    --destructive: #ff4d6a;
+    --destructive-foreground: #ffffff;
+    --border: rgba(192, 255, 0, 0.12);
+    --input: #3d3549;
+    --input-background: #3d3549;
+    --switch-background: #3d3549;
+    --ring: rgba(192, 255, 0, 0.4);
     --font-weight-medium: 500;
     --font-weight-normal: 400;
     --chart-1: #c0ff00;
-    --chart-2: #2b2635;
-    --chart-3: #c0ff00;
-    --chart-4: #2b2635;
-    --chart-5: #c0ff00;
+    --chart-2: #7c3aed;
+    --chart-3: #06d6a0;
+    --chart-4: #ff6b6b;
+    --chart-5: #4cc9f0;
     --sidebar: #2b2635;
-    --sidebar-foreground: #c0ff00;
+    --sidebar-foreground: #e8e6ed;
     --sidebar-primary: #c0ff00;
-    --sidebar-primary-foreground: #2b2635;
-    --sidebar-accent: #2b2635;
-    --sidebar-accent-foreground: #c0ff00;
-    --sidebar-border: #c0ff00;
-    --sidebar-ring: #c0ff00;
+    --sidebar-primary-foreground: #1a1520;
+    --sidebar-accent: #3d3549;
+    --sidebar-accent-foreground: #e8e6ed;
+    --sidebar-border: rgba(192, 255, 0, 0.12);
+    --sidebar-ring: rgba(192, 255, 0, 0.4);
   }
 }
 
@@ -196,7 +196,7 @@ a:hover {
 input,
 textarea,
 select {
-  background-color: var(--background);
+  background-color: var(--input);
   color: var(--foreground);
   border: 1px solid var(--border);
 }
@@ -207,4 +207,106 @@ select:focus {
   outline: none;
   border-color: var(--ring);
   box-shadow: 0 0 0 2px var(--ring);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(192, 255, 0, 0.15);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(192, 255, 0, 0.3);
+}
+
+/* Glass card utility */
+.glass-card {
+  background: rgba(52, 46, 64, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(192, 255, 0, 0.08);
+}
+
+.glass-card-strong {
+  background: rgba(52, 46, 64, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(192, 255, 0, 0.12);
+}
+
+/* Neon glow utility */
+.neon-glow {
+  box-shadow: 0 0 20px rgba(192, 255, 0, 0.15), 0 0 40px rgba(192, 255, 0, 0.05);
+}
+
+.neon-glow-sm {
+  box-shadow: 0 0 10px rgba(192, 255, 0, 0.1), 0 0 20px rgba(192, 255, 0, 0.03);
+}
+
+.neon-border {
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  box-shadow: 0 0 0 2px rgba(192, 255, 0, 0.3);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #c0ff00 0%, #a0e000 50%, #80c000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, select, textarea {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hide scrollbar for horizontal scroll sections */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Bottom nav spacer – prevent content from being hidden behind bottom nav on mobile */
+.pb-bottom-nav {
+  padding-bottom: 5.5rem;
+}
+
+@media (min-width: 768px) {
+  .pb-bottom-nav {
+    padding-bottom: 0;
+  }
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse glow for CTA */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(192, 255, 0, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(192, 255, 0, 0.4), 0 0 60px rgba(192, 255, 0, 0.1); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
